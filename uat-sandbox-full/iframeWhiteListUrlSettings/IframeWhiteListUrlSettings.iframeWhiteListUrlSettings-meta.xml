@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IframeWhiteListUrlSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <iframeWhiteListUrls>
+        <context>LightningOut</context>
+        <url>*.slack.com</url>
+    </iframeWhiteListUrls>
+    <iframeWhiteListUrls>
+        <context>LightningOut</context>
+        <url>*.slack-gov.com</url>
+    </iframeWhiteListUrls>
+    <iframeWhiteListUrls>
+        <context>VisualforcePages</context>
+        <url>wa1775550540999.my.salesforce-sites.com</url>
+    </iframeWhiteListUrls>
+    <iframeWhiteListUrls>
+        <context>VisualforcePages</context>
+        <url>https://wa1775550540999.my.site.com</url>
+    </iframeWhiteListUrls>
+    <iframeWhiteListUrls>
+        <context>UIEmbedding</context>
+        <url>wa1775550540999.my.site.com</url>
+    </iframeWhiteListUrls>
+</IframeWhiteListUrlSettings>

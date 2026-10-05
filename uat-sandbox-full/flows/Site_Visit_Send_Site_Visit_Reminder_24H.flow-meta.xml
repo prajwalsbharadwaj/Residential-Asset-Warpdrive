@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>reminder_app_notification</name>
+        <label>reminder app notification</label>
+        <locationX>50</locationX>
+        <locationY>900</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <connector>
+            <targetReference>Send_Reminder_Email</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>get_custom_notification.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>recipients</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <stringValue>Tomorrow’s Site Visit Scheduled!</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>sitevisitnotificationbody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>reminder_app_notification_opp</name>
+        <label>reminder app notification opp</label>
+        <locationX>578</locationX>
+        <locationY>900</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <connector>
+            <targetReference>Send_Reminder_Email_Opp</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>get_custom_notification.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>recipients</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <stringValue>Tomorrow’s Site Visit Scheduled!</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>sitevisitnotificationbody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Reminder_Email</name>
+        <label>Send Reminder Email</label>
+        <locationX>50</locationX>
+        <locationY>1008</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Update_Reminder_Sent_Status</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>Get_Lead_Record.Owner:User.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Your Site Visit Scheduled for Tomorrow</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>LeadSitevisitReminderEmail</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Reminder_Email_Opp</name>
+        <label>Send Reminder Email Opp</label>
+        <locationX>578</locationX>
+        <locationY>1008</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>OPP_Update_Reminder_Sent_Status</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>Get_Opp_Record.Owner.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Your Site Visit Scheduled for Tomorrow</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>OpportunitySitevisitReminderEmail</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <apiVersion>63.0</apiVersion>
+    <assignments>
+        <name>assigning_opp_owner_id</name>
+        <label>assigning opp owner id</label>
+        <locationX>578</locationX>
+        <locationY>792</locationY>
+        <assignmentItems>
+            <assignToReference>recipients</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Opp_Record.Owner.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>reminder_app_notification_opp</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assigning_owner_id</name>
+        <label>assigning owner id</label>
+        <locationX>50</locationX>
+        <locationY>792</locationY>
+        <assignmentItems>
+            <assignToReference>recipients</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Lead_Record.OwnerId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>reminder_app_notification</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_for_Site_Visit_Record_Type</name>
+        <label>Check for Site Visit Record Type</label>
+        <locationX>1007</locationX>
+        <locationY>252</locationY>
+        <defaultConnectorLabel>Non Residential Record Type</defaultConnectorLabel>
+        <rules>
+            <name>Residential_Record_Type</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Residential_Sales_Site_Visit</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>get_custom_notification</targetReference>
+            </connector>
+            <label>Residential Record Type</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_this_a_Lead_or_Opportunity_Visit</name>
+        <label>Is this a Lead or Opportunity Visit?</label>
+        <locationX>644</locationX>
+        <locationY>468</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Lead_Visit</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Lead__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Lead_Record</targetReference>
+            </connector>
+            <label>Lead Visit</label>
+        </rules>
+        <rules>
+            <name>Opportunity_Visit</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Opportunity__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Opp_Record</targetReference>
+            </connector>
+            <label>Opportunity Visit</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Should_Send_Reminder</name>
+        <label>Should Send Reminder</label>
+        <locationX>182</locationX>
+        <locationY>684</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Send_Reminder</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Is_Tomorrow</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Lead_Record.Owner:User.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assigning_owner_id</targetReference>
+            </connector>
+            <label>Yes – Send Reminder</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Should_Send_Reminder_Opp</name>
+        <label>Should Send Reminder Opp</label>
+        <locationX>710</locationX>
+        <locationY>684</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Send_Reminder_Opp</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Is_Tomorrow</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Opp_Record.Owner.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assigning_opp_owner_id</targetReference>
+            </connector>
+            <label>Yes – Send Reminder Opp</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>Is_Tomorrow</name>
+        <dataType>Boolean</dataType>
+        <expression>DATEVALUE({!$Record.Visit_DateTime__c}) == TODAY() +1</expression>
+    </formulas>
+    <interviewLabel>Site Visit - Send_Site_Visit_Reminder_24H {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RES_Site Visit - Send_Site_Visit_Reminder_24H</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>get_custom_notification</name>
+        <label>get custom notification</label>
+        <locationX>644</locationX>
+        <locationY>360</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_this_a_Lead_or_Opportunity_Visit</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>site_visit_notification</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Lead_Record</name>
+        <label>Get Lead Record</label>
+        <locationX>182</locationX>
+        <locationY>576</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Should_Send_Reminder</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Lead__r.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Opp_Record</name>
+        <label>Get Opp Record</label>
+        <locationX>710</locationX>
+        <locationY>576</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Should_Send_Reminder_Opp</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Opportunity__r.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Opportunity</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>Visit record as &apos;Reminder Sent&apos; to prevent duplicate notifications.</description>
+        <name>OPP_Update_Reminder_Sent_Status</name>
+        <label>OPP Update Reminder Sent Status</label>
+        <locationX>578</locationX>
+        <locationY>1116</locationY>
+        <inputAssignments>
+            <field>Reminder_Sent__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Visit record as &apos;Reminder Sent&apos; to prevent duplicate notifications.</description>
+        <name>Update_Reminder_Sent_Status</name>
+        <label>Update Reminder Sent Status</label>
+        <locationX>50</locationX>
+        <locationY>1116</locationY>
+        <inputAssignments>
+            <field>Reminder_Sent__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>881</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_for_Site_Visit_Record_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Reminder_Sent__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Cancelled</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordTypeDeveloperName__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Residential_Sales_Site_Visit</stringValue>
+            </value>
+        </filters>
+        <object>Site_Visit__c</object>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2025-06-12</startDate>
+            <startTime>08:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>LeadSitevisitReminderEmail</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;html&gt;
+  &lt;body style=&quot;font-family: Arial, sans-serif; font-size: 15px; color: #333;&quot;&gt;
+    &lt;table style=&quot;width: 100%; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; background-color: #f9f9f9;&quot;&gt;
+      &lt;tr&gt;
+        &lt;td&gt;
+          &lt;h2 style=&quot;color: #2a9d8f;&quot;&gt;Hello {!Get_Lead_Record.Name},&lt;/h2&gt;
+
+          &lt;p&gt;This is a reminder for your site visit scheduled on &lt;strong&gt;{!$Record.Visit_DateTime__c}&lt;/strong&gt; at the property &lt;strong&gt;{!$Record.Project__r.Name}&lt;/strong&gt;.&lt;/p&gt;
+
+          &lt;p&gt;&lt;strong&gt;Property Address:&lt;/strong&gt;&lt;br /&gt;
+          {!$Record.Project__r.Address__c}&lt;/p&gt;
+
+          &lt;p&gt;&lt;strong&gt;Your Sales Representative:&lt;/strong&gt; {!$User.FirstName}&lt;br /&gt;
+          &lt;strong&gt;Contact:&lt;/strong&gt; {!$User.Phone}, &lt;a href=&quot;mailto:{!$User.Email}&quot;&gt;{!$User.Email}&lt;/a&gt;&lt;/p&gt;
+
+          &lt;p&gt;Looking forward to seeing you!&lt;/p&gt;
+
+          &lt;p style=&quot;margin-top: 30px;&quot;&gt;Thanks,&lt;br /&gt;
+          &lt;strong&gt;The Sales Team&lt;/strong&gt;&lt;/p&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>OpportunitySitevisitReminderEmail</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;html&gt;
+  &lt;body style=&quot;font-family: Arial, sans-serif; font-size: 15px; color: #333;&quot;&gt;
+    &lt;table style=&quot;width: 100%; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; background-color: #f9f9f9;&quot;&gt;
+      &lt;tr&gt;
+        &lt;td&gt;
+          &lt;h2 style=&quot;color: #2a9d8f;&quot;&gt;Hello {!Get_Opp_Record.Account.FirstName} {!Get_Opp_Record.Account.LastName},&lt;/h2&gt;
+
+          &lt;p&gt;This is a reminder for your site visit scheduled on &lt;strong&gt;{!$Record.Visit_DateTime__c}&lt;/strong&gt; at the property &lt;strong&gt;{!$Record.Project__r.Name}&lt;/strong&gt;.&lt;/p&gt;
+
+          &lt;p&gt;&lt;strong&gt;Property Address:&lt;/strong&gt;&lt;br /&gt;
+          {!$Record.Project__r.Address__c}&lt;/p&gt;
+
+          &lt;p&gt;&lt;strong&gt;Your Sales Representative:&lt;/strong&gt; {!$User.FirstName}&lt;br /&gt;
+          &lt;strong&gt;Contact:&lt;/strong&gt; {!$User.Phone}, &lt;a href=&quot;mailto:{!$User.Email}&quot;&gt;{!$User.Email}&lt;/a&gt;&lt;/p&gt;
+
+          &lt;p&gt;Looking forward to seeing you!&lt;/p&gt;
+
+          &lt;p style=&quot;margin-top: 30px;&quot;&gt;Thanks,&lt;br /&gt;
+          &lt;strong&gt;The Sales Team&lt;/strong&gt;&lt;/p&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>sitevisitnotificationbody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your site visit for the property {!$Record.Project__r.Name} is scheduled for tomorrow at {!$Record.Visit_DateTime__c}.
+Sales Rep: {!$Record.Owner:User.FirstName}}  
+Contact: {!$Record.Owner:User.Email} | {!$Record.Owner:User.Phone}</text>
+    </textTemplates>
+    <variables>
+        <name>recipients</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

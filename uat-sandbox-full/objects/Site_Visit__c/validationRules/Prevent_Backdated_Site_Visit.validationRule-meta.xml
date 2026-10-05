@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_Backdated_Site_Visit</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+				OR(
+				 ISNEW(),
+					ISCHANGED(Visit_DateTime__c) 
+				),
+				DATEVALUE(Visit_DateTime__c)   &lt;  TODAY() ,
+    RecordType.DeveloperName = &quot;Residential_Sales_Site_Visit&quot;
+			)</errorConditionFormula>
+    <errorDisplayField>Visit_DateTime__c</errorDisplayField>
+    <errorMessage>Visit Date cannot be in the past.</errorMessage>
+</ValidationRule>

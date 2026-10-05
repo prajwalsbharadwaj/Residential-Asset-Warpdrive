@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <classAccesses>
+        <apexClass>WdGlassController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>WdGlassCustomerController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>WdGlassRecordController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <description>Access to the WarpDrive frosted-glass Home, Leads, Inventory and Bookings pages.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>WarpDrive Glass UI</label>
+    <tabSettings>
+        <tab>WD_Glass_Bookings</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>WD_Glass_Inventory</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>WD_Glass_Leads</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+</PermissionSet>

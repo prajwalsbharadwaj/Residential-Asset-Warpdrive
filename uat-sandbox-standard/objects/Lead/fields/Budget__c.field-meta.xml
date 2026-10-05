@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Budget__c</fullName>
+    <externalId>false</externalId>
+    <label>Budget</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>2-3 Cr</fullName>
+                <default>false</default>
+                <label>2-3 Cr</label>
+            </value>
+            <value>
+                <fullName>3-4 Cr</fullName>
+                <default>false</default>
+                <label>3-4 Cr</label>
+            </value>
+            <value>
+                <fullName>4-5 Cr</fullName>
+                <default>false</default>
+                <label>4-5 Cr</label>
+            </value>
+            <value>
+                <fullName>5-6 Cr</fullName>
+                <default>false</default>
+                <label>5-6 Cr</label>
+            </value>
+            <value>
+                <fullName>6-7 Cr</fullName>
+                <default>false</default>
+                <label>6-7 Cr</label>
+            </value>
+            <value>
+                <fullName>7-8 Cr</fullName>
+                <default>false</default>
+                <label>7-8 Cr</label>
+            </value>
+            <value>
+                <fullName>8-9 Cr</fullName>
+                <default>false</default>
+                <label>8-9 Cr</label>
+            </value>
+            <value>
+                <fullName>9-10 Cr</fullName>
+                <default>false</default>
+                <label>9-10 Cr</label>
+            </value>
+            <value>
+                <fullName>10-11 Cr</fullName>
+                <default>false</default>
+                <label>10-11 Cr</label>
+            </value>
+            <value>
+                <fullName>11-12 Cr</fullName>
+                <default>false</default>
+                <label>11-12 Cr</label>
+            </value>
+            <value>
+                <fullName>12 Cr &amp; Above</fullName>
+                <default>false</default>
+                <label>12 Cr &amp; Above</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

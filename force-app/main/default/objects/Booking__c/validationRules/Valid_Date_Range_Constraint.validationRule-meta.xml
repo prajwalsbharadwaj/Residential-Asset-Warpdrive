@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valid_Date_Range_Constraint</fullName>
+    <active>true</active>
+    <description>Validation rule to have date constraint on the Allotment letter sent date, it should not be in past beyond 1 week and not in future</description>
+    <errorConditionFormula>ISCHANGED( Allotment_Letter_Sent_Date__c ) &amp;&amp;
+(
+Allotment_Letter_Sent_Date__c &lt; (TODAY() - 7) ||  Allotment_Letter_Sent_Date__c &gt; TODAY()
+)</errorConditionFormula>
+    <errorDisplayField>Allotment_Letter_Sent_Date__c</errorDisplayField>
+    <errorMessage>Date must be within the past 7 days and not in the future.</errorMessage>
+</ValidationRule>

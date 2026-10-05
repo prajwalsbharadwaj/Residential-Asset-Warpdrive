@@ -1,0 +1,96 @@
+@import 'c/wdGlassStyles';
+
+.canvas {
+    position: relative;
+    overflow: hidden;
+    min-height: 100%;
+    padding: 2.25rem 1.9rem 2rem;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background:
+        linear-gradient(160deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 45%),
+        linear-gradient(135deg, #ecf9f1 0%, #dff4ea 38%, #e7f8f3 70%, #f3fbf7 100%);
+    box-shadow: 0 1px 3px rgba(12, 70, 40, 0.06);
+}
+
+.backdrop {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+}
+
+.glow_a {
+    width: 46rem;
+    height: 30rem;
+    top: 9rem;
+    left: 28%;
+    background: rgba(52, 194, 107, 0.26);
+}
+
+.glow_b {
+    width: 30rem;
+    height: 26rem;
+    top: -6rem;
+    right: -6rem;
+    background: rgba(64, 200, 180, 0.2);
+}
+
+.glow_c {
+    width: 34rem;
+    height: 22rem;
+    bottom: -8rem;
+    left: -8rem;
+    background: rgba(120, 220, 160, 0.22);
+}
+
+.mark {
+    position: absolute;
+    fill: #62d897;
+    opacity: 0.42;
+}
+
+.mark_hero {
+    width: 30rem;
+    top: 6.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mark_side {
+    width: 17rem;
+    top: 5rem;
+    right: 13%;
+    opacity: 0.45;
+    transform: rotate(8deg);
+}
+
+.mark_low {
+    width: 14rem;
+    top: 27rem;
+    left: 12%;
+    opacity: 0.4;
+    transform: rotate(-10deg);
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 767px) {
+    .canvas {
+        padding: 1.4rem 1rem;
+        border-radius: 18px;
+    }
+
+    .mark_side,
+    .mark_low {
+        display: none;
+    }
+}

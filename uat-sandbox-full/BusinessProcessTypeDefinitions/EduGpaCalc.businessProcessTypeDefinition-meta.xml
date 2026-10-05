@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BusinessProcessTypeDefinition xmlns="http://soap.sforce.com/2006/04/metadata">
+    <applicationUsageType>ExplainabilityService</applicationUsageType>
+    <description>The business process type definition for grade point average (GPA) calculation in Education Cloud</description>
+    <masterLabel>EDU Cloud GPA Calculation</masterLabel>
+</BusinessProcessTypeDefinition>

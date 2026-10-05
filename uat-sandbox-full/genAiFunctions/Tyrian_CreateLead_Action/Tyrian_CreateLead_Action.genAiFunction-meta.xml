@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Creates a new residential lead record in Salesforce. It captures customer contact details, project interest, and specific preferences like budget, unit type, and funding source. Use this action whenever a sales rep or user says they have a new customer to register.</description>
+    <invocationTarget>Tyrian_Skill_CreateLead</invocationTarget>
+    <invocationTargetType>flow</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <masterLabel>Tyrian_CreateLead_Action</masterLabel>
+</GenAiFunction>

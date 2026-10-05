@@ -1,0 +1,147 @@
+<template>
+    <lightning-quick-action-panel title="Customer Statement of Account (SOA)">
+        <template if:true={isLoading}>
+            <div class="slds-p-around_large slds-text-align_center">
+                <lightning-spinner alternative-text="Generating Statement of Account..." size="medium"></lightning-spinner>
+                <p class="slds-m-top_small text-muted text-xs">Compiling financial debits, credits, and interest calculations...</p>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <div class="printable-area slds-p-around_medium">
+                <!-- Developer Header & Customer Information -->
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center border-bottom-primary slds-p-bottom_small slds-m-bottom_medium">
+                    <div>
+                        <div class="brand-title font-black">{summary.projectName}</div>
+                        <div class="text-xs text-muted">A Township Community Experience • RERA Reg: PRM/KA/RERA/1251/446/PR/171014/000215</div>
+                        <div class="text-xs text-muted">Thanisandra Main Road, North Bengaluru 560077</div>
+                    </div>
+                    <div class="slds-text-align_right">
+                        <span class="soa-badge font-bold">OFFICIAL LEDGER STATEMENT</span>
+                        <div class="text-xs text-muted slds-m-top_xx-small">Booking Ref: <strong class="text-dark">{summary.bookingName}</strong></div>
+                        <div class="text-xs text-muted">SAP Code: <strong class="text-dark">{summary.sapCustomerCode}</strong></div>
+                    </div>
+                </div>
+
+                <!-- Customer & Property Particulars Grid -->
+                <div class="particulars-card slds-p-around_medium slds-m-bottom_medium">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_1-of-2">
+                            <div class="font-bold text-xs uppercase text-primary slds-m-bottom_xx-small">Customer Particulars:</div>
+                            <div class="font-bold text-base text-dark">{summary.customerName}</div>
+                            <div class="text-xs text-muted">Phone: <strong class="text-dark">{summary.customerPhone}</strong></div>
+                            <div class="text-xs text-muted">Account Status: <span class="status-badge slds-m-left_xx-small">{summary.status}</span></div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <div class="font-bold text-xs uppercase text-primary slds-m-bottom_xx-small">Allotted Property Particulars:</div>
+                            <div class="font-bold text-base text-dark">{summary.unitName} ({summary.configuration})</div>
+                            <div class="text-xs text-muted">Tower: <strong class="text-dark">{summary.towerName}</strong> • Project: <strong class="text-dark">{summary.projectName}</strong></div>
+                            <div class="text-xs text-muted">Agreement Cost: <strong class="text-dark">₹{formattedAgreementValue}</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Summary KPI Banner -->
+                <div class="kpi-banner slds-p-around_medium slds-m-bottom_medium">
+                    <div class="slds-grid slds-gutters slds-text-align_center">
+                        <div class="slds-col slds-size_1-of-5">
+                            <div class="kpi-label">TOTAL DEMANDED</div>
+                            <div class="kpi-value text-dark font-bold">₹{formattedTotalDemanded}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5">
+                            <div class="kpi-label">TOTAL RECEIVED</div>
+                            <div class="kpi-value text-success font-bold">₹{formattedTotalReceived}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5">
+                            <div class="kpi-label">OUTSTANDING PRINCIPAL</div>
+                            <div class="kpi-value text-dark font-bold">₹{formattedOutstandingPrincipal}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5">
+                            <div class="kpi-label">OVERDUE INTEREST (18%)</div>
+                            <div class="kpi-value red-highlight font-bold">₹{formattedOverdueInterest}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 net-due-box">
+                            <div class="kpi-label font-bold text-primary">NET PAYABLE TODAY</div>
+                            <div class="kpi-value font-black text-primary">₹{formattedNetPayable}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Milestone Schedule & Ledger Statement Table -->
+                <div class="slds-m-bottom_medium">
+                    <h4 class="font-bold text-sm text-dark slds-m-bottom_x-small">Milestone Installments &amp; Collections Ledger:</h4>
+                    <div class="soa-table-wrapper">
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer soa-table">
+                            <thead>
+                                <tr class="table-header-row">
+                                    <th scope="col">Milestone Name</th>
+                                    <th scope="col">Due Date</th>
+                                    <th scope="col" class="slds-text-align_right">Milestone Amount (₹)</th>
+                                    <th scope="col" class="slds-text-align_right">Amount Paid (₹)</th>
+                                    <th scope="col" class="slds-text-align_right">Principal Due (₹)</th>
+                                    <th scope="col" class="slds-text-align_right">Overdue Interest (₹)</th>
+                                    <th scope="col" class="slds-text-align_center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedMilestones} for:item="m">
+                                    <tr key={m.id}>
+                                        <td class="font-semibold text-xs text-dark">{m.milestoneName}</td>
+                                        <td class="text-xs text-muted">{m.dueDateFormatted}</td>
+                                        <td class="slds-text-align_right text-xs font-semibold">₹{m.formattedAmount}</td>
+                                        <td class="slds-text-align_right text-xs text-success font-semibold">₹{m.formattedPaid}</td>
+                                        <td class="slds-text-align_right text-xs font-semibold">₹{m.formattedDue}</td>
+                                        <td class="slds-text-align_right text-xs font-bold red-highlight">
+                                            <template if:true={m.hasInterest}>
+                                                ₹{m.formattedInterest}
+                                            </template>
+                                            <template if:false={m.hasInterest}>
+                                                -
+                                            </template>
+                                        </td>
+                                        <td class="slds-text-align_center">
+                                            <span class={m.badgeClass}>{m.status}</span>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Escrow Account Payment Instructions -->
+                <div class="escrow-card slds-p-around_medium slds-m-bottom_medium slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                    <div>
+                        <div class="font-bold text-xs uppercase text-primary slds-m-bottom_xx-small">RERA Designated Escrow Account for Remittance:</div>
+                        <div class="text-xs text-dark"><strong>Beneficiary:</strong> Residential Township Master Escrow A/c</div>
+                        <div class="text-xs text-dark"><strong>Bank &amp; Branch:</strong> HDFC Bank Ltd, Richmond Road Branch, Bengaluru</div>
+                        <div class="text-xs text-dark"><strong>Virtual A/c (VAN):</strong> NIKOO-{summary.bookingName} • <strong>IFSC:</strong> HDFC0000002</div>
+                    </div>
+                    <div class="slds-text-align_right">
+                        <div class="text-xs text-muted">Customer Finance Helpdesk:</div>
+                        <div class="font-bold text-xs text-dark">collections@nikoohomes.example.com</div>
+                        <div class="text-xs text-muted">Phone: +91 80 4688 8800</div>
+                    </div>
+                </div>
+
+                <!-- Footer Sign-off -->
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-end border-top-primary slds-p-top_medium">
+                    <div class="text-xs text-muted">
+                        <div>Computer-generated Statement of Account. Official developer statement.</div>
+                        <div>Generated on {currentDate}</div>
+                    </div>
+                    <div class="slds-text-align_right">
+                        <div class="font-semibold text-xs text-dark">For {summary.projectName} Developer Finance</div>
+                        <div class="text-xs text-muted">Department of Credit Management &amp; SAP Collections</div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Quick Action Footer -->
+        <div slot="footer">
+            <lightning-button label="Close" variant="neutral" onclick={handleClose} class="slds-m-right_x-small"></lightning-button>
+            <lightning-button label="Print / Download PDF" variant="brand" icon-name="utility:print" onclick={handlePrint}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

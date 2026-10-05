@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Email_and_Notification</name>
+        <label>Send Email and Notification</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>Flow_SendSingleEmailAndNotification</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Create_Demand_Task</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>emailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>emailSubject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>notificationBody</name>
+            <value>
+                <elementReference>notificationBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>notificationTitle</name>
+            <value>
+                <elementReference>notificationTitle</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>notificationTypeId</name>
+            <value>
+                <elementReference>Get_Notification_Type.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientEmail</name>
+            <value>
+                <elementReference>Get_Owner_Details.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>Get_Owner_Details.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetRecordId</name>
+            <value>
+                <elementReference>Loop_Through_Schedules.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Flow_SendSingleEmailAndNotification</nameSegment>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <environments>Default</environments>
+    <formulas>
+        <name>DueDateValidator</name>
+        <dataType>Date</dataType>
+        <expression>TODAY() - 15</expression>
+    </formulas>
+    <formulas>
+        <name>formattedDueDate</name>
+        <dataType>String</dataType>
+        <expression>TEXT(DAY({!Loop_Through_Schedules.Payment_Due_Date__c})) &amp; &quot; &quot; &amp;
+CASE(MONTH({!Loop_Through_Schedules.Payment_Due_Date__c}),
+  1, &quot;January&quot;,
+  2, &quot;February&quot;,
+  3, &quot;March&quot;,
+  4, &quot;April&quot;,
+  5, &quot;May&quot;,
+  6, &quot;June&quot;,
+  7, &quot;July&quot;,
+  8, &quot;August&quot;,
+  9, &quot;September&quot;,
+  10, &quot;October&quot;,
+  11, &quot;November&quot;,
+  12, &quot;December&quot;,
+  &quot;&quot;
+) &amp; &quot; &quot; &amp;
+TEXT(YEAR({!Loop_Through_Schedules.Payment_Due_Date__c}))</expression>
+    </formulas>
+    <formulas>
+        <name>recordLink</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!$Api.Partner_Server_URL_260}, FIND(&apos;/services&apos;, {!$Api.Partner_Server_URL_260})) &amp; {!Loop_Through_Schedules.Id}</expression>
+    </formulas>
+    <interviewLabel>SF - Booking Payment Schedule - 15 Day Demand Reminder {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SF - Booking Payment Schedule - 15 Day Demand Reminder</label>
+    <loops>
+        <name>Loop_Through_Schedules</name>
+        <label>Loop Through Schedules</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_Payment_Schedules_Due_in_15_Days</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Owner_Details</targetReference>
+        </nextValueConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Demand_Task</name>
+        <label>Create Demand Task</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Loop_Through_Schedules</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>Loop_Through_Schedules.Payment_Due_Date__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>Please generate the demand letter for this payment milestone.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>Loop_Through_Schedules.Booking__r.OwnerId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>Normal</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Not Started</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Reminder: Generate Demand Letter</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>Loop_Through_Schedules.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Notification_Type</name>
+        <label>Get Notification Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Through_Schedules</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>General_Custom_Notification</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Owner_Details</name>
+        <label>Get Owner Details</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Send_Email_and_Notification</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Loop_Through_Schedules.Booking__r.OwnerId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Payment_Schedules_Due_in_15_Days</name>
+        <label>Get Payment Schedules Due in 15 Days</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Notification_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Payment_Due_Date__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>DueDateValidator</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Booking__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Booking_Payment_Schedule__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Payment_Schedules_Due_in_15_Days</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Payment_Due_Date__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Booking_Payment_Schedule__c</object>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2025-07-11</startDate>
+            <startTime>14:45:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Draft</status>
+    <textTemplates>
+        <name>emailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Reminder: Demand Letter Due&lt;/title&gt;
+    &lt;style&gt;
+        /* Responsive Styles */
+        @media screen and (max-width: 600px) {
+            .content-cell {
+                padding: 20px !important;
+            }
+            .button {
+                width: 100% !important;
+                padding: 15px 0 !important;
+            }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body style=&quot;margin: 0; padding: 0; background-color: #f4f7f6;&quot;&gt;
+    &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
+        &lt;tr&gt;
+            &lt;td style=&quot;padding: 20px 0;&quot;&gt;
+                &lt;table align=&quot;center&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; width=&quot;600&quot; style=&quot;border-collapse: collapse; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);&quot;&gt;
+                    &lt;tr&gt;
+                        &lt;td align=&quot;center&quot; style=&quot;padding: 40px 0 30px 0; background-color: #dc3545; color: #ffffff; border-top-left-radius: 8px; border-top-right-radius: 8px;&quot;&gt;
+                            &lt;h1 style=&quot;margin: 0; font-family: Arial, sans-serif; font-size: 28px; font-weight: bold;&quot;&gt;Action Required&lt;/h1&gt;
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td class=&quot;content-cell&quot; style=&quot;padding: 40px 30px;&quot;&gt;
+                            &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; style=&quot;border-collapse: collapse;&quot;&gt;
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;color: #555555; font-family: Arial, sans-serif; font-size: 16px; line-height: 24px;&quot;&gt;
+                                        &lt;h2 style=&quot;font-size: 22px; margin-top: 0; color: #333333;&quot;&gt;Hello {!Get_Owner_Details.Name},&lt;/h2&gt;
+                                        &lt;p style=&quot;margin: 20px 0;&quot;&gt;A demand letter needs to be generated for the following booking:&lt;/p&gt;
+                                        &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; style=&quot;border-collapse: collapse; margin-bottom: 30px; background-color: #f9f9f9; border-left: 4px solid #dc3545;&quot;&gt;
+                                            &lt;tr&gt;
+                                                &lt;td style=&quot;padding: 15px 20px;&quot;&gt;
+                                                    &lt;p style=&quot;margin: 10px 0;&quot;&gt;&lt;strong&gt;Booking ID:&lt;/strong&gt;{!Loop_Through_Schedules.Booking__r.Name}&lt;/p&gt;
+                                                    &lt;p style=&quot;margin: 10px 0;&quot;&gt;&lt;strong&gt;Payment Due Date:&lt;/strong&gt;{!formattedDueDate}&lt;/p&gt;
+                                                    &lt;p style=&quot;margin: 10px 0;&quot;&gt;&lt;strong&gt;Amount:&lt;/strong&gt; ₹ {!Loop_Through_Schedules.Installment_Amount__c}&lt;/p&gt;
+                                                &lt;/td&gt;
+                                            &lt;/tr&gt;
+                                        &lt;/table&gt;
+                                        &lt;p style=&quot;margin-bottom: 30px;&quot;&gt;Please generate the demand letter manually within Salesforce at your earliest convenience.&lt;/p&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+                                &lt;tr&gt;
+                                    &lt;td align=&quot;center&quot;&gt;
+                                        &lt;a href=&quot;{!recordLink}&quot; class=&quot;button&quot; style=&quot;background-color: #dc3545; color: #ffffff; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; display: inline-block;&quot;&gt;Go to Salesforce&lt;/a&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+                            &lt;/table&gt;
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding: 30px; background-color: #eeeeee; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;&quot;&gt;
+                            &lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot; style=&quot;border-collapse: collapse;&quot;&gt;
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;color: #999999; font-family: Arial, sans-serif; font-size: 12px; text-align: center;&quot;&gt;
+                                        &lt;p style=&quot;margin: 0;&quot;&gt;This is an automated notification from the Salesforce Notification System.&lt;/p&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+                            &lt;/table&gt;
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+                &lt;/table&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>emailSubject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Demand Letter Due by {!formattedDueDate} – Booking: {!Loop_Through_Schedules.Booking__r.Name}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>notificationBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>A demand letter needs to be generated for Booking: {!Loop_Through_Schedules.Booking__r.Name} .
+Payment is due on {!Loop_Through_Schedules.Payment_Due_Date__c} for ₹ {!Loop_Through_Schedules.Installment_Amount__c}.
+Please create the demand letter in Salesforce.</text>
+    </textTemplates>
+    <textTemplates>
+        <name>notificationTitle</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Demand Letter Reminder - {!Loop_Through_Schedules.Name}</text>
+    </textTemplates>
+    <variables>
+        <name>recipientEmails</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>recipientIDs</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

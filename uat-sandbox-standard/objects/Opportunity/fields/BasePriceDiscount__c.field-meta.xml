@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BasePriceDiscount__c</fullName>
+    <externalId>false</externalId>
+    <label>Base Price Discount</label>
+    <summarizedField>Booking_Condition__c.Amount__c</summarizedField>
+    <summaryFilterItems>
+        <field>Booking_Condition__c.Condition_Type__c</field>
+        <operation>equals</operation>
+        <value>Base Price Discount</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Booking_Condition__c.Opportunity__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Registration_Transfer_Status__c</fullName>
+    <label>Registration / Transfer Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Pending</fullName>
+                <default>false</default>
+                <label>Pending</label>
+            </value>
+            <value>
+                <fullName>Documents In Verification</fullName>
+                <default>false</default>
+                <label>Documents In Verification</label>
+            </value>
+            <value>
+                <fullName>Verification Complete</fullName>
+                <default>false</default>
+                <label>Verification Complete</label>
+            </value>
+            <value>
+                <fullName>Slot Scheduled</fullName>
+                <default>false</default>
+                <label>Slot Scheduled</label>
+            </value>
+            <value>
+                <fullName>Ownership Transferred</fullName>
+                <default>false</default>
+                <label>Ownership Transferred</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

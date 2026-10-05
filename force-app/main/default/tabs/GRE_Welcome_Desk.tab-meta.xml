@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Nikoo Homes GRE Welcome Desk for front-desk visitor registration and family re-visit logging</description>
+    <label>GRE Welcome Desk</label>
+    <lwcComponent>greWalkinDesk</lwcComponent>
+    <motif>Custom53: Bell</motif>
+</CustomTab>

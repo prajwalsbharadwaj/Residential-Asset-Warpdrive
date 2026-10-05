@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valid_Booking_Date_Constraint</fullName>
+    <active>false</active>
+    <description>Validation rule to enforce a valid booking date range</description>
+    <errorConditionFormula>ISCHANGED(  Booking_Date__c ) &amp;&amp;
+(
+Booking_Date__c &lt; (TODAY() - 7) ||  Booking_Date__c &gt; TODAY()
+)</errorConditionFormula>
+    <errorDisplayField>Booking_Date__c</errorDisplayField>
+    <errorMessage>Date must be within the past 7 days and not in the future.</errorMessage>
+</ValidationRule>

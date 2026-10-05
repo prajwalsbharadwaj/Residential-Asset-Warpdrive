@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Subsource__c</fullName>
+    <externalId>false</externalId>
+    <label>Lead Subsource</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>LeadSource</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>kenyt</fullName>
+                <default>false</default>
+                <label>Kenyt</label>
+            </value>
+            <value>
+                <fullName>ctw_ri_property</fullName>
+                <default>false</default>
+                <label>Ctw ri property</label>
+            </value>
+            <value>
+                <fullName>leadgen_ri_hni</fullName>
+                <default>false</default>
+                <label>Leadgen ri hni</label>
+            </value>
+            <value>
+                <fullName>leadgen_ri_lookalike</fullName>
+                <default>false</default>
+                <label>Leadgen ri lookalike</label>
+            </value>
+            <value>
+                <fullName>leadgen_ri_lookalike2</fullName>
+                <default>false</default>
+                <label>Leadgen ri lookalike2</label>
+            </value>
+            <value>
+                <fullName>leadgen_ri_luxuryaudiences</fullName>
+                <default>false</default>
+                <label>Leadgen ri luxuryaudiences</label>
+            </value>
+            <value>
+                <fullName>leadgen_ri_micros</fullName>
+                <default>false</default>
+                <label>Leadgen ri micros</label>
+            </value>
+            <value>
+                <fullName>leadgen_ri_primary_video</fullName>
+                <default>false</default>
+                <label>Leadgen ri primary video</label>
+            </value>
+            <value>
+                <fullName>discovery_ctw_combinedaudiences</fullName>
+                <default>false</default>
+                <label>Discovery ctw combinedaudiences</label>
+            </value>
+            <value>
+                <fullName>discovery_ctw_custintandrmktg</fullName>
+                <default>false</default>
+                <label>Discovery ctw custintandrmktg</label>
+            </value>
+            <value>
+                <fullName>search_ri_brand</fullName>
+                <default>false</default>
+                <label>Search ri brand</label>
+            </value>
+            <value>
+                <fullName>search_ri_competitor</fullName>
+                <default>false</default>
+                <label>Search ri competitor</label>
+            </value>
+            <value>
+                <fullName>taboola_mobile</fullName>
+                <default>false</default>
+                <label>Taboola mobile</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Chatbot</controllingFieldValue>
+            <valueName>kenyt</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Facebook</controllingFieldValue>
+            <valueName>ctw_ri_property</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Facebook</controllingFieldValue>
+            <valueName>leadgen_ri_hni</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Facebook</controllingFieldValue>
+            <valueName>leadgen_ri_lookalike</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Facebook</controllingFieldValue>
+            <valueName>leadgen_ri_lookalike2</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Facebook</controllingFieldValue>
+            <valueName>leadgen_ri_luxuryaudiences</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Facebook</controllingFieldValue>
+            <valueName>leadgen_ri_micros</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Facebook</controllingFieldValue>
+            <valueName>leadgen_ri_primary_video</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Google</controllingFieldValue>
+            <valueName>discovery_ctw_combinedaudiences</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Google</controllingFieldValue>
+            <valueName>discovery_ctw_custintandrmktg</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Google</controllingFieldValue>
+            <valueName>search_ri_brand</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Google</controllingFieldValue>
+            <valueName>search_ri_competitor</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Taboola</controllingFieldValue>
+            <valueName>taboola_mobile</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

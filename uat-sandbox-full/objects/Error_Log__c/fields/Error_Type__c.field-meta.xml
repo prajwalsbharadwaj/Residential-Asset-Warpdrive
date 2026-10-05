@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Error_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Error Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Integration Error</fullName>
+                <default>false</default>
+                <label>Integration Error</label>
+            </value>
+            <value>
+                <fullName>Apex Exception</fullName>
+                <default>false</default>
+                <label>Apex Exception</label>
+            </value>
+            <value>
+                <fullName>Flow Error</fullName>
+                <default>false</default>
+                <label>Flow Error</label>
+            </value>
+            <value>
+                <fullName>LWC Error</fullName>
+                <default>false</default>
+                <label>LWC Error</label>
+            </value>
+            <value>
+                <fullName>Validation Error</fullName>
+                <default>false</default>
+                <label>Validation Error</label>
+            </value>
+            <value>
+                <fullName>Data Error</fullName>
+                <default>false</default>
+                <label>Data Error</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

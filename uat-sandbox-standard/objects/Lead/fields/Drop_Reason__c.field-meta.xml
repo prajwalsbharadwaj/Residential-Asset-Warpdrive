@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Drop_Reason__c</fullName>
+    <externalId>false</externalId>
+    <label>Drop Reason</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>No response from customer</fullName>
+                <default>false</default>
+                <label>No response from customer</label>
+            </value>
+            <value>
+                <fullName>Customer not interested anymore</fullName>
+                <default>false</default>
+                <label>Customer not interested anymore</label>
+            </value>
+            <value>
+                <fullName>Duplicate enquiry</fullName>
+                <default>false</default>
+                <label>Duplicate enquiry</label>
+            </value>
+            <value>
+                <fullName>Out of service area</fullName>
+                <default>false</default>
+                <label>Out of service area</label>
+            </value>
+            <value>
+                <fullName>Requirement mismatch</fullName>
+                <default>false</default>
+                <label>Requirement mismatch</label>
+            </value>
+            <value>
+                <fullName>Delayed purchase plan</fullName>
+                <default>false</default>
+                <label>Delayed purchase plan</label>
+            </value>
+            <value>
+                <fullName>Price expectation mismatch</fullName>
+                <default>false</default>
+                <label>Price expectation mismatch</label>
+            </value>
+            <value>
+                <fullName>Already finalized property</fullName>
+                <default>false</default>
+                <label>Already finalized property</label>
+            </value>
+            <value>
+                <fullName>Test / dummy lead</fullName>
+                <default>false</default>
+                <label>Test / dummy lead</label>
+            </value>
+            <value>
+                <fullName>Language barrier</fullName>
+                <default>false</default>
+                <label>Language barrier</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

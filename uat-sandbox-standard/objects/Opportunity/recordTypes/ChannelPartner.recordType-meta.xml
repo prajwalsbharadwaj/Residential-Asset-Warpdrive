@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ChannelPartner</fullName>
+    <active>false</active>
+    <businessProcess>Channel Sales Process</businessProcess>
+    <compactLayoutAssignment>Opportunity_Layout</compactLayoutAssignment>
+    <description>Opportunities created by or for partners.</description>
+    <label>Channel (Partner)</label>
+    <picklistValues>
+        <picklist>ApprovalStatus__c</picklist>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Recalled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Discount_Approval_Status__c</picklist>
+        <values>
+            <fullName>Approval Not Required</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Approval Request Submitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending For Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>ForecastCategoryName</picklist>
+        <values>
+            <fullName>Best Case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Commit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Omitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pipeline</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>LeadSource</picklist>
+        <values>
+            <fullName>8147505558</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chatbot</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cold Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Community</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Data%2Ecom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inbound Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Live Chat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Marketing Event</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Salesforce IoT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Social Media</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Website</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Products__c</picklist>
+        <values>
+            <fullName>GC1000 series</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GC10001</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GC20002</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GC5000 series</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GC50000</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SDO_Sales_Competitor__c</picklist>
+        <values>
+            <fullName>Competitor A</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Competitor B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Competitor C</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SDO_Sales_Contract_Terms__c</picklist>
+        <values>
+            <fullName>Non-Standard</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Standard</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SDO_Sales_Reason_Lost__c</picklist>
+        <values>
+            <fullName>No Decision</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Price</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product Issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Relationship</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SDO_Sales_Winning_Competitor__c</picklist>
+        <values>
+            <fullName>Competitor A</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Competitor B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Competitor C</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type</picklist>
+        <values>
+            <fullName>Add-On Business</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Business</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Services</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Updated_Source__c</picklist>
+        <values>
+            <fullName>8147505558</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>99Acres</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ANAROCK Property Consultants Pvt%2E Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Agent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BMW Event 2021</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Channel Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Common Floor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Database</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Database BP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Database ISML</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Database VK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ETconnect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Employee</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Events</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exhibition</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Prospect%27s Reference</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook %28LP%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook Conversion %28LP%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fests</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Friends</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Discovery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Display %28LP%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Performance Max</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google search %28LP%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hoardings</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Housing%2ECom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Influencer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Instagram</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kessaku Vitual Number</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MagicBricks</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Management Reference</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manual</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Native</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needtoday%2Ecom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Newspaper Insert</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OBW Virtual number</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OBW landingPage</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>One Bangalore West Landing Page%28OBWLP%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online Advertisement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online Magazine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Palladium construction pvt ltd Demo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Portal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Print</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referrals</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Relative</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Response to Ad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Roof And Floor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self Generated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TOI Road block</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Telephone</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower 7 %28LandingPage%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vapp</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Walk-In</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web Enquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web Portals</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Website Inquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Website Lead %28One Bangalore West%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Website Lead%28KESSAKU%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WhatsApp Lead Gen</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>YouTube %28LP%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>linkedin</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>whatsapp</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

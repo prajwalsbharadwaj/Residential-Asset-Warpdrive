@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Closed_Won_Validate</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISCHANGED(StageName),
+    ISPICKVAL(StageName, &quot;Closed Won&quot;),
+    RecordTypeDeveloperName__c = &quot;Residential_Sales_Opportunity&quot;,
+    OR(
+        ISBLANK(Payment_Plan__c),
+        ISBLANK(Token_Amount__c)
+    )
+)</errorConditionFormula>
+    <errorMessage>A Payment Plan and Token Amount must be provided before changing the Opportunity stage to Closed Won.</errorMessage>
+</ValidationRule>

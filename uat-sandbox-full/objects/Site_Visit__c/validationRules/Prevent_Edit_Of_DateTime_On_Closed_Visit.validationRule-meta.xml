@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_Edit_Of_DateTime_On_Closed_Visit</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  ISCHANGED( Visit_DateTime__c ),
+  OR(
+    ISPICKVAL( Status__c , &quot;Completed&quot;),
+    ISPICKVAL( Status__c , &quot;Cancelled&quot;)
+  ),
+				 RecordType.DeveloperName  = &quot;Residential_Sales_Site_Visit&quot;
+)</errorConditionFormula>
+    <errorDisplayField>Visit_DateTime__c</errorDisplayField>
+    <errorMessage>You cannot change the Site Visit Date/Time because the visit is already marked as Completed or Cancelled.</errorMessage>
+</ValidationRule>

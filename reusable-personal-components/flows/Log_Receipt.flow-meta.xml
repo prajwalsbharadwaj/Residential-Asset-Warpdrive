@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <choices>
+        <name>Choice_Cheque</name>
+        <choiceText>Cheque</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Cheque</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Choice_CreditCard</name>
+        <choiceText>Credit Card</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Credit Card</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Choice_DemandDraft</name>
+        <choiceText>Demand Draft</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Demand Draft</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Choice_NEFT_RTGS</name>
+        <choiceText>NEFT/RTGS</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>NEFT/RTGS</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Choice_UPI</name>
+        <choiceText>UPI</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>UPI</stringValue>
+        </value>
+    </choices>
+    <description>Quick guided entry for logging a payment receipt against an installment</description>
+    <environments>Default</environments>
+    <interviewLabel>Log Receipt {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Log Receipt</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordCreates>
+        <name>Create_Receipt_Record</name>
+        <label>Create Receipt Record</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <connector>
+            <targetReference>Confirmation_Screen</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Amount__c</field>
+            <value>
+                <elementReference>Payment_Amount</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Installment__c</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Payment_Mode__c</field>
+            <value>
+                <elementReference>Payment_Mode</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Receipt_Date__c</field>
+            <value>
+                <elementReference>Receipt_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Reconciliation_Notes__c</field>
+            <value>
+                <elementReference>Reconciliation_Notes</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Pending Reconciliation</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Transaction_Reference__c</field>
+            <value>
+                <elementReference>Transaction_Reference</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Receipt__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Installment_Details</name>
+        <label>Get Installment Details</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Receipt_Entry_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Installment__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <screens>
+        <name>Confirmation_Screen</name>
+        <label>Receipt Logged</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Success_Message</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(15, 128, 23); font-size: 16px;&quot;&gt;Receipt Created Successfully!&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;A payment receipt for &lt;strong&gt;â‚¹ {!Payment_Amount}&lt;/strong&gt; has been recorded against installment &lt;strong&gt;{!Get_Installment_Details.Name}&lt;/strong&gt;.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Current Status:&lt;/b&gt; &lt;span style=&quot;color: rgb(235, 137, 8);&quot;&gt;Pending Reconciliation&lt;/span&gt;&lt;/p&gt;&lt;p&gt;The receipt is now ready for Finance team approval and SAP bank clearance.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Receipt_Entry_Screen</name>
+        <label>Log Payment Receipt</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Create_Receipt_Record</targetReference>
+        </connector>
+        <fields>
+            <name>Installment_Summary</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 14px;&quot;&gt;Installment Information&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Installment:&lt;/b&gt; {!Get_Installment_Details.Name}&lt;/p&gt;&lt;p&gt;&lt;b&gt;Due Date:&lt;/b&gt; {!Get_Installment_Details.Due_Date__c}&lt;/p&gt;&lt;p&gt;&lt;b&gt;Outstanding Amount:&lt;/b&gt; â‚¹ {!Get_Installment_Details.Outstanding_Amount__c}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Payment_Amount</name>
+            <dataType>Currency</dataType>
+            <defaultValue>
+                <elementReference>Get_Installment_Details.Outstanding_Amount__c</elementReference>
+            </defaultValue>
+            <fieldText>Payment Amount (â‚¹)</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+            <scale>2</scale>
+        </fields>
+        <fields>
+            <name>Receipt_Date</name>
+            <dataType>Date</dataType>
+            <defaultValue>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </defaultValue>
+            <fieldText>Receipt Date</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Payment_Mode</name>
+            <choiceReferences>Choice_NEFT_RTGS</choiceReferences>
+            <choiceReferences>Choice_UPI</choiceReferences>
+            <choiceReferences>Choice_Cheque</choiceReferences>
+            <choiceReferences>Choice_DemandDraft</choiceReferences>
+            <choiceReferences>Choice_CreditCard</choiceReferences>
+            <dataType>String</dataType>
+            <defaultSelectedChoiceReference>Choice_NEFT_RTGS</defaultSelectedChoiceReference>
+            <fieldText>Payment Mode</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Transaction_Reference</name>
+            <dataType>String</dataType>
+            <fieldText>Transaction / Cheque / UTR Number</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Reconciliation_Notes</name>
+            <fieldText>Reconciliation Notes</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Installment_Details</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

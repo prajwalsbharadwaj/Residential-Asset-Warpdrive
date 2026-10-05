@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Agent_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Agent Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Primary Agent</fullName>
+                <default>false</default>
+                <label>Primary Agent</label>
+            </value>
+            <value>
+                <fullName>Influencer</fullName>
+                <default>false</default>
+                <label>Influencer</label>
+            </value>
+            <value>
+                <fullName>Wellspring Financial Services Pvt. Ltd.</fullName>
+                <default>false</default>
+                <label>Wellspring Financial Services Pvt. Ltd.</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

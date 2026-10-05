@@ -1,0 +1,77 @@
+<template>
+    <lightning-card title="Submit for Approval">
+        <div class="slds-p-around_medium">
+            <template lwc:if={isWiring}>
+                <lightning-spinner alternative-text="Loading..." size="small"></lightning-spinner>
+            </template>
+            <template lwc:elseif={isNotFinalQuote}>
+                <div class="slds-notify slds-notify_alert slds-theme_warning slds-p-around_small slds-m-bottom_medium" role="alert">
+                    <lightning-icon icon-name="utility:warning" size="small" variant="inverse" class="slds-m-right_small"></lightning-icon>
+                    <strong>This Quote is not marked as Final.</strong> Edit this Quote and check the <em>Final Quote</em> checkbox before submitting for approval.
+                </div>
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Close" onclick={handleClose}></lightning-button>
+                </div>
+            </template>
+            <template lwc:elseif={isAlreadyApproved}>
+                <div class="slds-notify slds-notify_alert slds-theme_success slds-p-around_small slds-m-bottom_medium" role="alert">
+                    <lightning-icon icon-name="utility:check" size="small" variant="inverse" class="slds-m-right_small"></lightning-icon>
+                    <strong>This Quote has been approved.</strong> The Resale Opportunity has been updated automatically.
+                </div>
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Close" onclick={handleClose}></lightning-button>
+                </div>
+            </template>
+            <template lwc:elseif={isAlreadySubmitted}>
+                <div class="slds-notify slds-notify_alert slds-theme_warning slds-p-around_small slds-m-bottom_medium" role="alert">
+                    <lightning-icon icon-name="utility:clock" size="small" variant="inverse" class="slds-m-right_small"></lightning-icon>
+                    <strong>Pending Approval.</strong> This Quote is awaiting approval. The approver has received an email.
+                </div>
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Close" onclick={handleClose}></lightning-button>
+                </div>
+            </template>
+            <template lwc:elseif={isLoading}>
+                <lightning-spinner alternative-text="Submitting for approval..." size="medium"></lightning-spinner>
+            </template>
+            <template lwc:elseif={isDone}>
+                <div class="slds-notify slds-notify_alert slds-theme_success slds-p-around_small slds-m-bottom_medium" role="alert">
+                    <span>{successMessage}</span>
+                </div>
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Close" onclick={handleClose}></lightning-button>
+                </div>
+            </template>
+            <template lwc:elseif={errorMessage}>
+                <div class="slds-notify slds-notify_alert slds-theme_error slds-p-around_small slds-m-bottom_medium" role="alert">
+                    {errorMessage}
+                </div>
+                <div class="slds-grid slds-grid_align-end slds-m-top_medium">
+                    <lightning-button label="Close" onclick={handleClose} class="slds-m-right_small"></lightning-button>
+                    <lightning-button label="Retry" variant="brand" onclick={handleSubmit}></lightning-button>
+                </div>
+            </template>
+            <template lwc:else>
+                <!-- Remarks input before submit -->
+                <p class="slds-m-bottom_small" style="color:#3e3e3c">
+                    Add any commercial remarks or notes for the approver before submitting this Final Resale Quote.
+                </p>
+                <lightning-textarea
+                    label="Remarks"
+                    placeholder="Enter any remarks for the approver (optional)..."
+                    value={remarks}
+                    onchange={handleRemarksChange}
+                    max-length="1000">
+                </lightning-textarea>
+                <div class="slds-grid slds-grid_align-end slds-m-top_medium">
+                    <lightning-button label="Cancel" onclick={handleClose} class="slds-m-right_small"></lightning-button>
+                    <lightning-button
+                        label="Submit for Approval"
+                        variant="brand"
+                        onclick={handleSubmit}>
+                    </lightning-button>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

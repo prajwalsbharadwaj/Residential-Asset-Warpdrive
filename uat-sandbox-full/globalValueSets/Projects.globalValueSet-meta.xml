@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Kessaku</fullName>
+        <default>false</default>
+        <label>Kessaku</label>
+    </customValue>
+    <customValue>
+        <fullName>One Bangalore West</fullName>
+        <default>false</default>
+        <label>One Bangalore West</label>
+    </customValue>
+    <masterLabel>Projects</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

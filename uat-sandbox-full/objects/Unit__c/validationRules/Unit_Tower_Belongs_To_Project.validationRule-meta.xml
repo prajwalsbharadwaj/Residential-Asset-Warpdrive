@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unit_Tower_Belongs_To_Project</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(Tower__c)), 
+    NOT(ISBLANK( Property__c )), 
+    Tower__r.Property__c  &lt;&gt; Property__c,
+				RecordType.DeveloperName = &quot;Residential_Unit&quot;
+)</errorConditionFormula>
+    <errorDisplayField>Tower__c</errorDisplayField>
+    <errorMessage>The selected Tower must belong to the Project you have chosen for this Unit.</errorMessage>
+</ValidationRule>

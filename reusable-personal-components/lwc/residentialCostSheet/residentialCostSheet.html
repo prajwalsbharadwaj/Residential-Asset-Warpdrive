@@ -1,0 +1,377 @@
+<template>
+    <div class="cost-sheet-card slds-card">
+        <!-- TOP BRANDING & ACTION HEADER -->
+        <div class="sheet-header">
+            <div class="header-branding">
+                <div class="developer-tag">RESIDENTIAL SALES CRM • INVENTORY &amp; QUOTE MODULE</div>
+                <div class="sheet-title">{oppContext.projectName} — UNIT SELECTION &amp; QUOTATION</div>
+                <div class="sheet-subtitle">
+                    Customer: <strong>{oppContext.customerName}</strong> ({oppContext.customerPhone}) • Stage: <span class="stage-badge">{oppContext.stageName}</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-print" onclick={handlePrint}>
+                    <span>🖨️ Print Cost Sheet</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="slds-p-around_medium">
+            <!-- SPINNER -->
+            <template if:true={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <lightning-spinner alternative-text="Loading Inventory..." size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:false={isLoading}>
+                <!-- QUOTATION ACTIVE STATUS BANNER -->
+                <template if:true={hasActiveQuote}>
+                    <div class="quote-status-banner slds-m-bottom_medium">
+                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                            <div class="slds-grid slds-grid_vertical-align-center">
+                                <div class="quote-icon-box">
+                                    <lightning-icon icon-name="standard:quotes" size="small"></lightning-icon>
+                                </div>
+                                <div class="slds-m-left_small">
+                                    <div class="quote-banner-title">
+                                        Active Quotation: <strong>{activeQuoteName}</strong>
+                                    </div>
+                                    <div class="quote-banner-sub">
+                                        Total Consideration: <strong>₹{formattedActiveQuoteTotal}</strong> • Status: 
+                                        <span class={quoteBadgeClass}>
+                                            {activeQuoteStatus}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-grid_vertical-align-center">
+                                <!-- GO TO QUOTE BUTTON -->
+                                <button class="btn-go-quote slds-m-right_small" onclick={handleGoToQuote}>
+                                    <span>📄 Go to Quote</span>
+                                </button>
+
+                                <!-- CUSTOMER AGREED BUTTON -->
+                                <template if:false={isQuoteAccepted}>
+                                    <button class="btn-agree-quote" onclick={handleAgreeQuote} disabled={isAgreeingQuote}>
+                                        <template if:true={isAgreeingQuote}>
+                                            <span class="spinner-small"></span> Verifying...
+                                        </template>
+                                        <template if:false={isAgreeingQuote}>
+                                            <span>✓ Mark Customer Agreement</span>
+                                        </template>
+                                    </button>
+                                </template>
+                                <template if:true={isQuoteAccepted}>
+                                    <span class="text-success-bold">✓ Customer Agreed</span>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- STEP 1: TOWER SELECTION & HIGHLIGHTS -->
+                <div class="section-box slds-m-bottom_medium">
+                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                        <div class="section-title">
+                            <span class="step-num">1</span> Select Project Tower
+                        </div>
+                        <div style="min-width: 320px;">
+                            <lightning-combobox
+                                name="towerSelect"
+                                label="Tower Selection"
+                                variant="label-hidden"
+                                value={selectedTowerId}
+                                options={towerSelectOptions}
+                                onchange={handleTowerChange}>
+                            </lightning-combobox>
+                        </div>
+                    </div>
+
+                    <!-- Tower Highlights Card -->
+                    <template if:true={selectedTower}>
+                        <div class="tower-highlight-card">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-p-right_medium">
+                                    <div class="highlight-label">Tower Structure</div>
+                                    <div class="highlight-value text-navy">{selectedTower.towerName} ({selectedTower.totalFloors} Floors)</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-p-right_medium">
+                                    <div class="highlight-label">Construction Milestone</div>
+                                    <div class="highlight-badge text-emerald">{selectedTower.constructionStatus}</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-4">
+                                    <div class="highlight-label">Key Tower Highlights &amp; USP</div>
+                                    <div class="highlight-desc">{selectedTower.highlights}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- STEP 2: AVAILABLE UNIT INVENTORY SELECTION -->
+                <div class="section-box slds-m-bottom_medium">
+                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                        <div class="section-title">
+                            <span class="step-num">2</span> Select Unit Inventory
+                            <span class="section-count">({filteredUnits.length} Available)</span>
+                        </div>
+                        <div style="min-width: 200px;">
+                            <lightning-combobox
+                                name="configFilter"
+                                label="Filter by Configuration"
+                                variant="label-hidden"
+                                value={selectedConfigFilter}
+                                options={configOptions}
+                                onchange={handleConfigFilterChange}>
+                            </lightning-combobox>
+                        </div>
+                    </div>
+
+                    <div class="units-grid">
+                        <template for:each={filteredUnits} for:item="u">
+                            <div key={u.unitId} class="unit-card" onclick={handleSelectUnit} data-id={u.unitId}>
+                                <div class="unit-card-top slds-grid slds-grid_align-spread">
+                                    <div class="unit-title">{u.unitName}</div>
+                                    <span class="config-tag">{u.configuration}</span>
+                                </div>
+                                <div class="unit-floor text-muted">Floor {u.floorNumber} • {u.viewFacing}</div>
+                                <div class="unit-specs-row slds-grid slds-grid_align-spread slds-m-top_small">
+                                    <div>
+                                        <div class="spec-micro-label">LOCKED AREA</div>
+                                        <div class="spec-micro-val">{u.sbaSqFt} Sq.Ft.</div>
+                                    </div>
+                                    <div>
+                                        <div class="spec-micro-label">EFFECTIVE RATE</div>
+                                        <div class="spec-micro-val text-blue">₹{u.effectiveRate}/sft</div>
+                                    </div>
+                                    <div>
+                                        <div class="spec-micro-label">EST. BASE COST</div>
+                                        <div class="spec-micro-val text-navy">₹{u.baseAmount}</div>
+                                    </div>
+                                </div>
+                                <div class="unit-card-action slds-m-top_small">
+                                    <button class="btn-select-unit">
+                                        Configure &amp; Generate Quote ➔
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <template if:true={filteredUnits.length}>
+                        <!-- List is populated -->
+                    </template>
+                    <template if:false={filteredUnits.length}>
+                        <div class="slds-align_absolute-center slds-p-around_large text-muted">
+                            No units matching this configuration filter in {selectedTower.towerName}.
+                        </div>
+                    </template>
+                </div>
+
+                <!-- STEP 3: MILESTONE PAYMENT SCHEDULE MATRIX -->
+                <div class="section-box slds-m-bottom_medium">
+                    <div class="section-title slds-m-bottom_small">
+                        <span class="step-num">3</span> Construction-Linked Milestone Payment Schedule (CLP)
+                    </div>
+                    <div class="table-container">
+                        <table class="cost-table">
+                            <thead>
+                                <tr class="thead-dark">
+                                    <th>#</th>
+                                    <th>Construction Milestone Stage</th>
+                                    <th>Milestone %</th>
+                                    <th>Inst. Consideration (₹)</th>
+                                    <th>Payment Due Trigger</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={milestoneSchedule} for:item="m">
+                                    <tr key={m.id}>
+                                        <td class="cell-bold">{m.id}</td>
+                                        <td class="cell-label">{m.name}</td>
+                                        <td class="cell-pct text-blue font-bold">{m.pct}</td>
+                                        <td class="cell-amount text-navy font-bold">₹ {m.amount}</td>
+                                        <td class="cell-status text-muted">{m.status}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- POP-UP MODAL: UNIT DETAILS & AVAILABLE COMMERCIAL CUSTOMIZATIONS -->
+        <template if:true={isUnitModalOpen}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container modal-custom-width">
+                    <!-- Modal Header -->
+                    <header class="slds-modal__header modal-indigo-header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseUnitModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-text-heading_medium font-bold text-white">
+                            Unit Customization &amp; Quotation Generator — {selectedUnit.unitName}
+                        </h2>
+                        <p class="modal-sub text-white-dim">
+                            {selectedUnit.configuration} • Floor {selectedUnit.floorNumber} • {selectedTower.towerName}
+                        </p>
+                    </header>
+
+                    <!-- Modal Body -->
+                    <div class="slds-modal__content slds-p-around_large modal-scroll-body">
+                        <!-- SECTION A: NON-EDITABLE LOCKED UNIT SPECIFICATIONS -->
+                        <div class="locked-specs-box slds-m-bottom_medium">
+                            <div class="locked-badge-row slds-m-bottom_x-small">
+                                <span class="badge-lock">🔒 INVENTORY LOCKED SPECIFICATIONS (NON-EDITABLE)</span>
+                            </div>
+                            <div class="slds-grid slds-gutters slds-wrap">
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                    <div class="locked-label">Super Built-Up Area (SBA)</div>
+                                    <div class="locked-val">{selectedUnit.sbaSqFt} Sq.Ft.</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                    <div class="locked-label">Carpet Area</div>
+                                    <div class="locked-val">{selectedUnit.carpetAreaSqFt} Sq.Ft.</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                    <div class="locked-label">Base Rate + Floor Rise</div>
+                                    <div class="locked-val">₹{selectedUnit.effectiveRate} / sq.ft.</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                    <div class="locked-label">Balcony &amp; Facing</div>
+                                    <div class="locked-val">{selectedUnit.viewFacing}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION B: COMMERCIAL NEGOTIATION CONTROLS (ONLY REPS CAN ADJUST) -->
+                        <div class="customization-section slds-m-bottom_medium">
+                            <div class="customization-title slds-m-bottom_small">
+                                ⚙️ Available Commercial Customizations
+                            </div>
+                            <div class="slds-grid slds-gutters slds-wrap">
+                                <!-- Discount Input -->
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                                    <lightning-input 
+                                        type="number" 
+                                        label="Conceded Special Discount (₹ / Sq.Ft.)" 
+                                        value={discountInput} 
+                                        onchange={handleDiscountChange}
+                                        placeholder="0"
+                                        min="0"
+                                        max="500">
+                                    </lightning-input>
+                                    <div class="input-hint">Total Discount Conceded: -₹{modalCalculations.discountTotalFormatted}</div>
+                                </div>
+
+                                <!-- Parking Slots -->
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                                    <lightning-combobox
+                                        name="parking"
+                                        label="Car Parking Allocation"
+                                        value={parkingSlotsInput}
+                                        options={parkingOptions}
+                                        onchange={handleParkingChange}>
+                                    </lightning-combobox>
+                                    <div class="input-hint">Parking Charges: ₹{modalCalculations.parkingCostFormatted}</div>
+                                </div>
+
+                                <!-- Preferential Location Charges (PLC) -->
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                                    <lightning-combobox
+                                        name="plc"
+                                        label="Preferential Location Charges (PLC)"
+                                        value={plcRateInput}
+                                        options={plcOptions}
+                                        onchange={handlePlcChange}>
+                                    </lightning-combobox>
+                                    <div class="input-hint">PLC Total: ₹{modalCalculations.plcCostFormatted}</div>
+                                </div>
+
+                                <!-- Premium Finish Package -->
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                                    <lightning-combobox
+                                        name="finish"
+                                        label="Interior Finish Package"
+                                        value={finishPackageInput}
+                                        options={finishOptions}
+                                        onchange={handleFinishChange}>
+                                    </lightning-combobox>
+                                    <div class="input-hint">Package Add-on: ₹{modalCalculations.finishCostFormatted}</div>
+                                </div>
+
+                                <!-- Special Remarks / Notes -->
+                                <div class="slds-col slds-size_1-of-1 slds-m-bottom_small">
+                                    <lightning-input
+                                        type="text"
+                                        label="Quotation Remarks / Negotiation Justification"
+                                        value={quoteNotesInput}
+                                        onchange={handleNotesChange}
+                                        placeholder="e.g. Approved by Sales Director under Diwali Festive Launch offer...">
+                                    </lightning-input>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION C: LIVE PRICING BREAKDOWN SUMMARY -->
+                        <div class="summary-breakdown-card">
+                            <div class="breakdown-header">Financial Consideration Breakdown</div>
+                            <div class="breakdown-grid">
+                                <div class="breakdown-row slds-grid slds-grid_align-spread">
+                                    <span class="row-text">Base Unit Consideration ({selectedUnit.sbaSqFt} sft @ ₹{selectedUnit.effectiveRate}):</span>
+                                    <span class="row-num font-bold">₹ {modalCalculations.baseCostFormatted}</span>
+                                </div>
+                                <div class="breakdown-row slds-grid slds-grid_align-spread">
+                                    <span class="row-text">Preferential Location Charges (PLC):</span>
+                                    <span class="row-num">₹ {modalCalculations.plcCostFormatted}</span>
+                                </div>
+                                <div class="breakdown-row slds-grid slds-grid_align-spread">
+                                    <span class="row-text">Covered Car Parking Charges:</span>
+                                    <span class="row-num">₹ {modalCalculations.parkingCostFormatted}</span>
+                                </div>
+                                <template if:true={modalCalculations.finishCostFormatted}>
+                                    <div class="breakdown-row slds-grid slds-grid_align-spread">
+                                        <span class="row-text">Finish &amp; Home Automation Upgrade:</span>
+                                        <span class="row-num">₹ {modalCalculations.finishCostFormatted}</span>
+                                    </div>
+                                </template>
+                                <div class="breakdown-row slds-grid slds-grid_align-spread text-danger">
+                                    <span class="row-text">Less: Special Conceded Discount:</span>
+                                    <span class="row-num">- ₹ {modalCalculations.discountTotalFormatted}</span>
+                                </div>
+                                <div class="breakdown-row-total slds-grid slds-grid_align-spread">
+                                    <span class="row-text font-bold">Net Agreement Value:</span>
+                                    <span class="row-num font-bold text-navy">₹ {modalCalculations.netAgreementFormatted}</span>
+                                </div>
+                                <div class="breakdown-row slds-grid slds-grid_align-spread text-muted">
+                                    <span class="row-text">GST (5%) + Possession Infrastructure Fees:</span>
+                                    <span class="row-num">+ ₹ {modalCalculations.gstTaxFormatted}</span>
+                                </div>
+                                <div class="grand-total-row slds-grid slds-grid_align-spread">
+                                    <span class="grand-label">GRAND TOTAL CONSIDERATION:</span>
+                                    <span class="grand-val text-success">₹ {modalCalculations.grandTotalFormatted}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <footer class="slds-modal__footer slds-grid slds-grid_align-spread">
+                        <lightning-button variant="neutral" label="Cancel" onclick={handleCloseUnitModal}></lightning-button>
+                        <button class="btn-confirm-quote" onclick={handleConfirmSaveQuote} disabled={isSavingQuote}>
+                            <template if:true={isSavingQuote}>
+                                <span class="spinner-small"></span> Creating Official Quotation...
+                            </template>
+                            <template if:false={isSavingQuote}>
+                                <span>💾 Confirm &amp; Save Quotation (₹{modalCalculations.grandTotalFormatted})</span>
+                            </template>
+                        </button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

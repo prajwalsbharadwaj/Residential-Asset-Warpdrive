@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>No_Future_Payment_Date</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  NOT(ISBLANK(Date_Of_Payment__c)),
+  Date_Of_Payment__c &gt; TODAY()
+)</errorConditionFormula>
+    <errorDisplayField>Date_Of_Payment__c</errorDisplayField>
+    <errorMessage>Date of Payment cannot be in the future.</errorMessage>
+</ValidationRule>

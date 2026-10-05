@@ -1,0 +1,102 @@
+<template>
+    <div class="panel">
+        <template lwc:if={loading}>
+            <div class="loading-row">
+                <div class="spinner" aria-hidden="true"></div>
+                <span>Loading…</span>
+            </div>
+        </template>
+
+        <template lwc:if={busy}>
+            <div class="loading-row">
+                <div class="spinner" aria-hidden="true"></div>
+                <span>Generating KYC link…</span>
+            </div>
+        </template>
+
+        <template lwc:if={error}>
+            <div class="msg msg--error" role="alert">{error}</div>
+        </template>
+
+        <template lwc:if={showStatus}>
+            <!-- Status display (only when KYC link already exists) -->
+            <div class="status-block">
+                <div class="status-row">
+                    <span class="status-label">Buyer</span>
+                    <span>{status.buyerName}</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Mobile</span>
+                    <span>{status.buyerMobile}</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Email</span>
+                    <span>{status.buyerEmail}</span>
+                </div>
+                <template lwc:if={status.status}>
+                    <div class="status-row">
+                        <span class="status-label">KYC Status</span>
+                        <span class={statusClass}>{status.status}</span>
+                    </div>
+                </template>
+                <template lwc:if={status.url}>
+                    <div class="status-row">
+                        <span class="status-label">Form Link</span>
+                        <a href={status.url} target="_blank" class="link">Open Form</a>
+                    </div>
+                </template>
+                <template lwc:if={status.expiresOn}>
+                    <div class="status-row">
+                        <span class="status-label">Expires</span>
+                        <span class={expiredClass}>{expiresLabel}</span>
+                    </div>
+                </template>
+                <template lwc:if={status.submittedAt}>
+                    <div class="status-row">
+                        <span class="status-label">Submitted</span>
+                        <span>{submittedAtFormatted}</span>
+                    </div>
+                </template>
+                <template lwc:if={status.lastSavedAt}>
+                    <div class="status-row">
+                        <span class="status-label">Last Saved</span>
+                        <span>{lastSavedAtFormatted}</span>
+                    </div>
+                </template>
+            </div>
+
+            <template lwc:if={status.siteError}>
+                <div class="msg msg--warn">{status.siteError}</div>
+            </template>
+        </template>
+
+        <template lwc:if={confirmRegenerate}>
+            <div class="msg msg--warn">This will replace the existing link and resend the email. The old link will stop working. Are you sure?</div>
+            <div class="btn-row">
+                <button class="btn btn--secondary" type="button" onclick={cancelRegenerate}>Cancel</button>
+                <button class="btn btn--danger" type="button" onclick={doGenerate} disabled={busy}>
+                    <template lwc:if={busy}>Sending…</template>
+                    <template lwc:else>Yes, Regenerate &amp; Resend</template>
+                </button>
+            </div>
+        </template>
+
+        <template lwc:if={showActions}>
+            <div class="btn-row">
+                <template lwc:if={isSubmitted}>
+                    <button class="btn btn--secondary" type="button" onclick={handleReopen} disabled={busy}>
+                        <template lwc:if={busy}>Working…</template>
+                        <template lwc:else>Reopen for Corrections</template>
+                    </button>
+                </template>
+                <template lwc:else>
+                    <button class="btn btn--primary" type="button" onclick={handleGenerate} disabled={busy}>
+                        <template lwc:if={busy}>Sending…</template>
+                        <template lwc:elseif={hasLink}>Regenerate KYC</template>
+                        <template lwc:else>Generate KYC</template>
+                    </button>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>

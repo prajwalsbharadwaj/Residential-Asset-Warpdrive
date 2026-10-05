@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Projects__c</fullName>
+    <externalId>false</externalId>
+    <label>Project</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Varthur Vista</fullName>
+                <default>false</default>
+                <label>Varthur Vista</label>
+            </value>
+            <value>
+                <fullName>Yalahanka Yard</fullName>
+                <default>false</default>
+                <label>Yalahanka Yard</label>
+            </value>
+            <value>
+                <fullName>Miyapur Manor</fullName>
+                <default>false</default>
+                <label>Miyapur Manor</label>
+            </value>
+            <value>
+                <fullName>Banjara Beam</fullName>
+                <default>false</default>
+                <label>Banjara Beam</label>
+            </value>
+            <value>
+                <fullName>Saket Square</fullName>
+                <default>false</default>
+                <label>Saket Square</label>
+            </value>
+            <value>
+                <fullName>Rohini Rise</fullName>
+                <default>false</default>
+                <label>Rohini Rise</label>
+            </value>
+            <value>
+                <fullName>Hemlock Society</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Hemlock Society</label>
+            </value>
+            <value>
+                <fullName>Kessaku</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Kessaku</label>
+            </value>
+            <value>
+                <fullName>Kolkata</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Kolkata</label>
+            </value>
+            <value>
+                <fullName>One Bangalore West</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>One Bangalore West</label>
+            </value>
+            <value>
+                <fullName>One Bangalore West;Kessaku</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>One Bangalore West;Kessaku</label>
+            </value>
+            <value>
+                <fullName>WD Society</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>WD Society</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

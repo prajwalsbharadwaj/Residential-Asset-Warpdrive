@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CreatedInLast90Days__c</fullName>
+    <externalId>false</externalId>
+    <formula>AND(
+    CreatedDate &lt;= (NOW() - 2),
+    RecordType.DeveloperName = &quot;Standard_Lead_Residential&quot;
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Created In Last 90 Days</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

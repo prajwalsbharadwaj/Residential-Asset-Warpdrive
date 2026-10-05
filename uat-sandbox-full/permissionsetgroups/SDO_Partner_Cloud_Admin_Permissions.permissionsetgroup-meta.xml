@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>SDO Partner Cloud Admin Permissions</label>
+    <permissionSets>SDO_Partner_Cloud_Admin_Access</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>

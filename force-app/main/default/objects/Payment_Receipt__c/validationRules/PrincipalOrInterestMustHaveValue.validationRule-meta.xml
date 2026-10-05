@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PrincipalOrInterestMustHaveValue</fullName>
+    <active>true</active>
+    <description>This rule will fire if both Principal Applied Or Interest Applied is empty</description>
+    <errorConditionFormula>AND(
+ ISBLANK( Principal_Applied__c),
+	ISBLANK( Interest_Applied__c)  
+)</errorConditionFormula>
+    <errorMessage>Please Enter Value in Principal Applied Or Interest Applied Or Both.</errorMessage>
+</ValidationRule>

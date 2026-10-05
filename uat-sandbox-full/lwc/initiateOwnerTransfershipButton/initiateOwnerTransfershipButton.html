@@ -1,0 +1,35 @@
+<template>
+    <lightning-quick-action-panel header="Initiate Ownership Transfer">
+        <lightning-record-edit-form object-api-name="Ownership_Transfer__c" onsuccess={handleSuccess}
+            onerror={handleError}>
+            <!-- Transfer Type -->
+            <lightning-combobox name="type" label="Transfer to" value={selectedType}
+                class="slds-p-left_xx-small" placeholder="Select Account, Contact, or Lead"
+                options={typeOptions} onchange={handleTypeChange}></lightning-combobox>
+
+            <!-- Conditional Fields -->
+            <template if:true={isAccountSelected}>
+                <lightning-input-field field-name="New_Account_Id__c"
+                    onchange={handleAccountChange}></lightning-input-field>
+            </template>
+
+            <template if:true={isLeadSelected}>
+                <lightning-input-field field-name="New_Lead_Id__c" onchange={handleLeadChange}></lightning-input-field>
+            </template>
+
+            <!-- Other Fields -->
+            <lightning-input-field field-name="Transfer_Effective_Date__c" onchange={handleDateChange}
+                required></lightning-input-field>
+
+            <lightning-textarea label="Transfer Reason" value={transferReason} onchange={handleReasonChange}
+                class="slds-p-left_xx-small" required></lightning-textarea>
+        </lightning-record-edit-form>
+
+        <!-- Footer -->
+        <div slot="footer" class="slds-grid slds-grid_align-end">
+            <lightning-button variant="neutral" label="Cancel" onclick={handleClose}></lightning-button>
+            <lightning-button variant="brand" label="Submit" class="slds-m-left_small" onclick={handleSave}
+                disabled={isSaveDisabled}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

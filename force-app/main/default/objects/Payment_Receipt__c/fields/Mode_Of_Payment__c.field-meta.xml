@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mode_Of_Payment__c</fullName>
+    <externalId>false</externalId>
+    <label>Mode Of Payment</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Cheque</fullName>
+                <default>false</default>
+                <label>Cheque</label>
+            </value>
+            <value>
+                <fullName>RTGS</fullName>
+                <default>false</default>
+                <label>RTGS</label>
+            </value>
+            <value>
+                <fullName>Net Banking</fullName>
+                <default>false</default>
+                <label>Net Banking</label>
+            </value>
+            <value>
+                <fullName>TDS</fullName>
+                <default>false</default>
+                <label>TDS</label>
+            </value>
+            <value>
+                <fullName>Bank Disbursement</fullName>
+                <default>false</default>
+                <label>Bank Disbursement</label>
+            </value>
+            <value>
+                <fullName>Demand Draft</fullName>
+                <default>false</default>
+                <label>Demand Draft</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

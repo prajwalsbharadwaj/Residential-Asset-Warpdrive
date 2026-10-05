@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionPlanTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Complete Appointment</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Complete Appointment</name>
+        <uniqueName>Complete_Appointment_7fe02926_6769_11f1_ad2f_8f2d61cbebb4</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Confirm Member Plan</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Confirm Member Plan</name>
+        <uniqueName>Confirm_Member_Plan_7fd74f64_6769_11f1_ad2f_0b31f139bb72</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Contact Provider for Missing Information</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Low</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>false</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Contact Provider for Missing Information</name>
+        <uniqueName>Contact_Provider_for_Missing_Information_7fdddf2d_6769_11f1_ad2f_5dff5aa14780</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Notify Patient of Referral Decision</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Notify Patient of Referral Decision</name>
+        <uniqueName>Notify_Patient_of_Referral_Decision_7fde7b6f_6769_11f1_ad2f_7b6b19d97b47</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Verify Visit Type</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Verify Visit Type</name>
+        <uniqueName>Verify_Visit_Type_7fd6da32_6769_11f1_ad2f_0716082c794f</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Review Health Conditions</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Low</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>false</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Review Health Conditions</name>
+        <uniqueName>Review_Health_Conditions_7fd7eba6_6769_11f1_ad2f_eb5a4cd88856</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Confirm Health Diagnoses</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Low</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>false</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Confirm Health Diagnoses</name>
+        <uniqueName>Confirm_Health_Diagnoses_7fd887e8_6769_11f1_ad2f_398f175ea2ce</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Confirm Patient Details for Eligibility and Benefits Verification</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Confirm Patient Details for Eligibility and Benefits Verification</name>
+        <uniqueName>Confirm_Patient_Details_for_Eligibility_and_7fd9242a_6769_11f1_ad2f_75356166e975</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Book Appointment</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Book Appointment</name>
+        <uniqueName>Book_Appointment_7fdfb3f4_6769_11f1_ad2f_935b61230795</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Notify Provider of Referral Decision</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Notify Provider of Referral Decision</name>
+        <uniqueName>Notify_Provider_of_Referral_Decision_7fdf17b2_6769_11f1_ad2f_632baf1bfa36</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Verify Prior Authorization Requirement</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Verify Prior Authorization Requirement</name>
+        <uniqueName>Verify_Prior_Authorization_Requirement_7fdb9533_6769_11f1_ad2f_ebdac9d4b2f7</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Complete Prior Authorization</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Low</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>false</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Complete Prior Authorization</name>
+        <uniqueName>Complete_Prior_Authorization_7fdd42eb_6769_11f1_ad2f_8515218aa86c</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Specify EHR Patient Identifier</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Low</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>false</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Specify EHR Patient Identifier</name>
+        <uniqueName>Specify_EHR_Patient_Identifier_7fdc0a65_6769_11f1_ad2f_cffeb2850e44</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Submit Prior Authorization</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Low</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>false</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Submit Prior Authorization</name>
+        <uniqueName>Submit_Prior_Authorization_7fdca6a8_6769_11f1_ad2f_adc4bf55590d</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Run Eligibility and Benefits Verification</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Run Eligibility and Benefits Verification</name>
+        <uniqueName>Run_Eligibility_and_Benefits_Verification_7fdaf8f1_6769_11f1_ad2f_51f4a3d99366</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Confirm Provider Details for Eligibility and Benefits Verification</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Confirm Provider Details for Eligibility and Benefits Verification</name>
+        <uniqueName>Confirm_Provider_Details_for_Eligibility_an_7fda5caf_6769_11f1_ad2f_55fb5ff2b398</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Confirm Payer Details for Eligibility and Benefits Verification</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Confirm Payer Details for Eligibility and Benefits Verification</name>
+        <uniqueName>Confirm_Payer_Details_for_Eligibility_and_B_7fd9c06d_6769_11f1_ad2f_5b23bd540999</uniqueName>
+    </actionPlanTemplateItem>
+    <actionPlanTemplateItem>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Subject</name>
+            <valueLiteral>Create Case</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <actionPlanTemplateItemValue>
+            <itemEntityType>Task</itemEntityType>
+            <name>Priority</name>
+            <valueLiteral>Normal</valueLiteral>
+        </actionPlanTemplateItemValue>
+        <isRequired>true</isRequired>
+        <itemEntityType>Task</itemEntityType>
+        <name>Create Case</name>
+        <uniqueName>Create_Case_7fd616e0_6769_11f1_ad2f_65de00525d81</uniqueName>
+    </actionPlanTemplateItem>
+    <description>Standard action plan template for processing clinical service requests (referrals) from intake through appointment completion.</description>
+    <isAdHocItemCreationEnabled>false</isAdHocItemCreationEnabled>
+    <name>Referral Management</name>
+    <targetEntityType>ClinicalServiceRequest</targetEntityType>
+    <uniqueName>Referral_Management_7fad803b_6769_11f1_ad2f_d7d51b064d3e</uniqueName>
+</ActionPlanTemplate>

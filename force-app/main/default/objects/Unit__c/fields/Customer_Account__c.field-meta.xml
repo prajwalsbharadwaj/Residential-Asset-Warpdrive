@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Account__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Links this Unit to the owning Customer Account for accurate property ownership tracking.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Select the Account that represents the primary customer owner of this unit.</inlineHelpText>
+    <label>Customer Account</label>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>Units</relationshipLabel>
+    <relationshipName>Units</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

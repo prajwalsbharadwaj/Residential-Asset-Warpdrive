@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_record_editing_for_active_plan</fullName>
+    <active>true</active>
+    <description>This rule will prevent to edit records once the parent payment plan is active.</description>
+    <errorConditionFormula>AND(
+  NOT(ISNEW()),
+  Payment_Plan_Id__r.Active__c = TRUE
+)</errorConditionFormula>
+    <errorMessage>You cannot edit active Payment Schedules.</errorMessage>
+</ValidationRule>

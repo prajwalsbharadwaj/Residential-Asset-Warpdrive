@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Custom_Notification_for_Initial_Contact_task</name>
+        <label>Send Custom Notification for Initial Contact task</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>Get_Custom_Notification.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>recipientsId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <elementReference>titleCN</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>body</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>Create_Task</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Initial_Task_Notification_to_STMs</name>
+        <label>Send Initial Task Email Notification to STMs</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Get_Custom_Notification</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Owner:User.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>subject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>formattedEmailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <assignments>
+        <name>Assigning_Owner_id_to_collection</name>
+        <label>Assigning Owner id to collection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>recipientsId</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Send_Custom_Notification_for_Initial_Contact_task</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Account_Record_Found</name>
+        <label>Account Record Found</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>AccountFound</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Converted_Account_Record</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Office_Address</targetReference>
+            </connector>
+            <label>AccountFound</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_Owner_Id_is_changed</name>
+        <label>Check if Owner Id is changed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Changed</name>
+            <conditionLogic>((1 AND 2 AND 4) OR ( 1 AND 3)) AND 5</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.OwnerId</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.UserRole.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Sales_Team_Member</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.LeadSource</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Channel Partner</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Owner:User.UserRole.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Presales_Member</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_the_OwnerId_to_check_if_it_is_a_queue</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Task</targetReference>
+            </connector>
+            <label>Changed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>isConvertedLead</name>
+        <label>isConvertedLead</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_the_OwnerId_to_check_if_it_is_a_queue</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.IsConverted</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Converted_Account_Record</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>ActivityDate</name>
+        <dataType>Date</dataType>
+        <expression>today()</expression>
+    </formulas>
+    <formulas>
+        <name>body</name>
+        <dataType>String</dataType>
+        <expression>&quot;A new &apos;Initial Contact&apos; task has been assigned to you for Lead: &quot; &amp; {!$Record.LastName} &amp; &quot;. Please complete it within 60 minutes.&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>bodyEscalated</name>
+        <dataType>String</dataType>
+        <expression>&quot;The &apos;Initial Contact&apos; task for Lead - &quot; &amp; {!$Record.LastName} &amp; &quot; has not been completed within 60 minutes.&quot; &amp; 
+BR() &amp; BR() &amp; 
+&quot;Please follow up with the customer at the earliest.&quot; &amp; 
+BR() &amp; BR() &amp; 
+&quot;Best regards,&quot; &amp; 
+BR() &amp; 
+&quot;Phoenix Residential Notifications&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>isChanged</name>
+        <dataType>Boolean</dataType>
+        <expression>ISCHANGED({!$Record.OwnerId})</expression>
+    </formulas>
+    <formulas>
+        <name>isNew</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
+    <formulas>
+        <name>OwnerChangeTeskDescription</name>
+        <dataType>String</dataType>
+        <expression>&quot;This Lead was reassigned from &quot; &amp;{!$Record__Prior.Owner:User.FirstName} +&apos; &apos; +  {!$Record__Prior.Owner:User.LastName} &amp; &quot; to &quot; &amp;  {!$Record.Owner:User.FirstName} + &apos; &apos; + {!$Record.Owner:User.LastName}</expression>
+    </formulas>
+    <formulas>
+        <name>reminderTime</name>
+        <dataType>DateTime</dataType>
+        <expression>DATETIMEVALUE({!$Flow.CurrentDateTime})+ (1/24)</expression>
+    </formulas>
+    <formulas>
+        <name>subject</name>
+        <dataType>String</dataType>
+        <expression>&quot;New Initial Contact Task for Lead : &quot; &amp; {!$Record.LastName}</expression>
+    </formulas>
+    <formulas>
+        <name>subjectEscaltaed</name>
+        <dataType>String</dataType>
+        <expression>&quot;Urgent: Initial Contact Not Made for Lead: &quot; &amp; {!$Record.LastName}</expression>
+    </formulas>
+    <formulas>
+        <name>taskSubject</name>
+        <dataType>String</dataType>
+        <expression>&quot;Initial Contact : &quot; &amp; {!$Record.FirstName} &amp; &quot; &quot; &amp; {!$Record.LastName}</expression>
+    </formulas>
+    <interviewLabel>RTF : Lead : After Save {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RES_RTF : Lead : After Save</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Task</name>
+        <label>Create Task</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>LeadAssignmentTask</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>reminderTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>Please make initial contact with this lead within 60 minutes.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Not Started</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>taskSubject</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhoId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>LeadAssignmentTask</name>
+        <label>LeadAssignmentTask</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Send_Initial_Task_Notification_to_STMs</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>ActivityDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>OwnerChangeTeskDescription</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>Normal</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Reassignment: Lead owner changed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhoId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Converted_Account_Record</name>
+        <label>Get Converted Account Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Account_Record_Found</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.ConvertedAccountId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Custom_Notification</name>
+        <label>Get Custom Notification</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assigning_Owner_id_to_collection</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>General_Custom_Notification</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_the_OwnerId_to_check_if_it_is_a_queue</name>
+        <label>Get the OwnerId to check if it is a queue</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_if_Owner_Id_is_changed</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Type</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Queue</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Group</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Office_Address</name>
+        <label>Update Office Address</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.ConvertedAccountId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Office_Address__City__s</field>
+            <value>
+                <elementReference>$Record.Residential_Address__City__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Office_Address__CountryCode__s</field>
+            <value>
+                <elementReference>$Record.Residential_Address__CountryCode__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Office_Address__GeocodeAccuracy__s</field>
+            <value>
+                <elementReference>$Record.Residential_Address__GeocodeAccuracy__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Office_Address__Latitude__s</field>
+            <value>
+                <elementReference>$Record.Residential_Address__Latitude__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Office_Address__Longitude__s</field>
+            <value>
+                <elementReference>$Record.Residential_Address__Longitude__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Office_Address__PostalCode__s</field>
+            <value>
+                <elementReference>$Record.Residential_Address__PostalCode__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Office_Address__StateCode__s</field>
+            <value>
+                <elementReference>$Record.Residential_Address__StateCode__s</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Office_Address__Street__s</field>
+            <value>
+                <elementReference>$Record.Residential_Address__Street__s</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Account</object>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>isConvertedLead</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>RecordTypeDeveloperName__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Standard_Lead_Residential</stringValue>
+            </value>
+        </filters>
+        <object>Lead</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>formattedEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;html&gt;
+  &lt;body style=&quot;font-family: Arial, sans-serif; font-size: 15px; color: #333333; line-height: 1.6; background-color: #f9f9f9; padding: 25px;&quot;&gt;
+
+    &lt;div style=&quot;max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.07); border: 1px solid #e0e0e0;&quot;&gt;
+
+      &lt;div style=&quot;background-color: #EBF5FB; padding: 20px; text-align: center; border-radius: 6px; border: 1px solid #D6EAF8; margin-bottom: 25px;&quot;&gt;
+        &lt;h2 style=&quot;color: #2E86C1; font-size: 22px; margin: 0;&quot;&gt;New Task Assigned 📌&lt;/h2&gt;
+      &lt;/div&gt;
+
+      &lt;p style=&quot;font-size: 16px; margin-bottom: 20px;&quot;&gt;
+        Dear &lt;strong&gt;{!$Record.Owner:User.FirstName} {!$Record.Owner:User.LastName}&lt;/strong&gt;,
+      &lt;/p&gt;
+
+      &lt;p style=&quot;font-size: 15px; margin-bottom: 20px;&quot;&gt;
+        A new task titled &lt;strong&gt;&quot;Initial Contact&quot;&lt;/strong&gt; has been assigned to you for the following Lead:
+      &lt;/p&gt;
+
+      &lt;div style=&quot;background-color: #FCF3CF; padding: 15px; border: 1px solid #F9E79F; border-radius: 6px; margin: 25px 0;&quot;&gt;
+        &lt;h3 style=&quot;color: #B9770E; margin-top: 0;&quot;&gt;Lead Details 📝&lt;/h3&gt;
+        &lt;ul style=&quot;padding-left: 20px; margin: 0;&quot;&gt;
+          &lt;li&gt;&lt;strong&gt;Name:&lt;/strong&gt; {!$Record.FirstName} {!$Record.LastName}&lt;/li&gt;
+          &lt;li&gt;&lt;strong&gt;Email:&lt;/strong&gt; &lt;a href=&quot;mailto:{!$Record.Email}&quot; style=&quot;color: #2E86C1;&quot;&gt;{!$Record.Email}&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;strong&gt;Phone:&lt;/strong&gt; &lt;a href=&quot;tel:{!$Record.Phone}&quot; style=&quot;color: #2E86C1;&quot;&gt;{!$Record.Phone}&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+
+      &lt;p style=&quot;font-size: 15px; margin-bottom: 20px;&quot;&gt;
+        Please ensure that this task is completed within &lt;strong&gt;60 minutes&lt;/strong&gt; to maintain timely engagement with the prospect.
+      &lt;/p&gt;
+
+      &lt;div style=&quot;background-color: #F9EBEA; padding: 15px; border: 1px solid #F5B7B1; border-radius: 6px; margin: 25px 0;&quot;&gt;
+        &lt;p style=&quot;margin: 0; font-size: 14px; color: #922B21;&quot;&gt;
+          ⏰ &lt;strong&gt;Your prompt response is crucial!&lt;/strong&gt; Kindly act immediately.
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;h3 style=&quot;color: #2E86C1;&quot;&gt;Need Assistance?&lt;/h3&gt;
+      &lt;p style=&quot;font-size: 14px;&quot;&gt;
+        If you have any questions or require support, feel free to reach out to your manager or CRM administrator.
+      &lt;/p&gt;
+
+      &lt;p style=&quot;font-size: 14px; margin-top: 30px;&quot;&gt;
+        Thank you,&lt;br/&gt;
+        &lt;strong&gt;Phoenix Residential Notifications&lt;/strong&gt;
+      &lt;/p&gt;
+
+    &lt;/div&gt;
+
+  &lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>escalatedUserList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>recipientsId collection for custom notification</description>
+        <name>recipientsId</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>titleCN</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>New Initial Contact Task Assigned</stringValue>
+        </value>
+    </variables>
+</Flow>

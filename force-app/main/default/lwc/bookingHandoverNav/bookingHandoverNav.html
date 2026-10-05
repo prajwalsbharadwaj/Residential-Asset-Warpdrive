@@ -1,0 +1,191 @@
+<template>
+    <article class="slds-card slds-card_boundary handover-tab-container">
+        <!-- Tab Banner / Header -->
+        <div class="slds-card__header slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-around_medium slds-border_bottom tab-hero-header">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-service-appointment hero-icon" title="Handover &amp; Possession">
+                        <lightning-icon icon-name="standard:service_appointment" size="medium"></lightning-icon>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span class="tab-title font-weight-bold">Handover &amp; Possession Journey</span>
+                    </h2>
+                    <p class="slds-text-body_regular slds-text-color_weak">Seamless post-booking transition: Readiness, Quality Inspection, Snag Rectification, and Key Delivery</p>
+                </div>
+            </header>
+            <div class="slds-grid slds-grid_vertical-align-center">
+                <lightning-button-icon
+                    icon-name="utility:refresh"
+                    variant="border-filled"
+                    alternative-text="Refresh Handover Status"
+                    onclick={handleRefresh}
+                    class="slds-m-right_xx-small"
+                ></lightning-button-icon>
+            </div>
+        </div>
+
+        <!-- Card Body -->
+        <div class="slds-card__body slds-card__body_inner slds-p-around_large">
+            <template lwc:if={isLoading}>
+                <div class="spinner-container slds-p-around_xx-large slds-text-align_center">
+                    <lightning-spinner alternative-text="Loading Handover Journey..." size="medium"></lightning-spinner>
+                </div>
+            </template>
+            <template lwc:else>
+                <!-- CASE 1: Handover Record Exists -->
+                <template lwc:if={hasHandover}>
+                    <div class="slds-notify slds-notify_alert slds-alert_info slds-m-bottom_medium banner-badge" role="alert">
+                        <span class="slds-assistive-text">info</span>
+                        <lightning-icon icon-name="utility:info" size="x-small" variant="inverse" class="slds-m-right_x-small"></lightning-icon>
+                        <h2>
+                            Handover record is active for this booking. Click below to launch the dedicated workspace for inspections, snags, and physical handover.
+                        </h2>
+                    </div>
+
+                    <!-- KPI Cards Grid -->
+                    <div class="slds-grid slds-gutters slds-wrap slds-m-bottom_large">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-m-bottom_small">
+                            <div class="kpi-card slds-p-around_medium slds-box slds-box_x-small">
+                                <span class="kpi-label">HANDOVER RECORD</span>
+                                <div class="kpi-value">
+                                    <a href="#" onclick={navigateToHandover} class="record-link font-weight-bold">{summary.handoverNumber}</a>
+                                </div>
+                                <span class="kpi-sub">Tagged to this Booking</span>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-m-bottom_small">
+                            <div class="kpi-card slds-p-around_medium slds-box slds-box_x-small">
+                                <span class="kpi-label">LIFECYCLE STAGE</span>
+                                <div class="slds-m-top_xx-small">
+                                    <span class={stageBadgeClass}>{stageLabel}</span>
+                                </div>
+                                <span class="kpi-sub slds-truncate">{summary.status}</span>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-m-bottom_small">
+                            <div class="kpi-card slds-p-around_medium slds-box slds-box_x-small">
+                                <span class="kpi-label">TARGET HANDOVER DATE</span>
+                                <div class="kpi-value font-weight-bold">{targetDateDisplay}</div>
+                                <span class="kpi-sub">Scheduled Delivery</span>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-m-bottom_small">
+                            <div class="kpi-card slds-p-around_medium slds-box slds-box_x-small">
+                                <span class="kpi-label">HANDOVER IN-CHARGE</span>
+                                <div class="kpi-value font-weight-bold slds-truncate" title={summary.ownerName}>{summary.ownerName}</div>
+                                <span class="kpi-sub">Assigned Specialist</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Property & Customer Context -->
+                    <div class="slds-box slds-theme_shade slds-m-bottom_large slds-p-around_medium">
+                        <div class="slds-grid slds-gutters slds-wrap">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                <span class="meta-label">CUSTOMER NAME</span>
+                                <div class="meta-val font-weight-bold">{summary.customerName}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                <span class="meta-label">UNIT &amp; TOWER</span>
+                                <div class="meta-val font-weight-bold">{summary.unitName} &bull; {summary.towerName}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                <span class="meta-label">HANDOVER STATUS</span>
+                                <div class="meta-val font-weight-bold">{summary.status}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-top_small slds-border_top">
+                        <div>
+                            <button class="slds-button slds-button_neutral" onclick={navigateToHandover}>
+                                <lightning-icon icon-name="utility:preview" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                View Handover Details
+                            </button>
+                        </div>
+                        <div>
+                            <button class="slds-button slds-button_brand launch-btn" onclick={navigateToHandover}>
+                                <lightning-icon icon-name="utility:new_window" size="x-small" variant="inverse" class="slds-m-right_x-small"></lightning-icon>
+                                Open Dedicated Handover Workspace ↗
+                            </button>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- CASE 2: Handover Record NOT yet initiated -->
+                <template lwc:else>
+                    <div class="intake-hero slds-box slds-theme_shade slds-m-bottom_large slds-p-around_large">
+                        <div class="slds-media slds-media_center slds-m-bottom_medium">
+                            <div class="slds-media__figure">
+                                <lightning-icon icon-name="utility:touch_action" size="medium" variant="warning"></lightning-icon>
+                            </div>
+                            <div class="slds-media__body">
+                                <h3 class="slds-text-heading_medium font-weight-bold">Initiate Handover &amp; Possession Lifecycle</h3>
+                                <p class="slds-text-body_regular slds-text-color_weak">
+                                    Capture the initial handover targets below. Once initiated, a dedicated Handover record is created with Master-Detail linkage to this Booking.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Intake Form Fields -->
+                        <div class="slds-grid slds-gutters slds-wrap slds-m-bottom_medium">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                                <lightning-input
+                                    type="date"
+                                    name="targetDate"
+                                    label="Target Handover Date"
+                                    value={targetDateInput}
+                                    onchange={handleTargetDateChange}
+                                    required
+                                ></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                                <lightning-input
+                                    type="text"
+                                    name="customerSignee"
+                                    label="Authorized Customer Representative / Signee"
+                                    value={customerSigneeInput}
+                                    placeholder="Customer or POA Holder"
+                                    onchange={handleCustomerSigneeChange}
+                                ></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-m-bottom_small">
+                                <lightning-textarea
+                                    name="instructions"
+                                    label="Customer Instructions &amp; Pre-Handover Notes"
+                                    placeholder="Enter any special requests, preferred inspection timing, or handover instructions..."
+                                    value={instructionsInput}
+                                    onchange={handleInstructionsChange}
+                                ></lightning-textarea>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="slds-grid slds-grid_align-end slds-m-top_medium">
+                            <button
+                                class="slds-button slds-button_brand launch-btn"
+                                onclick={initiateHandover}
+                                disabled={isCreating}
+                            >
+                                <template lwc:if={isCreating}>
+                                    <lightning-spinner alternative-text="Creating Handover Record..." size="x-small" class="slds-m-right_x-small"></lightning-spinner>
+                                    Initializing Handover...
+                                </template>
+                                <template lwc:else>
+                                    <lightning-icon icon-name="utility:forward" size="x-small" variant="inverse" class="slds-m-right_x-small"></lightning-icon>
+                                    Create Handover &amp; Open Workspace ↗
+                                </template>
+                            </button>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </article>
+</template>

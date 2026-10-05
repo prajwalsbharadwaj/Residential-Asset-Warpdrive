@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Approval_Status__c</fullName>
+    <externalId>false</externalId>
+    <label>Approval Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Pending Approval</fullName>
+                <default>false</default>
+                <label>Pending Approval</label>
+            </value>
+            <value>
+                <fullName>Booking Approved</fullName>
+                <default>false</default>
+                <label>Booking Approved</label>
+            </value>
+            <value>
+                <fullName>Booking Rejected</fullName>
+                <default>false</default>
+                <label>Booking Rejected</label>
+            </value>
+            <value>
+                <fullName>Transfer Approved</fullName>
+                <default>false</default>
+                <label>Transfer Approved</label>
+            </value>
+            <value>
+                <fullName>Transfer Rejected</fullName>
+                <default>false</default>
+                <label>Transfer Rejected</label>
+            </value>
+            <value>
+                <fullName>Cancellation Approved</fullName>
+                <default>false</default>
+                <label>Cancellation Approved</label>
+            </value>
+            <value>
+                <fullName>Cancellation Rejected</fullName>
+                <default>false</default>
+                <label>Cancellation Rejected</label>
+            </value>
+            <value>
+                <fullName>Booking_Approved</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Booking_Approved</label>
+            </value>
+            <value>
+                <fullName>Rejected</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Rejected</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Domain__c</fullName>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Domain</label>
+    <required>true</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Configuration</fullName>
+                <default>true</default>
+                <label>Configuration</label>
+            </value>
+            <value>
+                <fullName>Facing</fullName>
+                <default>false</default>
+                <label>Facing</label>
+            </value>
+            <value>
+                <fullName>Floor</fullName>
+                <default>false</default>
+                <label>Floor</label>
+            </value>
+            <value>
+                <fullName>Material Group</fullName>
+                <default>false</default>
+                <label>Material Group</label>
+            </value>
+            <value>
+                <fullName>Material Type</fullName>
+                <default>false</default>
+                <label>Material Type</label>
+            </value>
+            <value>
+                <fullName>Plant</fullName>
+                <default>false</default>
+                <label>Plant</label>
+            </value>
+            <value>
+                <fullName>Tower</fullName>
+                <default>false</default>
+                <label>Tower</label>
+            </value>
+            <value>
+                <fullName>Unit Type</fullName>
+                <default>false</default>
+                <label>Unit Type</label>
+            </value>
+            <value>
+                <fullName>Document Type</fullName>
+                <default>false</default>
+                <label>Document Type</label>
+            </value>
+            <value>
+                <fullName>Unit Status</fullName>
+                <default>false</default>
+                <label>Unit Status</label>
+            </value>
+            <value>
+                <fullName>Booking Milestone</fullName>
+                <default>false</default>
+                <label>Booking Milestone</label>
+            </value>
+            <value>
+                <fullName>Booking Bill Rule</fullName>
+                <default>false</default>
+                <label>Booking Bill Rule</label>
+            </value>
+            <value>
+                <fullName>Booking Bill Block</fullName>
+                <default>false</default>
+                <label>Booking Bill Block</label>
+            </value>
+            <value>
+                <fullName>Sales Org</fullName>
+                <default>false</default>
+                <label>Sales Org</label>
+            </value>
+            <value>
+                <fullName>Distribution Channel</fullName>
+                <default>false</default>
+                <label>Distribution Channel</label>
+            </value>
+            <value>
+                <fullName>Division</fullName>
+                <default>false</default>
+                <label>Division</label>
+            </value>
+            <value>
+                <fullName>Receipt Reversal</fullName>
+                <default>false</default>
+                <label>Receipt Reversal</label>
+            </value>
+            <value>
+                <fullName>Tower Duplicate External Id</fullName>
+                <default>false</default>
+                <label>Tower Duplicate External Id</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

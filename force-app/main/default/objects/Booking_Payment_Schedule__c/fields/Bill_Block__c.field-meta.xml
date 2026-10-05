@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bill_Block__c</fullName>
+    <externalId>false</externalId>
+    <label>Bill Block</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Compl Confirm Missng</fullName>
+                <default>true</default>
+                <label>Compl Confirm Missng</label>
+            </value>
+            <value>
+                <fullName>Check Day Rate</fullName>
+                <default>false</default>
+                <label>Check Day Rate</label>
+            </value>
+            <value>
+                <fullName>Calculation Missing</fullName>
+                <default>false</default>
+                <label>Calculation Missing</label>
+            </value>
+            <value>
+                <fullName>Prices Incomplete</fullName>
+                <default>false</default>
+                <label>Prices Incomplete</label>
+            </value>
+            <value>
+                <fullName>Check Terms of Paymt</fullName>
+                <default>false</default>
+                <label>Check Terms of Paymt</label>
+            </value>
+            <value>
+                <fullName>Check Terms of Dlv</fullName>
+                <default>false</default>
+                <label>Check Terms of Dlv</label>
+            </value>
+            <value>
+                <fullName>Check Credit Memo</fullName>
+                <default>false</default>
+                <label>Check Credit Memo</label>
+            </value>
+            <value>
+                <fullName>Check Debit Memo</fullName>
+                <default>false</default>
+                <label>Check Debit Memo</label>
+            </value>
+            <value>
+                <fullName>Price Chg. Approval</fullName>
+                <default>false</default>
+                <label>Price Chg. Approval</label>
+            </value>
+            <value>
+                <fullName>NF Rate Det. Error</fullName>
+                <default>false</default>
+                <label>NF Rate Det. Error</label>
+            </value>
+            <value>
+                <fullName>Coverage w/o Key Dte</fullName>
+                <default>false</default>
+                <label>Coverage w/o Key Dte</label>
+            </value>
+            <value>
+                <fullName>Coverage w/o Fxd Rte</fullName>
+                <default>false</default>
+                <label>Coverage w/o Fxd Rte</label>
+            </value>
+            <value>
+                <fullName>Cov.Qty&lt;Document Qty</fullName>
+                <default>false</default>
+                <label>Cov.Qty&lt;Document Qty</label>
+            </value>
+            <value>
+                <fullName>Rte Conversion Error</fullName>
+                <default>false</default>
+                <label>Rte Conversion Error</label>
+            </value>
+            <value>
+                <fullName>No GI/GR Posting</fullName>
+                <default>false</default>
+                <label>No GI/GR Posting</label>
+            </value>
+            <value>
+                <fullName>Prov.Qty&lt;Doc.Qty</fullName>
+                <default>false</default>
+                <label>Prov.Qty&lt;Doc.Qty</label>
+            </value>
+            <value>
+                <fullName>Prov. Rate Missing</fullName>
+                <default>false</default>
+                <label>Prov. Rate Missing</label>
+            </value>
+            <value>
+                <fullName>Base Key Missing</fullName>
+                <default>false</default>
+                <label>Base Key Missing</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

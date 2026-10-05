@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Amount__c</fullName>
+    <description>Total amount (principal + interest + tax) at posting time.</description>
+    <externalId>false</externalId>
+    <formula>IF(ISBLANK(Principal_Amount__c), 0, Principal_Amount__c) +
+        IF(ISBLANK(Interest_Amount__c), 0, Interest_Amount__c) + IF(ISBLANK(Tax_Amount__c), 0,
+        Tax_Amount__c)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Sums principal, interest, and tax components so you can see the total impact of the ledger row.</inlineHelpText>
+    <label>Total Amount</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Escalation_Reason__c</fullName>
+    <description>Why an email case was classified COMPLEX and escalated to the CRM team.</description>
+    <externalId>false</externalId>
+    <label>Escalation Reason</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Legal or RERA complaint</fullName>
+                <default>false</default>
+                <label>Legal or RERA complaint</label>
+            </value>
+            <value>
+                <fullName>Cancellation or refund</fullName>
+                <default>false</default>
+                <label>Cancellation or refund</label>
+            </value>
+            <value>
+                <fullName>Possession delay or compensation</fullName>
+                <default>false</default>
+                <label>Possession delay or compensation</label>
+            </value>
+            <value>
+                <fullName>Payment dispute</fullName>
+                <default>false</default>
+                <label>Payment dispute</label>
+            </value>
+            <value>
+                <fullName>Fraud or unauthorised transaction</fullName>
+                <default>false</default>
+                <label>Fraud or unauthorised transaction</label>
+            </value>
+            <value>
+                <fullName>Construction quality</fullName>
+                <default>false</default>
+                <label>Construction quality</label>
+            </value>
+            <value>
+                <fullName>Ownership transfer</fullName>
+                <default>false</default>
+                <label>Ownership transfer</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

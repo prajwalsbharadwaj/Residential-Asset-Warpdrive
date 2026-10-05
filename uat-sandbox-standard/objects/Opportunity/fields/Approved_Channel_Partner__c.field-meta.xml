@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Approved_Channel_Partner__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <externalId>false</externalId>
+    <inlineHelpText>Only approved Channel Partner accounts will appear in this list.</inlineHelpText>
+    <label>Channel Partner</label>
+    <lookupFilter>
+        <active>true</active>
+        <errorMessage>Only Accounts with an &apos;Approved&apos; Channel Partner Status can be selected.</errorMessage>
+        <filterItems>
+            <field>Account.CP_Approval_Status__c</field>
+            <operation>equals</operation>
+            <value>Approved</value>
+        </filterItems>
+        <filterItems>
+            <field>Account.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Channel Partner (Residential)</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>Opportunities</relationshipLabel>
+    <relationshipName>Opportunities</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <type>Lookup</type>
+</CustomField>

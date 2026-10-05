@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Principal_Cannot_Exceed_outstanding</fullName>
+    <active>true</active>
+    <description>Keeps schedule principal accurate, true overage must flow to Excess Payment -&gt; Advance Applied later</description>
+    <errorConditionFormula>Principal_Applied__c &gt;  (Demand__r.Booking_Payment_Schedule_Id__r.Installment_Amount__c 
+																										- Demand__r.Booking_Payment_Schedule_Id__r.TotalPrincipalReceived__c
+																									 -  Demand__r.Booking_Payment_Schedule_Id__r.Advance_Applied__c )</errorConditionFormula>
+    <errorMessage>Principle exceeds this schedule&apos;s outstanding. Enter only the outstanding here; any extra will be excess (carried to future schedules).</errorMessage>
+</ValidationRule>

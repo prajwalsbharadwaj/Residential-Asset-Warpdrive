@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_for_Duplication_Picklist__c</fullName>
+    <externalId>false</externalId>
+    <label>Reason for Duplication</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Duplicate record found with same phone</fullName>
+                <default>false</default>
+                <label>Duplicate record found with same phone</label>
+            </value>
+            <value>
+                <fullName>Duplicate record found with same email</fullName>
+                <default>false</default>
+                <label>Duplicate record found with same email</label>
+            </value>
+            <value>
+                <fullName>Duplicate record found with same phone and email</fullName>
+                <default>false</default>
+                <label>Duplicate record found with same phone and email</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

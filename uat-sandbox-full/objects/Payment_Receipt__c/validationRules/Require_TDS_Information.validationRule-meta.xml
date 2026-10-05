@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_TDS_Information</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISPICKVAL(Mode_Of_Payment__c, &apos;TDS&apos;),
+					ISBLANK(Challan_Number__c),
+  			ISBLANK(Certificate_Number__c) 
+				)</errorConditionFormula>
+    <errorDisplayField>Mode_Of_Payment__c</errorDisplayField>
+    <errorMessage>You must enter a Challan Number or a Certification Number when the Mode of Payment is TDS.</errorMessage>
+</ValidationRule>

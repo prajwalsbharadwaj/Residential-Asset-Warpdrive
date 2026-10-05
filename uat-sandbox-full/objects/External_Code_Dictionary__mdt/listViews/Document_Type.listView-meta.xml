@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Document_Type</fullName>
+    <columns>MasterLabel</columns>
+    <columns>DeveloperName</columns>
+    <columns>Code__c</columns>
+    <columns>Domain__c</columns>
+    <columns>Is_Active__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Domain__c</field>
+        <operation>equals</operation>
+        <value>Document Type</value>
+    </filters>
+    <label>Document Type</label>
+</ListView>

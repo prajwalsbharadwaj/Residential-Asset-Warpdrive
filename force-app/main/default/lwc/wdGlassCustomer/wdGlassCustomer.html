@@ -1,0 +1,264 @@
+<template>
+    <template lwc:if={error}>
+        <div class="wd-error" role="alert">{error}</div>
+    </template>
+
+    <!-- Top: alerts + KPI cards -->
+    <template lwc:if={isSummary}>
+        <template for:each={alerts} for:item="alert">
+            <div key={alert.key} class={alert.className} role="status">
+                <span class="alert-dot" aria-hidden="true"></span>{alert.message}
+            </div>
+        </template>
+        <div class={gridClass}>
+            <template for:each={cards} for:item="card">
+                <article key={card.key} class={card.className}>
+                    <span class="kpi-label">{card.label}</span>
+                    <p class={card.valueClass}>{card.value}<span class="kpi-unit">{card.unit}</span></p>
+                    <template lwc:if={card.hasProgress}>
+                        <span class="bar"><span class="bar-fill" style={card.progressStyle}></span></span>
+                    </template>
+                    <p class="kpi-caption">{card.caption}</p>
+                </article>
+            </template>
+        </div>
+    </template>
+
+    <!-- Tab 1: Overview & Units (What the customer owns) -->
+    <template lwc:if={isHoldings}>
+        <template lwc:if={hasHoldings}>
+            <section class="wd-glass card">
+                <header class="head">
+                    <h2 class="wd-section-title">Units owned</h2>
+                    <span class="head-note">{paidSummary} · {dueSummary}</span>
+                </header>
+                <div class="holdings">
+                    <template for:each={holdings} for:item="h">
+                        <article key={h.key} class="holding">
+                            <div class="holding-top">
+                                <div class="holding-id">
+                                    <a href="#" class="holding-unit" data-id={h.unitId} onclick={handleOpen}>{h.unitName}</a>
+                                    <span class="holding-spec">{h.spec}</span>
+                                    <span class="holding-loc">{h.location}</span>
+                                </div>
+                                <div class="holding-side">
+                                    <span class={h.statusClass}>{h.status}</span>
+                                    <a href="#" class="small-link" data-id={h.bookingId} onclick={handleOpen}>{h.bookingName} · {h.role}</a>
+                                </div>
+                            </div>
+                            <div class="money">
+                                <div><span class="money-label">Agreement value</span><span class="money-value">{h.valueText}</span></div>
+                                <div><span class="money-label">Paid</span><span class="money-value money_paid">{h.paidText}</span></div>
+                                <div><span class="money-label">Outstanding</span><span class="money-value">{h.outstandingText}</span></div>
+                            </div>
+                            <span class="bar bar_wide" title="Paid share of agreement value">
+                                <span class="bar-fill" style={h.progressStyle}></span>
+                            </span>
+                            <dl class="facts">
+                                <template for:each={h.facts} for:item="f">
+                                    <div key={f.key} class="fact">
+                                        <dt>{f.label}</dt>
+                                        <dd>{f.value}</dd>
+                                    </div>
+                                </template>
+                            </dl>
+                        </article>
+                    </template>
+                </div>
+            </section>
+        </template>
+        <template lwc:else>
+            <section class="wd-glass card">
+                <header class="head">
+                    <h2 class="wd-section-title">Units owned</h2>
+                </header>
+                <p class="empty">No residential units booked yet. Active deals and site visits are tracked under the Pipeline &amp; Visits tab.</p>
+            </section>
+        </template>
+    </template>
+
+    <!-- Tab 2: Financials & Payments (Dues + Receipts) -->
+    <template lwc:if={isFinancials}>
+        <section class="wd-glass card">
+            <header class="head">
+                <h2 class="wd-section-title">Upcoming &amp; overdue dues</h2>
+                <span class="head-note">{dueSummary}</span>
+            </header>
+            <template lwc:if={hasDues}>
+                <ul class="rows">
+                    <template for:each={dues} for:item="d">
+                        <li key={d.key} class="row">
+                            <div class="row-main">
+                                <a href="#" class="row-title" data-id={d.id} onclick={handleOpen}>{d.title}</a>
+                                <span class="row-meta">{d.meta}</span>
+                            </div>
+                            <div class="row-side">
+                                <span class="row-amount">{d.amountText}</span>
+                                <span class={d.whenClass}>{d.when}</span>
+                                <template lwc:if={d.interestText}>
+                                    <span class="when when_bad">{d.interestText}</span>
+                                </template>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template lwc:else>
+                <p class="empty">All milestone dues are fully settled. No pending or overdue instalments on the payment schedule.</p>
+            </template>
+        </section>
+
+        <section class="wd-glass card">
+            <header class="head">
+                <h2 class="wd-section-title">Recent payments &amp; receipts</h2>
+                <span class="head-note">{paidSummary}</span>
+            </header>
+            <template lwc:if={hasReceipts}>
+                <ul class="rows">
+                    <template for:each={receipts} for:item="r">
+                        <li key={r.key} class="row">
+                            <div class="row-main">
+                                <a href="#" class="row-title" data-id={r.id} onclick={handleOpen}>{r.title}</a>
+                                <span class="row-meta">{r.meta}</span>
+                            </div>
+                            <div class="row-side">
+                                <span class="row-amount">{r.amountText}</span>
+                                <span class={r.statusClass}>{r.status}</span>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template lwc:else>
+                <p class="empty">No payment receipts recorded yet for this customer.</p>
+            </template>
+        </section>
+    </template>
+
+    <!-- Tab 3: Pipeline & Visits (Opportunities + Site Visits + Enquiries) -->
+    <template lwc:if={isPipeline}>
+        <section class="wd-glass card">
+            <header class="head">
+                <h2 class="wd-section-title">Open opportunities</h2>
+                <button type="button" class="link-btn" onclick={handleNewOpportunity}>+ New Deal</button>
+            </header>
+            <template lwc:if={hasOpportunities}>
+                <ul class="rows">
+                    <template for:each={opportunities} for:item="o">
+                        <li key={o.key} class="row">
+                            <div class="row-main">
+                                <a href="#" class="row-title" data-id={o.id} onclick={handleOpen}>{o.title}</a>
+                                <span class="row-meta">{o.meta}</span>
+                            </div>
+                            <div class="row-side">
+                                <span class="row-amount">{o.amountText}</span>
+                                <span class={o.statusClass}>{o.status}</span>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template lwc:else>
+                <p class="empty">No open deal. A happy buyer is the best lead for a second unit or a referral.</p>
+            </template>
+        </section>
+
+        <section class="wd-glass card">
+            <header class="head">
+                <h2 class="wd-section-title">Site visits</h2>
+                <button type="button" class="link-btn" onclick={handleNewSiteVisit}>+ Log Visit</button>
+            </header>
+            <template lwc:if={hasSiteVisits}>
+                <ul class="rows">
+                    <template for:each={siteVisits} for:item="v">
+                        <li key={v.key} class="row">
+                            <div class="row-main">
+                                <a href="#" class="row-title" data-id={v.id} onclick={handleOpen}>{v.title}</a>
+                                <span class="row-meta">{v.meta}</span>
+                            </div>
+                            <div class="row-side">
+                                <span class={v.statusClass}>{v.status}</span>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template lwc:else>
+                <p class="empty">No site visits recorded yet for this customer.</p>
+            </template>
+        </section>
+
+        <template lwc:if={hasEnquiries}>
+            <section class="wd-glass card">
+                <header class="head">
+                    <h2 class="wd-section-title">Enquiry history</h2>
+                </header>
+                <ul class="rows">
+                    <template for:each={enquiries} for:item="e">
+                        <li key={e.key} class="row">
+                            <div class="row-main">
+                                <a href="#" class="row-title" data-id={e.id} onclick={handleOpen}>{e.title}</a>
+                                <span class="row-meta">{e.meta}</span>
+                            </div>
+                            <div class="row-side">
+                                <span class={e.statusClass}>{e.status}</span>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </section>
+        </template>
+    </template>
+
+    <!-- Sidebar: Profile Card (Quick Contact & Ownership) -->
+    <template lwc:if={isSidebarProfile}>
+        <template lwc:if={loaded}>
+            <section class="wd-glass card">
+                <header class="head">
+                    <h2 class="wd-section-title">{profile.name}</h2>
+                </header>
+                <div class="contact">
+                    <template lwc:if={profile.telHref}>
+                        <a class="chip-btn" href={profile.telHref}>Call {profile.primaryPhone}</a>
+                        <a class="chip-btn" href={profile.waHref} target="_blank" rel="noopener">WhatsApp</a>
+                    </template>
+                    <template lwc:if={profile.mailHref}>
+                        <a class="chip-btn" href={profile.mailHref}>Email</a>
+                    </template>
+                </div>
+                <dl class="lines">
+                    <template for:each={profile.lines} for:item="l">
+                        <div key={l.key} class="line">
+                            <dt>{l.label}</dt>
+                            <dd>{l.value}</dd>
+                        </div>
+                    </template>
+                </dl>
+            </section>
+        </template>
+    </template>
+
+    <!-- Sidebar: Support & Open Service Cases -->
+    <template lwc:if={isSidebarSupport}>
+        <template lwc:if={hasCases}>
+            <section class="wd-glass card">
+                <header class="head">
+                    <h2 class="wd-section-title">Open service cases</h2>
+                </header>
+                <ul class="rows">
+                    <template for:each={cases} for:item="k">
+                        <li key={k.key} class="row">
+                            <div class="row-main">
+                                <a href="#" class="row-title" data-id={k.id} onclick={handleOpen}>{k.title}</a>
+                                <span class="row-meta">{k.meta}</span>
+                            </div>
+                            <div class="row-side">
+                                <span class={k.statusClass}>{k.status}</span>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </section>
+        </template>
+    </template>
+</template>

@@ -1,0 +1,224 @@
+/* Card Container - WARPDRIVE LIGHT THEME */
+.sap-card {
+    background: #ffffff;
+    border-radius: 14px;
+    color: #0f172a;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+    border: 1px solid #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden;
+}
+
+.sap-header {
+    padding: 14px 16px 10px;
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    border-bottom: 2px solid #00a859;
+}
+
+.brand-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.sap-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sap-logo-text {
+    background: #ecfdf5;
+    color: #047857;
+    font-weight: 800;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    border: 1px solid #a7f3d0;
+    letter-spacing: 0.5px;
+}
+
+.system-id {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    font-family: monospace;
+}
+
+.sync-status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.dot-connected {
+    background-color: #00a859;
+    box-shadow: 0 0 8px rgba(0, 168, 89, 0.6);
+    animation: pulse-dot 2s infinite;
+}
+
+.dot-syncing {
+    background-color: #f59e0b;
+    box-shadow: 0 0 8px #f59e0b;
+    animation: spin 0.8s linear infinite;
+}
+
+.sap-sub {
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* Body */
+.sap-body {
+    padding: 16px;
+}
+
+.telemetry-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.telemetry-tile {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 8px 10px;
+}
+
+.tile-lbl {
+    font-size: 9px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.tile-val {
+    font-size: 12px;
+    font-weight: 700;
+    font-family: monospace;
+    color: #0f172a;
+}
+
+.highlight-blue {
+    color: #0f172a;
+}
+
+.highlight-emerald {
+    color: #00a859;
+    font-weight: 800;
+}
+
+.status-green {
+    color: #00a859;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+/* Sync Action */
+.sync-action-row {
+    text-align: center;
+}
+
+.btn-sync-sap {
+    width: 100%;
+    background: #00a859;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 168, 89, 0.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.btn-sync-sap:hover {
+    background: #008c4a;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 168, 89, 0.45);
+}
+
+.sync-icon {
+    font-size: 14px;
+}
+
+.last-sync-time {
+    margin-top: 8px;
+    font-size: 10px;
+    color: #64748b;
+}
+
+/* Syncing Animation Box */
+.syncing-box {
+    background: #f8fafc;
+    border: 1.5px solid #a7f3d0;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.sync-spinner-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.sync-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0, 168, 89, 0.2);
+    border-top: 2px solid #00a859;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.sync-step-label {
+    font-size: 11px;
+    color: #00a859;
+    font-family: monospace;
+    font-weight: 700;
+}
+
+.progress-bar-track {
+    height: 5px;
+    background: #e2e8f0;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: #00a859;
+    border-radius: 9999px;
+    transition: width 0.4s ease;
+}
+
+/* Keyframes */
+@keyframes pulse-dot {
+    0% { transform: scale(0.95); opacity: 0.7; }
+    50% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

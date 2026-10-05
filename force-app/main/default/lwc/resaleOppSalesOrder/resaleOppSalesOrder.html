@@ -1,0 +1,97 @@
+<template>
+    <lightning-card title="Generate Sales Order">
+        <div class="slds-p-around_medium">
+            <template lwc:if={isWiring}>
+                <lightning-spinner alternative-text="Loading..." size="small"></lightning-spinner>
+            </template>
+            <template lwc:elseif={isLoading}>
+                <lightning-spinner alternative-text="Generating Sales Order..." size="medium"></lightning-spinner>
+            </template>
+            <template lwc:elseif={quoteLoading}>
+                <lightning-spinner alternative-text="Loading Quote..." size="small"></lightning-spinner>
+            </template>
+            <template lwc:elseif={hasApprovedQuote}>
+                <!-- Quote Summary -->
+                <p class="slds-text-heading_small slds-m-bottom_small" style="color:#1b4332;font-weight:700;">Quote Summary (Read-only)</p>
+                <div class="slds-grid slds-wrap slds-gutters_small slds-m-bottom_medium">
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_xx-small">
+                        <p class="slds-text-title">Quote No.</p><p class="slds-text-body_regular">{quoteNumber}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_xx-small">
+                        <p class="slds-text-title">Buyer</p><p class="slds-text-body_regular">{buyerName}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_xx-small">
+                        <p class="slds-text-title">Project</p><p class="slds-text-body_regular">{project}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_xx-small">
+                        <p class="slds-text-title">Tower / Building</p><p class="slds-text-body_regular">{tower}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_xx-small">
+                        <p class="slds-text-title">Configuration</p><p class="slds-text-body_regular">{configuration}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_xx-small">
+                        <p class="slds-text-title">Chargeable Area (Sq ft)</p><p class="slds-text-body_regular">{chargeableArea}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_xx-small">
+                        <p class="slds-text-title">Previous Sold Value</p>
+                        <lightning-formatted-number value={originalValue} format-style="currency" currency-code="INR"></lightning-formatted-number>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_xx-small">
+                        <p class="slds-text-title">Proposed Resale Value</p>
+                        <lightning-formatted-number value={proposedValue} format-style="currency" currency-code="INR"></lightning-formatted-number>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_xx-small">
+                        <p class="slds-text-title">Applicable Charges</p>
+                        <lightning-formatted-number value={resaleCharges} format-style="currency" currency-code="INR"></lightning-formatted-number>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_xx-small">
+                        <p class="slds-text-title">Brokerage / Service Fee</p>
+                        <lightning-formatted-number value={brokerageFee} format-style="currency" currency-code="INR"></lightning-formatted-number>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-p-around_xx-small" style="border-top:2px solid #1b4332;margin-top:4px;padding-top:8px;">
+                        <p class="slds-text-title" style="font-weight:700;">Grand Total (Final Resale Value)</p>
+                        <p style="font-size:16px;font-weight:700;color:#1b4332;">
+                            <lightning-formatted-number value={grandTotal} format-style="currency" currency-code="INR"></lightning-formatted-number>
+                        </p>
+                    </div>
+                </div>
+
+                <hr/>
+                <p class="slds-text-heading_small slds-m-top_medium slds-m-bottom_small" style="font-weight:700;">Payment Terms</p>
+                <template lwc:if={errorMessage}>
+                    <div class="slds-notify slds-notify_alert slds-theme_error slds-p-around_small slds-m-bottom_medium" role="alert">
+                        {errorMessage}
+                    </div>
+                </template>
+                <lightning-combobox label="Payment Type" value={paymentType} options={paymentTypeOptions}
+                    required onchange={handlePaymentTypeChange} class="slds-m-bottom_small">
+                </lightning-combobox>
+                <lightning-input type="date" label="Due Date / Milestone" value={dueDate}
+                    onchange={handleDueDateChange} class="slds-m-bottom_small">
+                </lightning-input>
+                <lightning-textarea label="Remarks" value={remarks} onchange={handleRemarksChange}
+                    max-length="500" class="slds-m-bottom_medium">
+                </lightning-textarea>
+                <div class="slds-grid slds-grid_align-end">
+                    <lightning-button label="Cancel" onclick={handleClose} class="slds-m-right_small"></lightning-button>
+                    <lightning-button label="Generate Sales Order" variant="brand" onclick={handleGenerate}>
+                    </lightning-button>
+                </div>
+            </template>
+            <template lwc:else>
+                <div class="slds-notify slds-notify_alert slds-theme_warning slds-p-around_small" role="alert">
+                    <lightning-icon icon-name="utility:warning" size="small" variant="inverse" class="slds-m-right_small"></lightning-icon>
+                    <template lwc:if={errorMessage}>
+                        {errorMessage}
+                    </template>
+                    <template lwc:else>
+                        No approved Final Quote found for this Opportunity. Submit a Quote for approval first.
+                    </template>
+                </div>
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Close" onclick={handleClose}></lightning-button>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

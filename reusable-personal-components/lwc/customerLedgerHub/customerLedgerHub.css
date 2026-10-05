@@ -1,0 +1,354 @@
+/* CUSTOMER FINANCIAL LEDGER HUB STYLES - WARPDRIVE THEME */
+.ledger-main-card {
+    border-radius: 14px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+
+/* KPI GRID */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.kpi-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(0, 168, 89, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: #a7f3d0;
+}
+
+.kpi-agreement { border-top: 3.5px solid #0f172a; }
+.kpi-token { border-top: 3.5px solid #00a859; background: #fbfdfc; }
+.kpi-demanded { border-top: 3.5px solid #334155; }
+.kpi-collected { border-top: 3.5px solid #00a859; background: #f0fdf4; }
+.kpi-outstanding { border-top: 3.5px solid #ef4444; }
+.kpi-interest { border-top: 3.5px solid #f59e0b; }
+.kpi-net-due { 
+    border-top: 3.5px solid #f59e0b;
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    box-shadow: 0 0 0 1px #fcd34d;
+}
+
+.kpi-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.kpi-value {
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #0f172a;
+}
+
+.kpi-sub {
+    font-size: 0.68rem;
+    color: #64748b;
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* SECTION HEADINGS */
+.section-heading {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.badge-pill-soft {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+    padding: 3px 12px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* TABLE STYLING */
+.table-responsive-wrapper {
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.custom-ledger-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-header-row th {
+    background: #f8fafc;
+    color: #475569;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 11px 14px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.table-body-row td {
+    padding: 11px 14px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem;
+    color: #1e293b;
+}
+.table-body-row:hover {
+    background: #f0fdf4;
+}
+
+/* STATUS & WAIVER PILLS */
+.status-pill {
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.status-paid { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+.status-due { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.status-overdue { 
+    background: #fef2f2; 
+    color: #b91c1c; 
+    border: 1px solid #fecaca; 
+    animation: alert-pulse 2s infinite; 
+}
+.status-upcoming { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+
+@keyframes alert-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.waiver-pill {
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    display: inline-block;
+}
+
+.waiver-approved { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+.waiver-requested { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+.waiver-rejected { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+
+.dn-badge {
+    background: #ecfdf5;
+    color: #047857;
+    font-weight: 700;
+    font-family: monospace;
+    font-size: 0.78rem;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    cursor: pointer;
+    border: 1px dashed #00a859;
+    transition: all 0.2s ease;
+}
+.dn-badge:hover {
+    background: #00a859;
+    color: #ffffff;
+}
+
+.payment-mode-pill {
+    background: #f1f5f9;
+    color: #334155;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* FINANCE BANNER & CARDS */
+.finance-header-banner {
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid #00a859;
+    border-radius: 10px;
+}
+
+.waiver-review-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    transition: transform 0.15s;
+}
+.waiver-review-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 168, 89, 0.1);
+    border-color: #a7f3d0;
+}
+
+.reason-quote {
+    background: #f8fafc;
+    border-left: 3px solid #cbd5e1;
+    font-size: 0.82rem;
+    color: #475569;
+    border-radius: 4px;
+}
+
+/* MODAL HEADERS */
+.modal-blue-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+.modal-green-header {
+    background: linear-gradient(135deg, #00a859 0%, #008c4a 100%);
+}
+
+.text-white { color: white !important; }
+.text-white-dim { color: rgba(255, 255, 255, 0.85) !important; font-size: 0.8rem; }
+
+.interest-warning-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+}
+
+.text-large { font-size: 1.35rem; }
+
+.reason-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.chip-pill {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+}
+.chip-pill:hover {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: #a7f3d0;
+}
+
+.btn-full-waive {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #00a859;
+}
+
+/* COLOR UTILITIES */
+.text-navy { color: #0f172a; }
+.text-blue { color: #00a859; }
+.text-emerald { color: #047857; }
+.text-success { color: #00a859; }
+.text-danger { color: #ef4444; }
+.text-amber { color: #f59e0b; }
+.text-gold { color: #d97706; }
+.text-muted { color: #64748b; }
+.text-accent { color: #00a859; }
+.font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+.font-mono { font-family: 'Courier New', Courier, monospace; font-size: 0.82rem; }
+
+.btn-xs { font-size: 0.75rem; }
+.btn-approve-glow {
+    background: #00a859 !important;
+    border-color: #00a859 !important;
+    color: #ffffff !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 4px 12px rgba(0, 168, 89, 0.35);
+}
+.btn-approve-glow:hover {
+    background: #008c4a !important;
+}
+.btn-glow-primary {
+    background: #00a859 !important;
+    border-color: #00a859 !important;
+    color: #ffffff !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 4px 12px rgba(0, 168, 89, 0.3);
+}
+
+/* SAP INVOICE & BILL BLOCK STYLES */
+.sap-invoice-badge {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: monospace;
+    display: inline-block;
+}
+
+.sap-block-released {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    display: inline-block;
+}
+
+.sap-blocked {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    display: inline-block;
+}
+
+/* REMINDER PILLS */
+.reminder-pill {
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 0.70rem;
+    font-weight: 700;
+    display: inline-block;
+}
+.reminder-level-1 { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.reminder-level-2 { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+.reminder-level-3 { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+.reminder-level-none { background: #f8fafc; color: #94a3b8; border: 1px solid #e2e8f0; }
+
+/* RECONCILIATION BADGES */
+.reconcile-pending-badge {
+    background: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fde68a;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      body {
+       font-family: Segoe UI; 
+      }
+      .container {
+        padding: 30px;
+        height: fit-content;
+        border-radius: 5px 5px 0px 0px;
+      }
+      .container-success {
+        background: #B7F5D280;
+        border-top: 5px solid #4BCA81;
+      }
+      .container-warning {
+        background: #fcf3e0;
+        border-top: 5px solid #d79301;
+      }
+      .content {
+        padding: 30px;
+        background: white;
+      }
+      .details-box {
+        border: 1px solid #C9C9C9;
+      }
+      .padding-left-right-small {
+        padding: 0px 20px;
+      }
+      .horizontal-bar {
+        height: 1px;
+        background: #C9C9C9;
+      }
+      .table-container td{
+        padding: 10px;
+      }
+      .scheduled-time-cell {
+        display: flex;
+        align-items: center;
+      }
+      .margin-right-xx_small {
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+            <div class="container container-success">
+                <div class="content">
+                    <p>
+                        Hello [[PARTICIPANT_NAME]],
+                    </p>
+                    <p>
+                        You've been successfully added to {!WaitlistParticipant.Waitlist}.
+                    </p>
+                    <div class="details-box">
+                        <p class="padding-left-right-small">
+                            Service Appointment Details:
+                        </p>
+                        <div class="horizontal-bar"></div>
+                        <div class="table-container">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <b>Waitlist position at checkin - [[CURRENT_POSITION]]/[[TOTAL_PARTICIPANTS]]</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        for {!WaitlistParticipant.WorkType}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        on {!WaitlistParticipant.CreatedDate}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <p>
+                        To view your current waitlist status, <a target="_blank" href="[[WAITLIST_STATUS_URL]]">click here</a>.
+                    </p>
+                    <p>
+                        If you select a preferred service resource, your waitlist position might change.
+                    </p>
+                </div>
+            </div>
+          </body>
+</html>

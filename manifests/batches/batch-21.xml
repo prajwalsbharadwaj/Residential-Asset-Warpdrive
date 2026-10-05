@@ -1,0 +1,807 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+    <members>AI_Agent_Conversation_Entry__c-AI Agent Conversation Entry Layout</members>
+    <members>AI_Agent_Conversation__c-AI Agent Layout</members>
+    <members>AI_Agent_Label__mdt-AI Agent Label Layout</members>
+    <members>AI_Agent__c-AI Agent Layout</members>
+    <members>Account-Account Layout</members>
+    <members>Account-SDO - Account</members>
+    <members>Account-SDO - Account Community</members>
+    <members>Account-SDO - Partner Account</members>
+    <members>AccountAccountRelation-Account Account Relationship Layout</members>
+    <members>AccountBrand-Account Brand Layout</members>
+    <members>AccountContactRelation-Account Contact Relationship Layout</members>
+    <members>AccountContactRelation-SDO - Account Contact Relationship</members>
+    <members>AccountPlan-Account Plan Layout</members>
+    <members>AccountPlan-Account Plans - Joint Business Plans</members>
+    <members>AccountPlanObjective-Account Plan Objective Layout</members>
+    <members>AccountPlanObjectiveMeasure-Account Plan Objective Measure Layout</members>
+    <members>AccountRelationship-Account RelationshipLayout</members>
+    <members>AccountTeamMember-Account Team Member Layout</members>
+    <members>Accreditation-Accreditation Layout</members>
+    <members>ActionPlan-Action Plan Layout</members>
+    <members>ActionPlanItemDependency-Action Plan Item Dependency Layout</members>
+    <members>ActionPlanTemplate-Action Plan Template Layout</members>
+    <members>ActionPlanTemplateAssignment-Action Plan Template Assignment Layout</members>
+    <members>ActionPlanTemplateItem-Action Plan Template Item Layout</members>
+    <members>ActionPlanTemplateItemValue-Action Plan Template Item Value Layout</members>
+    <members>ActionPlanTemplateVersion-Action Plan Template Version Layout</members>
+    <members>ActionPlnTmplItmDependency-Action Plan Template Item Dependency Layout</members>
+    <members>ActionableList-Actionable List Layout</members>
+    <members>ActionableListColumn-Actionable List Column Layout</members>
+    <members>ActivityTiming-Activity Timing Layout</members>
+    <members>Address-Address Layout</members>
+    <members>AgeBandHlthRskAdjFctr-Age Band Health Risk Adjustment Factor Layout</members>
+    <members>AgentWork__c-AgentWork%5F%5Fc Layout</members>
+    <members>Agent_brokerage__c-Agent brokerage Layout</members>
+    <members>AirTravelEmssnFctr-Air Travel Emissions Factor Layout</members>
+    <members>AllergyIntolerance-Allergy Intolerance Layout</members>
+    <members>AlternativePaymentMethod-Alternative Payment Method Layout</members>
+    <members>AnnualEmssnInventoryExtension-Annual Emissions Inventory Extension Layout</members>
+    <members>AntiCorruptionInitSum-Anti-Corruption Initiative Summary Layout</members>
+    <members>ApiAnomalyEventStore-API Anomaly Event Store Layout</members>
+    <members>AppFormProdtPrpsAttribute-Application Form Product Proposal Attribute Layout</members>
+    <members>AppFormProductCollateral-Application Form Product Collateral Layout</members>
+    <members>Applicant-Applicant Layout</members>
+    <members>ApplicationActionItem-Application Action Item Layout</members>
+    <members>ApplicationForm-Application Form Layout</members>
+    <members>ApplicationFormProduct-Application Form Product Layout</members>
+    <members>ApplicationFormProductFee-Application Form Product Fee Layout</members>
+    <members>ApplicationFormProductProposal-Application Form Product Proposal Layout</members>
+    <members>ApplicationFormSellerItem-Application Form Seller Item Layout</members>
+    <members>AppointmentInvitation-Appointment Invitation Layout</members>
+    <members>ApprovalAlertContentDef-%5F%5FMISSING LABEL%5F%5F PropertyFile - val ApprovalAlertContentDef not found in section StandardLayouts</members>
+    <members>ApptBundleConfig-Appointment Bundle Config Layout</members>
+    <members>ApptBundlePolicy-Appointment Bundle Policy Layout</members>
+    <members>AssessmentIndDefinedValue-%5F%5FMISSING LABEL%5F%5F PropertyFile - val AssessmentIndDefinedValue not found in section StandardLayouts</members>
+    <members>AssessmentIndValue-Assessment Indicator Value Layout</members>
+    <members>AssessmentIndicatorDefinition-Assessment Indicator Definition Layout</members>
+    <members>AssessmentTask-Assessment Task Layout</members>
+    <members>AssessmentTaskContentDocument-Assessment Task Content Document Layout</members>
+    <members>AssessmentTaskDefinition-Assessment Task Definition Layout</members>
+    <members>AssessmentTaskOrder-Assessment Task Order Layout</members>
+    <members>Asset-Asset Layout</members>
+    <members>Asset-SDO - Asset</members>
+    <members>AssetAccountParticipant-Asset Account Participant Layout</members>
+    <members>AssetAction-Asset Action Layout</members>
+    <members>AssetActionSource-Asset Action Source Layout</members>
+    <members>AssetContactParticipant-Asset Contact Participant Layout</members>
+    <members>AssetRelationship-Asset Relationship Layout</members>
+    <members>AssetStatePeriod-Asset State Period Layout</members>
+    <members>AssignedResource-Assigned Resource Layout</members>
+    <members>AssignedResource-SDO - SFS Assigned Resource</members>
+    <members>AssociatedLocation-Associated Location Layout</members>
+    <members>AsyncOperationLog-Async Operation Log Layout</members>
+    <members>AsyncOperationTracker-Async Operation Tracker Layout</members>
+    <members>AttributeAdjustmentCondition-Attribute Adjustment Condition Layout</members>
+    <members>AttributeBasedAdjRule-Attribute Based Adjustment Rule Layout</members>
+    <members>AttributeBasedAdjustment-Attribute Based Adjustment Layout</members>
+    <members>AttributeDefinition-Attribute Definition Layout</members>
+    <members>AttributePicklist-Attribute Picklist Layout</members>
+    <members>AuthFormRequestRecord-Authorizable Form Request Record Layout</members>
+    <members>AuthorNote-Author Note Layout</members>
+    <members>AuthorizationForm-Authorization Form Layout</members>
+    <members>AuthorizationFormConsent-Authorization Form Consent Layout</members>
+    <members>AuthorizationFormDataUse-Authorization Form Data Use Layout</members>
+    <members>AuthorizationFormText-Authorization Form Text Layout</members>
+    <members>Award-Award Layout</members>
+    <members>B2BFeaturedProductsCfg__mdt-B2B Featured Products Config Layout</members>
+    <members>B2B_SPC_Delivery_Method__mdt-B2B SPC Delivery Method Layout</members>
+    <members>B2B_SPC_Tax_Rates__mdt-B2B SPC Tax Rate Layout</members>
+    <members>Benefit-Benefit Layout</members>
+    <members>BenefitAssignment-Benefit Assignment Layout</members>
+    <members>BenefitAssignmentAdjustment-Benefit Assignment Adjustment Layout</members>
+    <members>BenefitDisbursement-Benefit Disbursement Layout</members>
+    <members>BenefitDisbursementAdj-Benefit Disbursement Adjustment Layout</members>
+    <members>BenefitType-Benefit Type Layout</members>
+    <members>BiodiversitySummary-Biodiversity Summary Layout</members>
+    <members>BldgEnrgyIntensity-Building Energy Intensity Layout</members>
+    <members>BldgEnrgyIntensityVal-Building Energy Intensity Value Layout</members>
+    <members>BldgSizeCategory-Building Size Category Layout</members>
+    <members>BoardCertification-Board Certification Layout</members>
+    <members>Booking_Condition__c-Booking Condition Layout</members>
+    <members>Booking_Payment_Schedule__c-Booking Payment Schedule Layout</members>
+    <members>Booking__c-Booking Layout</members>
+    <members>BroadcastTopic-Broadcast Topic Layout</members>
+    <members>BundleBasedAdjustment-Bundle Based Adjustment Layout</members>
+    <members>BusinessBrand-Business Brand Layout</members>
+    <members>BusinessLicense-Business License Layout</members>
+    <members>BusinessMilestone-Business Milestone Layout</members>
+    <members>BusinessPlanPrice__c-Business Plan Price Layout</members>
+    <members>BusinessProfile-Business Profile Layout</members>
+    <members>BuyerAccount-Buyer Account Layout</members>
+    <members>BuyerGroup-Buyer Group Layout</members>
+    <members>BuyerGroupMember-Buyer Group Member Layout</members>
+    <members>BuyerGroupPricebook-Buyer Group Price Book Layout</members>
+    <members>CGC_Exercise__c-Exercise Layout</members>
+    <members>CGC_Milestone_Progress_V2__c-Milestone Progress V2 Layout</members>
+    <members>CGC_Milestone_Progress__c-Milestone Progress Layout</members>
+    <members>CGC_Milestone__c-Milestone Layout</members>
+    <members>CGC_Milestone_and_Exercise__c-Exercise Layout</members>
+    <members>CGC_Milestone_and_Exercise__c-Milestone Layout</members>
+    <members>CGC_Program__c-Program Layout</members>
+    <members>CGC_Section__c-Section Layout</members>
+    <members>CalcMatrixColumnRange-Decision Matrix Column Range Layout</members>
+    <members>CalcProcStepRelationship-Expression Set Step Relationship Layout</members>
+    <members>CalculationMatrix-Decision Matrix Layout</members>
+    <members>CalculationMatrixColumn-Decision Matrix Column Layout</members>
+    <members>CalculationMatrixRow-Decision Matrix Row Layout</members>
+    <members>CalculationMatrixVersion-Decision Matrix Version Layout</members>
+    <members>CalculationProcedure-Calculation Procedure Layout</members>
+    <members>CalculationProcedureStep-Calculation Procedure Step Layout</members>
+    <members>CalculationProcedureVariable-Calculation Procedure Variable Layout</members>
+    <members>CalculationProcedureVersion-Calculation Procedure Version Layout</members>
+    <members>Call_Detail__c-Call Detail Layout</members>
+    <members>Campaign-Campaign Layout</members>
+    <members>Campaign-SDO - Campaign Default</members>
+    <members>Campaign-SDO - Parent Campaign</members>
+    <members>Campaign-SDO - Partner-Led Campaign</members>
+    <members>CampaignInfluenceModel-Campaign Influence Model Layout</members>
+    <members>CampaignMember-Campaign Member Page Layout</members>
+    <members>CampaignMember-SDO - Campaign Member Page</members>
+    <members>CardPaymentMethod-Card Payment Method Layout</members>
+    <members>CareBarrier-Care Barrier Layout</members>
+    <members>CareBarrierDeterminant-Care Barrier Determinant Layout</members>
+    <members>CareBarrierType-Care Barrier Type Layout</members>
+    <members>CareBenefitVerifySettings-Care Benefit Verification Settings Layout</members>
+    <members>CareDeterminant-Care Determinant Layout</members>
+    <members>CareDeterminantType-Care Determinant Type Layout</members>
+    <members>CareInterventionType-Care Intervention Type Layout</members>
+    <members>CareMetricTarget-Care Metric Target Layout</members>
+    <members>CareObservation-Care Observation Layout</members>
+    <members>CareObservationComponent-Care Observation Component Layout</members>
+    <members>CarePerformer-Care Performer Layout</members>
+    <members>CarePgmProvHealthcareProvider-Care Program Healthcare Provider Layout</members>
+    <members>CareProgram-Care Program Layout</members>
+    <members>CareProgramCampaign-Care Program Campaign Layout</members>
+    <members>CareProgramDetail-Care Program Detail Layout</members>
+    <members>CareProgramEligibilityRule-Care Program Eligibility Rule Layout</members>
+    <members>CareProgramEnrollee-Care Program Enrollee Layout</members>
+    <members>CareProgramEnrolleeProduct-Care Program Enrollee Product Layout</members>
+    <members>CareProgramEnrollmentCard-Care Program Enrollment Card Layout</members>
+    <members>CareProgramGoal-Care Program Goal Layout</members>
+    <members>CareProgramProduct-Care Program Product Layout</members>
+    <members>CareProgramProvider-Care Program Provider Layout</members>
+    <members>CareProgramTeamMember-Care Program Team Member Layout</members>
+    <members>CareProviderAdverseAction-Care Provider Adverse Action Layout</members>
+    <members>CareProviderAfflRoleConfig-Care Provider Affiliation Role Config Layout</members>
+    <members>CareProviderFacilitySpecialty-Care Provider Facility Specialty Layout</members>
+    <members>CareProviderSearchConfig-Care Provider Search Config Layout</members>
+    <members>CareProviderSearchableField-Care Provider Searchable Field Layout</members>
+    <members>CareRegisteredDevice-Care Registered Device Layout</members>
+    <members>CareRequestConfiguration-Care Request Configuration Layout</members>
+    <members>CareService-Care Service Layout</members>
+    <members>CareSpecialty-Care Specialty Layout</members>
+    <members>CareSpecialtyTaxonomy-Care Specialty Taxonomy Layout</members>
+    <members>CareTask-%5F%5FMISSING LABEL%5F%5F PropertyFile - val CareTask not found in section StandardLayouts</members>
+    <members>CareTaskDetail-%5F%5FMISSING LABEL%5F%5F PropertyFile - val CareTaskDetail not found in section StandardLayouts</members>
+    <members>CareTaxonomy-Care Taxonomy Layout</members>
+    <members>Case-Case Layout</members>
+    <members>Case-SDO - Case</members>
+    <members>Case-SDO - Case Community</members>
+    <members>Case-SDO - SFS Case</members>
+    <members>CaseArticle__c-CaseArticle%5F%5Fc Layout</members>
+    <members>CaseClose-Close Case Layout</members>
+    <members>CaseHistory__c-CaseHistory%5F%5Fc Layout</members>
+    <members>CaseMilestone-Case Milestone Layout</members>
+    <members>CaseParticipant-Case Participant Layout</members>
+    <members>CaseProceeding-Case Proceeding Layout</members>
+    <members>CaseProceedingParticipant-Case Proceeding Participant Layout</members>
+    <members>ChangeRequest-Change Request Layout</members>
+    <members>ChannelProgram-Channel Program Layout</members>
+    <members>ChannelProgramLevel-Channel Program Level Layout</members>
+    <members>ChannelProgramMember-Channel Program Member Layout</members>
+    <members>CleanEnergyProject-Clean Energy Project Layout</members>
+    <members>ClimateChgEmssnFincSummary-Climate Change Emissions and Financial Summary Layout</members>
+    <members>ClimateChgRiskOppSummary-Climate Change Risk Opportunity Summary Layout</members>
+    <members>ClinicalAlert-Clinical Alert Layout</members>
+    <members>ClinicalDetectedIssue-Clinical Detected Issue Layout</members>
+    <members>ClinicalDetectedIssueDetail-Clinical Detected Issue Detail Layout</members>
+    <members>ClinicalEncounter-Clinical Encounter Layout</members>
+    <members>ClinicalEncounterDiagnosis-Clinical Encounter Diagnosis Layout</members>
+    <members>ClinicalEncounterFacility-Clinical Encounter Facility Layout</members>
+    <members>ClinicalEncounterIdentifier-Clinical Encounter Identifier Layout</members>
+    <members>ClinicalEncounterProvider-Clinical Encounter Provider Layout</members>
+    <members>ClinicalEncounterReason-Clinical Encounter Reason Layout</members>
+    <members>ClinicalEncounterSvcRequest-Clinical Encounter Svc Request Layout</members>
+    <members>ClinicalServiceRequest-Clinical Service Request Layout</members>
+    <members>ClinicalServiceRequestDetail-Clinical Service Request Detail Layout</members>
+    <members>Co_Owner__c-Co-Owner Layout</members>
+    <members>CodeSet-Code Set Layout</members>
+    <members>CodeSetBundle-Code Set Bundle Layout</members>
+    <members>CollaborationGroup-Group Layout</members>
+    <members>CommerceEntitlementBuyerGroup-Entitlement Buyer Group Layout</members>
+    <members>CommerceEntitlementPolicy-Entitlement Policy Layout</members>
+    <members>CommerceEntitlementProduct-Entitlement Product Layout</members>
+    <members>Company_Bank_Account__c-Company Bank Account Layout</members>
+    <members>CondIntrctnHlthRskAdjFctr-Condition Interaction Health Risk Adjustment Factor Layout</members>
+    <members>ConditionTypeCode__mdt-Condition Type Code Layout</members>
+    <members>ConsumptionRate-Consumption Rate Layout</members>
+    <members>ConsumptionSchedule-Consumption Schedule Layout</members>
+    <members>Contact-B2B Contact Layout</members>
+    <members>Contact-Contact Layout</members>
+    <members>Contact-SDO - Contact</members>
+    <members>Contact-SDO - Partner Contact</members>
+    <members>ContactEncounter-Contact Encounter Layout</members>
+    <members>ContactEncounterParticipant-Contact Encounter Participant Layout</members>
+    <members>ContactPointAddress-Contact Point Address Layout</members>
+    <members>ContactPointEmail-Contact Point Email Layout</members>
+    <members>ContactPointPhone-Contact Point Phone Layout</members>
+    <members>ContactPointTypeConsent-Contact Point Type Consent Layout</members>
+    <members>ContentLink-Content Link Layout</members>
+    <members>ContentSource-Content Source Layout</members>
+    <members>ContentVersion-Content Version Layout</members>
+    <members>Contract-Contract Layout</members>
+    <members>ContractLineItem-Contract Line Item Layout</members>
+    <members>ContractLineOutcome-Contract Line Outcome Layout</members>
+    <members>ContractLineOutcomeData-Contract Line Outcome Data Layout</members>
+    <members>CostBook-Cost Book Layout</members>
+    <members>CostBookEntry-Cost Book Entry Layout</members>
+    <members>Coupon-Coupon Layout</members>
+    <members>CrbnCreditAlloc-Carbon Credit Allocation Layout</members>
+    <members>CrbnCreditAllocItem-Carbon Credit Allocation Item Layout</members>
+    <members>CrbnCreditDistribution-Carbon Credit Distribution Layout</members>
+    <members>CrbnCreditProject-Carbon Credit Project Layout</members>
+    <members>CredentialStuffingEventStore-Credential Stuffing Event Store Layout</members>
+    <members>CreditMemo-Credit Memo Layout</members>
+    <members>CreditMemo-SDO - Credit Memo</members>
+    <members>CreditMemoInvApplication-Credit Memo Invoice Application Layout</members>
+    <members>CreditMemoLine-Credit Memo Line Layout</members>
+    <members>Credit_Note__c-Credit Note Layout</members>
+    <members>CspTrustedSite-Content Security Policy Trusted Site Layout</members>
+    <members>Customer-Customer Layout</members>
+    <members>Customer_Refund__c-Customer Refund Layout</members>
+    <members>DBM_Data_Entry__c-DBM Data Entry Layout</members>
+    <members>DBM_Report_Grouping_Entry__c-DBM Report Grouping Entry Layout</members>
+    <members>DBM_Report_Grouping__c-DBM Report Grouping Layout</members>
+    <members>DBM_Report__c-DBM Report Layout</members>
+    <members>DataStream-Data Stream Layout</members>
+    <members>DataUseLegalBasis-Data Use Legal Basis Layout</members>
+    <members>DataUsePurpose-Data Use Purpose Layout</members>
+    <members>Debit_Note__c-Debit Note Layout</members>
+    <members>DelegatedAccount-External Managed Account Layout</members>
+    <members>Demand__c-Demand Layout</members>
+    <members>DiagnosticSummary-Diagnostic Summary Layout</members>
+    <members>DiagnosticSummaryDetail-Diagnostic Summary Detail Layout</members>
+    <members>DigitalVerfSetupDetail-Digital Verification Setup Detail Layout</members>
+    <members>DigitalVerification-Digital Verification Layout</members>
+    <members>DigitalVerificationSetup-Digital Verification Setup Layout</members>
+    <members>DigitalWallet-Digital Wallet Layout</members>
+    <members>Disclosure-Disclosure Layout</members>
+    <members>DisclsReportingPeriod-Disclosure Reporting Period Layout</members>
+    <members>Discount_Threshold__mdt-Discount Threshold Layout</members>
+    <members>DivrsEquityInclSum-Diversity Equity Inclusion Summary Layout</members>
+    <members>DocumentCategory-Document Category Layout</members>
+    <members>DocumentChecklistItem-Document Checklist Item Layout</members>
+    <members>DocumentType-Document Type Layout</members>
+    <members>DrugDisplayTerm-Drug Display Term Layout</members>
+    <members>DuplicateRecordSet-Duplicate Record Set Layout</members>
+    <members>DynamicDataCapture-Dynamic Data Capture Layout</members>
+    <members>EconomicPerformanceSum-Economic Performance Summary Layout</members>
+    <members>ElectrLifecyclEmssnFctrSet-Electricity Lifecycle Emission Factor Set Layout</members>
+    <members>ElectricityEmssnFctrSet-Electricity Emissions Factor Set Layout</members>
+    <members>EmailMessage-Email Message Layout</members>
+    <members>EmissionsAllocation-Emissions Allocation Layout</members>
+    <members>EmpBenefitSummary-Employment Benefit Summary Layout</members>
+    <members>EmpUserProvisionProcessErr-Employee User Provisioning Process Error Layout</members>
+    <members>EmpUserProvisioningProcess-Employee User Provisioning Process Layout</members>
+    <members>Employee2-Employee Layout</members>
+    <members>EmployeeDemographicSum-Employee Demographic Summary Layout</members>
+    <members>EmployeeDevelopmentSum-Employee Development Summary Layout</members>
+    <members>EmploymentCompensationSummary-Employment Compensation Summary Layout</members>
+    <members>EnergyAttrCertCredit-Energy Attribute Certificate Credit Layout</members>
+    <members>EnergyAttrCertPurchase-Energy Attribute Certificate Purchase Layout</members>
+    <members>EnergyAttrCreditDstr-Energy Attribute Credit Distribution Layout</members>
+    <members>EngagementChannelType-Engagement Channel Type Layout</members>
+    <members>EngagementInteraction-Engagement Interaction Layout</members>
+    <members>EngagementTopic-Engagement Topic Layout</members>
+    <members>EnrollmentEligibilityCriteria-Enrollment Eligibility Criteria Layout</members>
+    <members>Entitlement-Entitlement Layout</members>
+    <members>EntityMilestone-Object Milestone Layout</members>
+    <members>EnvironmentalRisk-Environmental Risk Layout</members>
+    <members>Error_Log__c-Error Log Layout</members>
+    <members>EstmtEnergyUseCriteria-Estimated Energy Use Criteria Layout</members>
+    <members>EstmtEnergyUseJobRun-Estimated Energy Use Job Run Layout</members>
+    <members>Event-Event Layout</members>
+    <members>Expense-Expense Layout</members>
+    <members>ExpenseReport-Expense Report Layout</members>
+    <members>ExpenseReportEntry-Expense Report Entry Layout</members>
+    <members>ExpressionSet-Expression Set Layout</members>
+    <members>ExpressionSetVersion-Expression Set Version Layout</members>
+    <members>ExternalAccountHierarchy-External Account Hierarchy Layout</members>
+    <members>External_Code_Dictionary__mdt-External Code Dictionary Layout</members>
+    <members>FSAA__AppointmentAssistantPrivateSettings__mdt-Appointment Assistant Private Settings Layout</members>
+    <members>FSL__Optimization_Request__c-SDO SFS Optimization Request Layout</members>
+    <members>Fake_Report_Data_Object__c-Fake Report Data Layout</members>
+    <members>FeedItem-Feed Item Layout</members>
+    <members>FinanceBalanceSnapshot-Finance Balance Snapshot Layout</members>
+    <members>FinanceTransaction-Finance Transaction Layout</members>
+    <members>Finance_Policy__mdt-Finance Policy Layout</members>
+    <members>FinancialGoal-Financial Goal Layout</members>
+    <members>FinancialGoalFunding-Financial Goal Funding Layout</members>
+    <members>FldSvcObjChg-Field Service Object Change Layout</members>
+    <members>FldSvcObjChgDtl-Field Service Object Change Detail Layout</members>
+    <members>Floor__c-Floor Layout</members>
+    <members>FlowPersonalConfiguration__c-Flow Personal Configuration Layout</members>
+    <members>FlowRecordVersionOccurrence-%5F%5FMISSING LABEL%5F%5F PropertyFile - val FlowRecordVersionOccurrence not found in section StandardLayouts</members>
+    <members>FlowTableViewDefinition__c-FlowTableViewDefinition Layout</members>
+    <members>Forecasting_Historical_Data__c-Forecasting Historical Data Layout</members>
+    <members>FrgtHaulingEmssnFctr-Freight Hauling Emissions Factor Layout</members>
+    <members>FulfillmentOrder-Fulfillment Order Layout</members>
+    <members>FulfillmentOrder-SDO - Fulfillment Order</members>
+    <members>FulfillmentOrder-SDO - Store Pickup</members>
+    <members>FulfillmentOrderItemAdjustment-Fulfillment Order Item Adjustment Layout</members>
+    <members>FulfillmentOrderItemTax-Fulfillment Order Item Tax Layout</members>
+    <members>FulfillmentOrderLineItem-Fulfillment Order Product Layout</members>
+    <members>GeneratedWaste-%5F%5FMISSING LABEL%5F%5F PropertyFile - val GeneratedWaste not found in section StandardLayouts</members>
+    <members>GenericVisitTask-Generic Visit Task Layout</members>
+    <members>GenericVisitTaskContext-Generic Visit Task Context Layout</members>
+    <members>GeoCountry-Geo Country Layout</members>
+    <members>Global-Global Layout</members>
+    <members>Global-SDO SFS - Tech User Layout</members>
+    <members>GnrcVstKeyPerformanceInd-Generic Visit Key Performance Indicator Layout</members>
+    <members>GnrcVstTaskContextRelation-Generic Visit Task Context Relation Layout</members>
+    <members>GoalAssignment-Goal Assignment Layout</members>
+    <members>GoalDefinition-Goal Definition Layout</members>
+    <members>GovtFinancialAsstSum-Government Financial Assistance Summary Layout</members>
+    <members>GroundTravelEmssnFctr-Ground Travel Emissions Factor Layout</members>
+    <members>GuestBuyerProfile-Guest Buyer Profile Layout</members>
+    <members>GuestUserAnomalyEventStore-Guest User Anomaly Event Store Layout</members>
+    <members>HealthCareDiagnosis-Healthcare Diagnosis Layout</members>
+    <members>HealthCareProcedure-Healthcare Procedure Layout</members>
+    <members>HealthCondition-Health Condition Layout</members>
+    <members>HealthConditionDetail-Health Condition Detail Layout</members>
+    <members>HealthRiskEvalDetail-Health Risk Evaluation Detail Layout</members>
+    <members>HealthRiskEvalOutcome-Health Risk Evaluation Outcome Layout</members>
+    <members>HealthRiskEvaluation-Health Risk Evaluation Layout</members>
+    <members>HealthcareFacility-Healthcare Facility Layout</members>
+    <members>HealthcareFacilityNetwork-Healthcare Facility Network Layout</members>
+    <members>HealthcarePayerNetwork-Healthcare Payer Network Layout</members>
+    <members>HealthcarePractitionerFacility-Healthcare Practitioner Facility Layout</members>
+    <members>HealthcareProvider-Healthcare Provider Layout</members>
+    <members>HealthcareProviderNpi-Healthcare Provider NPI Layout</members>
+    <members>HealthcareProviderService-Healthcare Provider Service Layout</members>
+    <members>HealthcareProviderSpecialty-Healthcare Provider Specialty Layout</members>
+    <members>HealthcareProviderTaxonomy-Healthcare Provider Taxonomy Layout</members>
+    <members>HealthcareServiceDetail-Healthcare Service Detail Layout</members>
+    <members>HierCondHlthCodeMapping-Hierarchical Condition Health Code Mapping Layout</members>
+    <members>HierCondHlthRskAdjFctr-Hierarchical Condition Health Risk Adjustment Factor Layout</members>
+    <members>HlthCareProvTreatedCondition-Healthcare Provider Treated Condition Layout</members>
+    <members>HotelStayEmssnFctr-Hotel Stay Emissions Factor Layout</members>
+    <members>Idea-Idea Layout</members>
+    <members>Identifier-Identifier Layout</members>
+    <members>IdentityDocument-Identity Document Layout</members>
+    <members>IframeWhiteListUrl-Trusted Domain for Inline Frames Layout</members>
+    <members>Incident-Incident Layout</members>
+    <members>IndexRate-Index Rate Layout</members>
+    <members>Individual-Individual Layout</members>
+    <members>InflationRate-Inflation Rate Layout</members>
+    <members>InsurancePolicy-Insurance Policy Layout</members>
+    <members>InsurancePolicyAsset-Insurance Policy Asset Layout</members>
+    <members>IntegrationJobRun-Integration Job Run Layout</members>
+    <members>Integration_Control__mdt-Integration Control Layout</members>
+    <members>Interest_Waiver_Request__c-Interest Waiver Request Layout</members>
+    <members>InternalOrganizationUnit-Internal Organization Unit Layout</members>
+    <members>Invoice-Invoice Layout</members>
+    <members>Invoice-SDO - Invoice Layout</members>
+    <members>InvoiceLine-Invoice Line Layout</members>
+    <members>Invoice__c-Invoice Layout</members>
+    <members>JobProfile-Job Profile Layout</members>
+    <members>JournalType-Journal Type Layout</members>
+    <members>KCSArticle_DataCategorySelection__c-KCSArticle_DataCategorySelection%5F%5Fc Layout</members>
+    <members>KCSArticle_ViewStat__c-KCSArticle_ViewStat%5F%5Fc Layout</members>
+    <members>KCSArticle_VoteStat__c-KCSArticle_VoteStat%5F%5Fc Layout</members>
+    <members>KCSArticle_ka__c-KCSArticle_ka%5F%5Fc Layout</members>
+    <members>KCSArticle_kav__c-KCSArticle_kav%5F%5Fc Layout</members>
+    <members>Knowledge__kav-Knowledge Layout</members>
+    <members>Knowledge__kav-SDO - Community Knowledge</members>
+    <members>Knowledge__kav-SDO - KCS Layout</members>
+    <members>Knowledge__kav-SDO - Knowledge Author</members>
+    <members>Knowledge__kav-SDO - Knowledge Reader</members>
+    <members>Knowledge__kav-SDO Commerce - Community Knowledge</members>
+    <members>Lead-Lead Layout</members>
+    <members>Lead-SDO - Lead</members>
+    <members>Lead-SDO - Lead Community</members>
+    <members>Lead-SDO - Partner Lead</members>
+    <members>Lead_Assignment_Log__c-Lead Assignment Log Layout</members>
+    <members>Ledger_Entry__c-Ledger Entry Layout</members>
+    <members>LegalEntity-Legal Entity Layout</members>
+    <members>LinkedArticle-Linked Article Layout</members>
+    <members>ListEmail-List Email Layout</members>
+    <members>LiveAgentSession-Chat Session Layout</members>
+    <members>LiveChatTranscript-Chat Transcript Layout</members>
+    <members>LiveChatTranscriptActive-Chat Transcript %28In Progress%29 Layout</members>
+    <members>LiveChatTranscriptEvent-Chat Transcript Event Layout</members>
+    <members>LiveChatTranscriptEvent__c-LiveChatTranscriptEvent%5F%5Fc Layout</members>
+    <members>LiveChatTranscriptWaiting-Chat Transcript %28Waiting%29 Layout</members>
+    <members>LiveChatTranscript__c-LiveChatTranscript%5F%5Fc Layout</members>
+    <members>LiveChatVisitor-Chat Visitor Layout</members>
+    <members>Location-Location Layout</members>
+    <members>LocationGroup-Location Group Layout</members>
+    <members>LocationGroupAssignment-Location Group Assignment Layout</members>
+    <members>LoginAnomalyEventStore-Login Anomaly Event Store Layout</members>
+    <members>LoyaltyMemberCurrency-Loyalty Member Currency Layout</members>
+    <members>LoyaltyMembershipLifecycle-Loyalty Membership Lifecycle Layout</members>
+    <members>LoyaltyPgmGroupMbrRlnsp-Loyalty Program Group Member Relationship Layout</members>
+    <members>LoyaltyProgram-Loyalty Program Layout</members>
+    <members>LoyaltyProgramCurrency-Loyalty Program Currency Layout</members>
+    <members>LoyaltyProgramMbrPromotion-Loyalty Program Member Promotion Layout</members>
+    <members>LoyaltyProgramMember-Loyalty Program Member Layout</members>
+    <members>LoyaltyTier-Loyalty Tier Layout</members>
+    <members>LoyaltyTierGroup-Loyalty Tier Group Layout</members>
+    <members>MCUBE_Object_Api__c-MCUBE Object Api Layout</members>
+    <members>Macro-Macro Layout</members>
+    <members>MaintenanceAsset-Maintenance Asset Layout</members>
+    <members>MaintenanceAsset-SDO - Maintenance Asset SFS</members>
+    <members>MaintenancePlan-Maintenance Plan Layout</members>
+    <members>MaintenanceWorkRule-Maintenance Work Rule Layout</members>
+    <members>ManagedCareProgramPrfm-%5F%5FMISSING LABEL%5F%5F PropertyFile - val ManagedCareProgramPrfm not found in section StandardLayouts</members>
+    <members>ManagedContent-Managed Content Layout</members>
+    <members>ManagedContentVariant-Managed Content Variant Layout</members>
+    <members>Mcube__mdt-Mcube Layout</members>
+    <members>Medication-Medication Layout</members>
+    <members>MedicationAdministration-Medication Administration Layout</members>
+    <members>MedicationAdministrationDtl-Medication Administration Detail Layout</members>
+    <members>MedicationDispense-Medication Dispense Layout</members>
+    <members>MedicationRequest-Medication Request Layout</members>
+    <members>MedicationStatement-Medication Statement Layout</members>
+    <members>MedicationStatementDetail-Medication Statement Detail Layout</members>
+    <members>MedicinalIngredient-Medicinal Ingredient Layout</members>
+    <members>MerchAccPaymentMethodSet-Merchant Account Payment Method Set Layout</members>
+    <members>MerchAccPaymentMethodType-Merchant Account Payment Method Type Layout</members>
+    <members>MerchantAccount-Merchant Account Layout</members>
+    <members>MessagingChannel-Messaging Channel Layout</members>
+    <members>MessagingEndUser-Messaging User Layout</members>
+    <members>MessagingSession-SDO - LiveMessage Session</members>
+    <members>NetworkReferencedObject-Network Referenced Object Layout</members>
+    <members>ObjectStateDefinition-Object State Definition Layout</members>
+    <members>ObjectStateTransition-Object State Transition Layout</members>
+    <members>OmniGlobalAutoNumber-Omni Global Auto Number Layout</members>
+    <members>OperatingHours-Operating Hours Layout</members>
+    <members>OperatingHoursHoliday-Operating Hours Holiday Layout</members>
+    <members>Opportunity-Opportunity Layout</members>
+    <members>Opportunity-SDO - Opportunity</members>
+    <members>Opportunity-SDO - Partner Opportunity</members>
+    <members>OpportunityContactRole-Opportunity Contact Role Layout</members>
+    <members>OpportunityHistory__c-OpportunityHistory%5F%5Fc Layout</members>
+    <members>OpportunityLineItem-Opportunity Product Layout</members>
+    <members>OpportunityLineItem-SDO - Opportunity Product</members>
+    <members>OpportunitySplit-Opportunity Split Layout</members>
+    <members>OpportunityTeamMember-Opportunity Team Member Layout</members>
+    <members>OpportunityTeamMember-SDO - Opportunity Team Member</members>
+    <members>Opportunity_Parking__c-Parkings Layout</members>
+    <members>Order-Order Layout</members>
+    <members>OrderAdjustmentGroup-Order Adjustment Group Layout</members>
+    <members>OrderAdjustmentGroupSummary-Order Adjustment Group Summary Layout</members>
+    <members>OrderDeliveryGroup-Order Delivery Group Layout</members>
+    <members>OrderDeliveryGroupSummary-Order Delivery Group Summary Layout</members>
+    <members>OrderDeliveryMethod-Order Delivery Method Layout</members>
+    <members>OrderItem-Order Product Layout</members>
+    <members>OrderItemAdjustmentLineItem-Order Product Adjustment Line Item Layout</members>
+    <members>OrderItemAdjustmentLineSummary-Order Product Adjustment Line Item Summary Layout</members>
+    <members>OrderItemSummary-Order Product Summary Layout</members>
+    <members>OrderItemSummaryChange-Order Product Summary Change Layout</members>
+    <members>OrderItemSummaryRelationship-Order Product Summary Relationship Layout</members>
+    <members>OrderItemTaxLineItem-Order Product Tax Line Item Layout</members>
+    <members>OrderItemTaxLineItemSummary-Order Product Tax Line Item Summary Layout</members>
+    <members>OrderPaymentSummary-Order Payment Summary Layout</members>
+    <members>OrderPaymentSummaryReference-Order Payment Summary Reference Layout</members>
+    <members>OrderSummary-Order Summary Layout</members>
+    <members>OrderSummary-SDO - OMS - Order Summary</members>
+    <members>OrderSummary-SDO - Order Summary</members>
+    <members>OrderSummaryRelationship-Order Summary Relationship Layout</members>
+    <members>OrgIncidentSummary-Organization Incident Summary Layout</members>
+    <members>OrgPaymentPracSummary-Organization Payment Practice Summary Layout</members>
+    <members>OtherComponentTask-Other Component Task Layout</members>
+    <members>OtherEmssnFctrSet-Other Emissions Factor Set Layout</members>
+    <members>OtherEmssnFctrSetItem-Other Emissions Factor Set Item Layout</members>
+    <members>OthrLifecyclEmssnFctrSet-Other Lifecycle Emission Factor Set Layout</members>
+    <members>OthrLifecyclEmssnFctrSetItem-Other Lifecycle Emission Factor Set Item Layout</members>
+    <members>Ownership_Transfer__c-Ownership Transfer Layout</members>
+    <members>PSBulkActionConfig__c-PSBulkActionConfig Layout</members>
+    <members>Param_Mapping__c-Param Mapping Layout</members>
+    <members>Pardot_Template__mdt-Pardot Template Layout</members>
+    <members>Parking__c-Parking Layout</members>
+    <members>PartnerFundAllocation-Partner Fund Allocation Layout</members>
+    <members>PartnerFundClaim-Partner Fund Claim Layout</members>
+    <members>PartnerFundRequest-Partner Fund Request Layout</members>
+    <members>PartyCreditProfile-Party Credit Profile Layout</members>
+    <members>PartyExpense-Party Expense Layout</members>
+    <members>PartyFinancialAsset-Party Financial Asset Layout</members>
+    <members>PartyFinancialAssetLien-Party Financial Asset Lien Layout</members>
+    <members>PartyFinancialAssetRela-Party Financial Asset Relationship Layout</members>
+    <members>PartyFinancialAssetTerm-Party Financial Asset Term Layout</members>
+    <members>PartyFinancialLiability-Party Financial Liability Layout</members>
+    <members>PartyFinclAssetAddlOwner-Party Financial Asset Additional Owner Layout</members>
+    <members>PartyFinclLiabAddlBrwr-Party Fincl Liability Addl Borrower Layout</members>
+    <members>PartyIncome-Party Income Layout</members>
+    <members>PartyProfile-Party Profile Layout</members>
+    <members>PartyRoleRelation-Party Role Relationship Layout</members>
+    <members>PatientHealthReaction-Patient Health Reaction Layout</members>
+    <members>PatientImmunization-Patient Immunization Layout</members>
+    <members>PatientImmunizationProtocol-Patient Immunization Protocol Layout</members>
+    <members>PatientMedicalProcedure-Patient Medical Procedure Layout</members>
+    <members>PatientMedicalProcedureDetail-Patient Medical Procedure Detail Layout</members>
+    <members>PatientMedicationDosage-Patient Medication Dosage Layout</members>
+    <members>PayGroup-Pay Group Layout</members>
+    <members>PayPeriod-Pay Period Layout</members>
+    <members>Payment-Payment Layout</members>
+    <members>PaymentAuthAdjustment-Payment Authorization Adjustment Layout</members>
+    <members>PaymentAuthorization-Payment Authorization Layout</members>
+    <members>PaymentGateway-Payment Gateway Layout</members>
+    <members>PaymentGatewayLog-Payment Gateway Log Layout</members>
+    <members>PaymentGroup-Payment Group Layout</members>
+    <members>PaymentIntent-SDO SCOM Payment Intent</members>
+    <members>PaymentLineInvoice-Payment Line Invoice Layout</members>
+    <members>PaymentMandate-Payment Mandate Layout</members>
+    <members>PaymentRequest-Payment Request Layout</members>
+    <members>PaymentRequestLine-Payment Request Line Layout</members>
+    <members>Payment_Plan__c-Payment Plan Layout</members>
+    <members>Payment_Receipt__c-Payment Receipt Layout</members>
+    <members>Payment_Schedule__c-Payment Schedule Layout</members>
+    <members>PcmtEmssnFctrSet-Procurement Emissions Factor Set Layout</members>
+    <members>PcmtEmssnFctrSetItem-Procurement Emissions Factor Set Item Layout</members>
+    <members>PersonAccount-Channel Partner%28RES%29</members>
+    <members>PersonAccount-Person Account Layout</members>
+    <members>PersonAccount-SDO - Person Account Layout</members>
+    <members>PersonEducation-Person Education Layout</members>
+    <members>PersonEmployment-Person Employment Layout</members>
+    <members>PersonLanguage-Person Language Layout</members>
+    <members>PersonLifeEvent-Person Life Event Layout</members>
+    <members>PersonName-Person Name Layout</members>
+    <members>PgmBasedHlthRskAdjFctr-Program Based Risk Health Adjustment Factor Layout</members>
+    <members>PickTicketProduct-Pick Ticket Product Layout</members>
+    <members>PltnImpactRiskOppSummary-Pollution Impact Risk Opportunity Summary Layout</members>
+    <members>PriceAdjustmentSchedule-Price Adjustment Schedule Layout</members>
+    <members>PriceAdjustmentTier-Price Adjustment Tier Layout</members>
+    <members>PriceBookEntryDerivedPrice-Derived Price Layout</members>
+    <members>PriceRevisionPolicy-Price Revision Policy Layout</members>
+    <members>Pricebook2-Price Book Layout</members>
+    <members>PricebookEntry-Price Book Entry</members>
+    <members>PricingAdjBatchJob-Pricing Adjustment Batch Job Layout</members>
+    <members>PricingAdjBatchJobLog-Pricing Adjustment Batch Job Log Layout</members>
+    <members>PricingApiExecution-Pricing Api Execution Layout</members>
+    <members>PricingProcessExecution-Pricing Process Execution Layout</members>
+    <members>PrivacyHold-Privacy Hold Layout</members>
+    <members>PrivacyHoldReason-Privacy Hold Reason Layout</members>
+    <members>PrivacyRequest-Privacy Request Layout</members>
+    <members>Problem-Problem Layout</members>
+    <members>ProblemDefRelationship-%5F%5FMISSING LABEL%5F%5F PropertyFile - val ProblemDefRelationship not found in section StandardLayouts</members>
+    <members>ProblemDefinition-Problem Definition Layout</members>
+    <members>ProcessException-Process Exception Layout</members>
+    <members>Producer-Producer Layout</members>
+    <members>Product2-Product Layout</members>
+    <members>Product2-SDO - Product</members>
+    <members>ProductAttribute-Product Attribute Layout</members>
+    <members>ProductAttributeSetProduct-Product Attribute Set Product Layout</members>
+    <members>ProductCatalog-Catalog Layout</members>
+    <members>ProductCategory-Category Layout</members>
+    <members>ProductCategoryMedia-Category Media Layout</members>
+    <members>ProductCategoryProduct-Product Category Product Layout</members>
+    <members>ProductConsumed-Product Consumed Layout</members>
+    <members>ProductConsumedState-Product Consumed State Layout</members>
+    <members>ProductConsumptionSchedule-Product Consumption Schedule Layout</members>
+    <members>ProductEmissionsFactor-Product Emissions Factor Layout</members>
+    <members>ProductFeaturedProduct-SDO SCOM Product Featured Product</members>
+    <members>ProductFee-Product Fee Layout</members>
+    <members>ProductItem-Product Item Layout</members>
+    <members>ProductItemTransaction-Product Item Transaction Layout</members>
+    <members>ProductListRate-Product List Rate Layout</members>
+    <members>ProductMedia-Product Media Layout</members>
+    <members>ProductQuantityRule-Product Quantity Rule Layout</members>
+    <members>ProductRelatedComponent-Product Related Component Layout</members>
+    <members>ProductRequest-Product Request Layout</members>
+    <members>ProductRequestLineItem-Product Request Line Item Layout</members>
+    <members>ProductRequired-Product Required Layout</members>
+    <members>ProductSellingModel-Product Selling Model Layout</members>
+    <members>ProductServiceCampaign-Product Service Campaign Layout</members>
+    <members>ProductServiceCampaignItem-Product Service Campaign Item Layout</members>
+    <members>ProductTransfer-Product Transfer Layout</members>
+    <members>ProductTransferState-Product Transfer State Layout</members>
+    <members>Product_Inventory__c-Product Inventory Layout</members>
+    <members>ProfileSkill-Skill Layout</members>
+    <members>ProfileSkillEndorsement-Endorsement Layout</members>
+    <members>ProfileSkillUser-Skill User Layout</members>
+    <members>Promotion-Promotion Layout</members>
+    <members>Promotion-SDO - Promotion</members>
+    <members>PromotionChannel-Promotion Channel Layout</members>
+    <members>PromotionMarketSegment-Promotion Market Segment Layout</members>
+    <members>PromotionProduct-Promotion Product Layout</members>
+    <members>PromotionProductCategory-Promotion Product Category Layout</members>
+    <members>PromotionQualifier-Promotion Qualifier Layout</members>
+    <members>PromotionSegment-Promotion Segment Layout</members>
+    <members>PromotionSegmentBuyerGroup-Promotion Segment Buyer Group Layout</members>
+    <members>PromotionSegmentSalesStore-Promotion Segment Sales Store Layout</members>
+    <members>PromotionTarget-Promotion Target Layout</members>
+    <members>PromotionTier-Promotion Tier Layout</members>
+    <members>Property__c-Project Layout</members>
+    <members>ProviderSearchSyncLog-Provider Search Sync Log Layout</members>
+    <members>PurchaseQuantityRule-Quantity Rule Layout</members>
+    <members>QLabs__mdt-QLabs Layout</members>
+    <members>QuickText-Quick Text Layout</members>
+    <members>Quota__c-Quota%5F%5Fc Layout</members>
+    <members>Quote-Quote Layout</members>
+    <members>QuoteLineItem-Quote Line Item Layout</members>
+    <members>QuoteLineItemRelatedObject-%5F%5FMISSING LABEL%5F%5F PropertyFile - val QuoteLineItemRelatedObject not found in section StandardLayouts</members>
+    <members>ReceivedDocument-Received Document Layout</members>
+    <members>ReceivedDocumentType-Received Document Type Layout</members>
+    <members>Recommendation-Recommendation Layout</members>
+    <members>Recommendation-SDO Recommendation Layout</members>
+    <members>RecordAlert-Record Alert Layout</members>
+    <members>RecordsetFilterCriteria-Recordset Filter Criteria Layout</members>
+    <members>RecordsetFilterCriteriaRule-Recordset Filter Criteria Rule Layout</members>
+    <members>RecurrenceSchedule-Recurrence Schedule Layout</members>
+    <members>ReferenceDataLoadLog-Reference Data Load Log Layout</members>
+    <members>Referral-Referral Layout</members>
+    <members>RefrigerantEmssnFctr-Refrigerant Emissions Factor Layout</members>
+    <members>Refund-Refund Layout</members>
+    <members>RefundLinePayment-Refund Line Payment Layout</members>
+    <members>RentalCarEmssnFctr-Rental Car Emissions Factor Layout</members>
+    <members>Reply_Rec_Demo_Helper_QuickText__c-Reply Rec Demo Helper QuickText Layout</members>
+    <members>Reply_Rec_Demo_Helper__c-Reply Rec Demo Helper Layout</members>
+    <members>ReportAnomalyEventStore-Report Anomaly Event Store Layout</members>
+    <members>ResourceAbsence-Resource Absence Layout</members>
+    <members>ResourcePreference-Resource Preference Layout</members>
+    <members>RetailLocationGroup-Retail Store Group Layout</members>
+    <members>RetailStore-Retail Store Layout</members>
+    <members>RetailStoreGroupAssignment-Retail Store Group Assignment Layout</members>
+    <members>ReturnOrder-Return Order Layout</members>
+    <members>ReturnOrder-SDO - Return Order Layout</members>
+    <members>ReturnOrderItemAdjustment-Return Order Item Adjustment Layout</members>
+    <members>ReturnOrderItemTax-Return Order Item Tax Layout</members>
+    <members>ReturnOrderLineItem-Return Order Line Item Layout</members>
+    <members>ReturnOrderLineItem-SDO - OMS - Return Order Line Item Layout</members>
+    <members>RevenueAsyncOperation-Revenue Async Operation Layout</members>
+    <members>RevenueTransactionErrorLog-Revenue Transaction Error Log Layout</members>
+    <members>Round_Robin_Assignee__c-Round Robin Assignee Layout</members>
+    <members>Round_Robin_Settings__mdt-Round Robin Settings Layout</members>
+    <members>RuleLibrary-Rule Library Layout</members>
+    <members>RuleLibraryVersion-Rule Library Version Layout</members>
+    <members>SDO_B2BCommerce_CustomContent__c-B2BLE Custom Content Layout</members>
+    <members>SDO_B2BCommerce_Tier_Voucher_Rule__c-Tier Voucher Rule Layout</members>
+    <members>SDO_C360_Address__c-C360 Address Layout</members>
+    <members>SDO_ChannelPartner_Certification__c-Certification Layout</members>
+    <members>SDO_Community_Course_Enrollment__c-Course Enrollment Layout</members>
+    <members>SDO_Community_Idea_Issues__c-Idea Issue Layout</members>
+    <members>SDO_Community_Idea_Team__c-Idea Team Layout</members>
+    <members>SDO_Community_Ideas_Projects__c-Idea in Action Layout</members>
+    <members>SDO_Community_Related_Idea__c-Related Idea Layout</members>
+    <members>SDO_Community_Training_Course__c-EXTERNAL Layout</members>
+    <members>SDO_Community_Training_Course__c-INTERNAL Layout</members>
+    <members>SDO_Community_Training_Course__c-Training Course Layout</members>
+    <members>SDO_Customer360_Custom_Activity__c-Custom Activity Layout</members>
+    <members>SDO_Einstein_Customer_Profile__c-Customer Profile Layout</members>
+    <members>SDO_Experience_ContentArticle__c-Content Article Layout</members>
+    <members>SDO_Experience_ContentCollection__c-Content Collection Layout</members>
+    <members>SDO_OMS_Export_FOI__c-Export_FOI Layout</members>
+    <members>SDO_OMS_Link_Order_Summary__c-Link Order Summary Layout</members>
+    <members>SDO_Platform_Events_Button__c-Platform Event Button Layout</members>
+    <members>SDO_Platform_Events_Page__c-Platform Event Page Layout</members>
+    <members>SDO_SCOM_Auction_Bid__c-Auction Bid Layout</members>
+    <members>SDO_SCOM_Auction__c-Auction Layout</members>
+    <members>SDO_SCOM_Customer_Review__c-SDO_SCOM_Customer_Review Layout</members>
+    <members>SDO_SCOM_OOA_Approved_Domain__c-Approved Domain Layout</members>
+    <members>SDO_SCOM_OOA_Commerce_Approval_Requests__c-Commerce Approval Request Layout</members>
+    <members>SDO_SCOM_OOA_Commerce_Approval_Requests__c-Partner - Commerce Approval Request Layout</members>
+    <members>SDO_SCOM_OOA_Commerce_User_Requests__c-Commerce User Request Layout</members>
+    <members>SDO_SCOM_Replacement_Parts__c-Replacement Part Layout</members>
+    <members>SDO_SFS_Field_Capacity_Transfer__c-Field Capacity Transfer Layout</members>
+    <members>SDO_SFS_Field_Capacity__c-Field Capacity Layout</members>
+    <members>SDO_SFS_Vehicle_Inspection__c-Vehicle Inspection Layout</members>
+    <members>SDO_SFS_Work_Order_Volume__c-Work Order Volume Layout</members>
+    <members>SDO_Sales_ChannelPlan_Objective__c-Objective Layout</members>
+    <members>SDO_Sales_ChannelTeam__c-Channel Team Layout</members>
+    <members>SDO_Sales_Invoice_Example__c-Invoice Layout</members>
+    <members>SDO_Sales_Invoice_Example__c-SDO - Community Invoice Layout</members>
+    <members>SDO_Sales_Invoice_Example__c-SDO - Invoice Layout</members>
+    <members>SDO_Service_Appointment__c-Appointment Layout</members>
+    <members>SDO_Service_Bot_Message__c-Bot Message Layout</members>
+    <members>SDO_Service_CaseArticle__c-CaseArticle%5F%5Fc Layout</members>
+    <members>SDO_Service_Case_Pipeline_Snapshot__c-Case Pipeline Snapshot Layout</members>
+    <members>SDO_Service_Conversation_Helper__c-Conversation Helper Layout</members>
+    <members>SDO_Service_Custom_Debit_Card__c-Credit Account Layout</members>
+    <members>SDO_Service_Einstein_Agent_Helper__c-Einstein Agent Helper Layout</members>
+    <members>SDO_Service_Queue_Stat__c-Queue Stat Layout</members>
+    <members>SDO_Service_Workforce_Case_History__c-Case History Layout</members>
+    <members>SDO_Service_Workforce_Chat_History__c-Chat Transcript History Layout</members>
+    <members>SDO_Service_Workforce_VoiceCall_History__c-Voice Call History Layout</members>
+    <members>SDO_Service_openCTIconfig__c-Lightning CTI Config Layout</members>
+    <members>SDO_Service_openCTIconfig__c-openCTIconfig Layout</members>
+    <members>SFDC_Channel_Account_Plan__c-Channel Plan Layout</members>
+    <members>SOSSession-SOS Session Layout</members>
+    <members>SOSSessionActivity-SOS Session Activity Layout</members>
+    <members>SalesChannel-Sales Channel Layout</members>
+    <members>Salesforce_Rewind_History_Record__c-Salesforce Rewind History Record Layout</members>
+    <members>ScheduleBrdcstApptResource-Schedule Broadcast Appointment Resource Layout</members>
+    <members>ScheduleBroadcast-Schedule Broadcast Layout</members>
+    <members>ScheduleBroadcastAppointment-Schedule Broadcast Appointment Layout</members>
+    <members>ScheduleBroadcastTerritory-Schedule Broadcast Territory Layout</members>
+    <members>ScheduledTSDetails__c-ScheduledTSDetails Layout</members>
+    <members>SchedulingConstraint-Scheduling Constraint Layout</members>
+    <members>SchedulingObjective-Scheduling Objective Layout</members>
+    <members>SchedulingRule-Scheduling Rule Layout</members>
+    <members>SchedulingWorkspace-Scheduling Workspace Layout</members>
+    <members>SchedulingWorkspaceTerritory-Scheduling Workspace Territory Layout</members>
+    <members>Scope3EmssnSrc-%5F%5FMISSING LABEL%5F%5F PropertyFile - val Scope3EmssnSrc not found in section StandardLayouts</members>
+    <members>ScoreCategory-Score Category Layout</members>
+    <members>Scorecard-Scorecard Layout</members>
+    <members>ScorecardAssociation-Scorecard Association Layout</members>
+    <members>ScorecardMetric-Scorecard Metric Layout</members>
+    <members>Seller-Seller Layout</members>
+    <members>ServiceAppointment-SDO - Customer Community Service Appointment</members>
+    <members>ServiceAppointment-SDO - SFS Service Appointment Feed Based</members>
+    <members>ServiceAppointment-SDO - Scheduler Service Appointment</members>
+    <members>ServiceAppointment-Service Appointment Layout</members>
+    <members>ServiceAppointmentCapacityUsage-Service Appointment Capacity Usage Layout</members>
+    <members>ServiceContract-Service Contract Layout</members>
+    <members>ServiceCrew-SDO - Service Crew Layout</members>
+    <members>ServiceCrew-Service Crew Layout</members>
+    <members>ServiceCrewMember-SDO - Service Crew Member Layout</members>
+    <members>ServiceCrewMember-Service Crew Member Layout</members>
+    <members>ServiceResource-Service Resource Layout</members>
+    <members>ServiceResourceCapacity-Resource Capacity Layout</members>
+    <members>ServiceResourcePreference-Service Resource Preference Layout</members>
+    <members>ServiceResourceSkill-Service Resource Skill Layout</members>
+    <members>ServiceTerritory-SDO - SFS Service Territory Layout</members>
+    <members>ServiceTerritory-Service Territory Layout</members>
+    <members>ServiceTerritoryMember-SDO SFS STM Layout</members>
+    <members>ServiceTerritoryMember-Service Territory Member Layout</members>
+    <members>SessionHijackingEventStore-Session Hijacking Event Store Layout</members>
+    <members>Session_Time__c-Session Time Layout</members>
+    <members>SharingRecordCollection-Record Collection Layout</members>
+    <members>Shift-Shift Layout</members>
+    <members>ShiftPattern-Shift Pattern Layout</members>
+    <members>ShiftPatternEntry-Shift Pattern Entry Layout</members>
+    <members>ShiftSchedulingOperation-Shift Scheduling Operation Layout</members>
+    <members>ShiftTemplate-Shift Template Layout</members>
+    <members>ShiftWorkTopic-%5F%5FMISSING LABEL%5F%5F PropertyFile - val ShiftWorkTopic not found in section StandardLayouts</members>
+    <members>Shipment-SDO - Shipment Feed Based Layout</members>
+    <members>Shipment-Shipment Layout</members>
+    <members>ShipmentItem-SDO OMS Shipment Item</members>
+    <members>ShippingConfigurationSet-Shipping Configuration Set Layout</members>
+    <members>ShippingRateArea-Shipping Rate Area Layout</members>
+    <members>ShippingRateGroup-Shipping Rate Group Layout</members>
+    <members>SignatureTask-Signature Task Layout</members>
+    <members>SignatureTaskLineItem-Signature Task Line Item Layout</members>
+    <members>SignupRequest-Signup Request Layout</members>
+    <members>SiteIframeWhiteListUrl-Trusted Domains for Inline Frames Layout</members>
+    <members>Site_Visit__c-Site Visit Layout</members>
+    <members>SkillRequirement-Skill Requirement Layout</members>
+    <members>SocialContributionSum-Social Contribution Summary Layout</members>
+    <members>SocialPersona-Social Persona Layout</members>
+    <members>SocialPost-Social Post Layout</members>
+    <members>Solution-Solution Layout</members>
+    <members>Specimen-Specimen Layout</members>
+    <members>Spotter_Configuration__c-Spotter Configuration Layout</members>
+    <members>Spotter_Hotspot__c-Spotter Hotspot Layout</members>
+    <members>StandardShippingRate-Standard Shipping Rate Layout</members>
+    <members>StnryAssetAnnualFact-Stationary Asset Annual Fact Layout</members>
+    <members>StnryAssetEnrgyUse-%5F%5FMISSING LABEL%5F%5F PropertyFile - val StnryAssetEnrgyUse not found in section StandardLayouts</members>
+    <members>StnryAssetEnvrSrc-Stationary Asset Environmental Source Layout</members>
+    <members>StnryAssetWaterActvty-Stationary Asset Water Activity Layout</members>
+    <members>StnryAssetWaterFtprnt-Stationary Asset Water Footprint Layout</members>
+    <members>StnryAssetWtrFtprntItm-Stationary Asset Water Footprint Item Layout</members>
+    <members>Structural_Civil_Changes__c-Structural%2FCivil Change Layout</members>
+    <members>Supplier-%5F%5FMISSING LABEL%5F%5F PropertyFile - val Supplier not found in section StandardLayouts</members>
+    <members>SupplierProduct-Supplier Product Layout</members>
+    <members>Survey-Survey Layout</members>
+    <members>SurveySubject-Survey Subject Layout</members>
+    <members>SurveyVersion-Survey Version Layout</members>
+    <members>SustainabilityCredit-Sustainability Credit Layout</members>
+    <members>SustainabilityPurchase-Sustainability Purchase Layout</members>
+    <members>SustainabilityStakeholder-Sustainability Stakeholder Layout</members>
+    <members>SustainabilityTask-Sustainability Task Layout</members>
+    <members>SustainabilityTaskGroup-Sustainability Task Group Layout</members>
+    <members>SustnMaterialUseSummary-Sustainability Material Use Summary Layout</members>
+    <members>Swarm-Swarm Layout</members>
+    <members>SwarmMember-Swarm Member Layout</members>
+    <members>Task-Task Layout</members>
+    <members>TaxDisclosureSummary-Tax Disclosure Summary Layout</members>
+    <members>TaxPolicy-Tax Policy Layout</members>
+    <members>TaxTreatment-Tax Treatment Layout</members>
+    <members>Territory2Model-Territory Model Layout</members>
+        <name>Layout</name>
+    </types>
+    <version>60.0</version>
+</Package>

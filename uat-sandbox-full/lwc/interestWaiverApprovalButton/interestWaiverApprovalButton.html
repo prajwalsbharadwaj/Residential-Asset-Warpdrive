@@ -1,0 +1,39 @@
+<template>
+    <lightning-quick-action-panel header="Create Interest Waiver Approval">
+        <!-- Form Fields -->
+        <div class="slds-p-around_medium slds-grid slds-wrap slds-gutters">
+            <div class="slds-col slds-size_1-of-1">
+                <lightning-input 
+                    label="Waiver Amount" 
+                    type="number" 
+                    value={waiverAmount} 
+                    onchange={handleChange}
+                    data-id="waiverAmount"
+                    required>
+                </lightning-input>
+            </div>
+
+            <div class="slds-col slds-size_1-of-1">
+                <lightning-textarea 
+                    label="Waiver Reason" 
+                    value={waiverReason} 
+                    onchange={handleChange}
+                    data-id="waiverReason"
+                    required>
+                </lightning-textarea>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div slot="footer" class="slds-grid slds-grid_align-end">
+            <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}></lightning-button>
+            <lightning-button 
+                variant="brand" 
+                label="Save" 
+                class="slds-m-left_small" 
+                onclick={handleSave} 
+                disabled={isSaveDisabled}>
+            </lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

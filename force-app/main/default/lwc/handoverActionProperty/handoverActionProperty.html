@@ -1,0 +1,69 @@
+<template>
+    <lightning-quick-action-panel header="Property &amp; Customer Details">
+        <template lwc:if={isLoading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading details..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+        <template lwc:else>
+            <div class="slds-p-around_small">
+                <!-- Unit & Property Info Card -->
+                <div class="slds-box slds-box_xx-small slds-theme_shade slds-m-bottom_small">
+                    <h3 class="slds-text-title_bold slds-m-bottom_xx-small">Unit &amp; Property Information</h3>
+                    <div class="slds-grid slds-wrap slds-gutters_x-small">
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_xx-small">
+                            <span class="slds-text-color_weak slds-text-body_small">Unit:</span>
+                            <div class="font-weight-bold">{unitSummary.unitName}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_xx-small">
+                            <span class="slds-text-color_weak slds-text-body_small">Configuration:</span>
+                            <div class="font-weight-bold">{unitSummary.bhkConfig}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_xx-small">
+                            <span class="slds-text-color_weak slds-text-body_small">Tower &amp; Floor:</span>
+                            <div class="font-weight-bold">{unitSummary.towerName} &bull; {unitSummary.floorName}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_xx-small">
+                            <span class="slds-text-color_weak slds-text-body_small">Project:</span>
+                            <div class="font-weight-bold">{unitSummary.propertyName}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_xx-small">
+                            <span class="slds-text-color_weak slds-text-body_small">Carpet Area:</span>
+                            <div class="font-weight-bold">{unitSummary.carpetArea} sq ft</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_xx-small">
+                            <span class="slds-text-color_weak slds-text-body_small">Saleable Area:</span>
+                            <div class="font-weight-bold">{unitSummary.saleableArea} sq ft</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Details Card -->
+                <div class="slds-box slds-box_xx-small slds-theme_shade">
+                    <h3 class="slds-text-title_bold slds-m-bottom_xx-small">Customer &amp; Contact</h3>
+                    <div class="slds-grid slds-wrap slds-gutters_x-small">
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_xx-small">
+                            <span class="slds-text-color_weak slds-text-body_small">Name:</span>
+                            <div class="font-weight-bold">{contactSummary.name}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_xx-small">
+                            <span class="slds-text-color_weak slds-text-body_small">Phone:</span>
+                            <div><a href={phoneHref}>{contactSummary.phone}</a></div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_xx-small">
+                            <span class="slds-text-color_weak slds-text-body_small">Email:</span>
+                            <div><a href={emailHref}>{contactSummary.email}</a></div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_xx-small">
+                            <span class="slds-text-color_weak slds-text-body_small">Linked Booking:</span>
+                            <div><strong>#{unitSummary.bookingReference}</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <div slot="footer">
+            <lightning-button variant="neutral" label="Close" onclick={handleClose}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

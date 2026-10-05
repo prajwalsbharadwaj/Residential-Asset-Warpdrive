@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Must_Cover_Split</fullName>
+    <active>true</active>
+    <description>It ensures we never create a negative excess</description>
+    <errorConditionFormula>Amount_Paid__c &lt; (Principal_Applied__c + Interest_Applied__c +  Tax_on_Interest__c )</errorConditionFormula>
+    <errorDisplayField>Amount_Paid__c</errorDisplayField>
+    <errorMessage>Amount Paid must be at least Principal + Interest + Tax. Any Extra will be recorded as excess</errorMessage>
+</ValidationRule>

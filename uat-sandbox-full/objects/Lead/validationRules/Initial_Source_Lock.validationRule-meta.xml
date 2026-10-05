@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Initial_Source_Lock</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISCHANGED( LeadSource ) , 
+      NOT( ISNEW() ),
+				RecordType.DeveloperName  = &quot;Standard_Lead_Residential&quot;
+ )</errorConditionFormula>
+    <errorDisplayField>LeadSource</errorDisplayField>
+    <errorMessage>Initial Source cannot be changed after the Lead is created.</errorMessage>
+</ValidationRule>

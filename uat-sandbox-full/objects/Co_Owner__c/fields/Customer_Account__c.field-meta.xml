@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Account__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>Links this Co-Owner record to the specific Customer Account representing the co-owner.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Select the Account that is serving as this co-owner.</inlineHelpText>
+    <label>Customer Account</label>
+    <lookupFilter>
+        <active>true</active>
+        <errorMessage>Only &apos;Customer&apos; type accounts can be designated as co-owners.</errorMessage>
+        <filterItems>
+            <field>Account.RecordType.Name</field>
+            <operation>equals</operation>
+            <value>Customer</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>Co-Owners</relationshipLabel>
+    <relationshipName>Co_Owners</relationshipName>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

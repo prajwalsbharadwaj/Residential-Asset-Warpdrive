@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TotalPrincipalReceived__c</fullName>
+    <externalId>false</externalId>
+    <label>Total Principal Received</label>
+    <summarizedField>Payment_Receipt__c.Principal_Applied__c</summarizedField>
+    <summaryFilterItems>
+        <field>Payment_Receipt__c.Approval_Status__c</field>
+        <operation>equals</operation>
+        <value>Approved</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>Payment_Receipt__c.Receipt_Status__c</field>
+        <operation>equals</operation>
+        <value>Posted</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Payment_Receipt__c.Demand__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

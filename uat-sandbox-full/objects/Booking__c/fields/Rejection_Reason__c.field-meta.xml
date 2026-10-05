@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rejection_Reason__c</fullName>
+    <externalId>false</externalId>
+    <label>Rejection Reason</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Ownership Transfer Refund</fullName>
+                <default>false</default>
+                <label>Ownership Transfer Refund</label>
+            </value>
+            <value>
+                <fullName>General Debit Note</fullName>
+                <default>false</default>
+                <label>General Debit Note</label>
+            </value>
+            <value>
+                <fullName>General Credit Note</fullName>
+                <default>false</default>
+                <label>General Credit Note</label>
+            </value>
+            <value>
+                <fullName>Unit Change Charges</fullName>
+                <default>false</default>
+                <label>Unit Change Charges</label>
+            </value>
+            <value>
+                <fullName>Modification Charges</fullName>
+                <default>false</default>
+                <label>Modification Charges</label>
+            </value>
+            <value>
+                <fullName>Cancellation opted by Company</fullName>
+                <default>false</default>
+                <label>Cancellation opted by Company</label>
+            </value>
+            <value>
+                <fullName>Excess payment received</fullName>
+                <default>false</default>
+                <label>Excess payment received</label>
+            </value>
+            <value>
+                <fullName>Recovery of charges</fullName>
+                <default>false</default>
+                <label>Recovery of charges</label>
+            </value>
+            <value>
+                <fullName>Short fall of TDS</fullName>
+                <default>false</default>
+                <label>Short fall of TDS</label>
+            </value>
+            <value>
+                <fullName>Excessive Billing</fullName>
+                <default>false</default>
+                <label>Excessive Billing</label>
+            </value>
+            <value>
+                <fullName>General inquiry</fullName>
+                <default>false</default>
+                <label>General inquiry</label>
+            </value>
+            <value>
+                <fullName>High Pricing</fullName>
+                <default>false</default>
+                <label>High Pricing</label>
+            </value>
+            <value>
+                <fullName>Unsuitable Location</fullName>
+                <default>false</default>
+                <label>Unsuitable Location</label>
+            </value>
+            <value>
+                <fullName>Product dislike</fullName>
+                <default>false</default>
+                <label>Product dislike</label>
+            </value>
+            <value>
+                <fullName>Insuffucient budget</fullName>
+                <default>false</default>
+                <label>Insuffucient budget</label>
+            </value>
+            <value>
+                <fullName>Bank Loan rejection</fullName>
+                <default>false</default>
+                <label>Bank Loan rejection</label>
+            </value>
+            <value>
+                <fullName>Approval delayed</fullName>
+                <default>false</default>
+                <label>Approval delayed</label>
+            </value>
+            <value>
+                <fullName>Financial crisis</fullName>
+                <default>false</default>
+                <label>Financial crisis</label>
+            </value>
+            <value>
+                <fullName>Medical reason</fullName>
+                <default>false</default>
+                <label>Medical reason</label>
+            </value>
+            <value>
+                <fullName>Personal reason</fullName>
+                <default>false</default>
+                <label>Personal reason</label>
+            </value>
+            <value>
+                <fullName>Unit to Unit transfer</fullName>
+                <default>false</default>
+                <label>Unit to Unit transfer</label>
+            </value>
+            <value>
+                <fullName>Buyer to Buyer Transfer</fullName>
+                <default>false</default>
+                <label>Buyer to Buyer Transfer</label>
+            </value>
+            <value>
+                <fullName>Unit cancellation</fullName>
+                <default>false</default>
+                <label>Unit cancellation</label>
+            </value>
+            <value>
+                <fullName>Others</fullName>
+                <default>false</default>
+                <label>Others</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,45 @@
+<template>
+<div class="container">
+    <div class="header">
+        <lightning-input
+            type="search"
+            label="Search Payment Plan by Name"
+            value={searchTerm}
+            onchange={handleSearchTermChange}
+            class="search-input"
+            placeholder="Type to search..."
+        ></lightning-input>
+    </div>
+
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </template>
+
+    <template if:true={paymentPlans.length}>
+        <div class="">
+            <lightning-datatable
+                key-field="Id"
+                data={paymentPlans}
+                columns={columns}
+                class="slds-table_bordered slds-table_col-bordered custom-datatable"
+                onrowselection={handleRowSelection}
+                ></lightning-datatable>
+        </div>   
+    </template>
+
+    <div class="button-group slds-m-top_medium">
+        <lightning-button
+            variant="neutral"
+            label="Close"
+            onclick={handleClose}
+            class="close-btn"
+        ></lightning-button>
+        <lightning-button
+            variant="brand"
+            label="Generate PDF"
+            onclick={handleGeneratePDF}
+            class="pdf-btn"
+        ></lightning-button>
+    </div>
+</div>
+</template>

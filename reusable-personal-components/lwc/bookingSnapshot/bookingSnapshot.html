@@ -1,0 +1,155 @@
+<template>
+    <div class="slds-card snapshot-container">
+        <!-- Header with Refresh Button -->
+        <div class="snapshot-header slds-grid slds-grid_align-spread slds-grid_vertical-align-start slds-p-horizontal_medium slds-p-top_medium slds-p-bottom_x-small">
+            <div>
+                <h3 class="snapshot-title">Booking Snapshot</h3>
+                <p class="snapshot-timestamp">As of: {currentTimestamp}</p>
+            </div>
+            <div>
+                <lightning-button-icon 
+                    icon-name="utility:refresh" 
+                    variant="border-filled" 
+                    size="small" 
+                    alternative-text="Refresh Snapshot" 
+                    onclick={handleRefresh}
+                    class="refresh-icon-btn">
+                </lightning-button-icon>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="slds-p-around_large slds-text-align_center">
+                <lightning-spinner alternative-text="Loading Booking Snapshot..." size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <!-- Collapsible Section: Booking Totals -->
+            <div class="totals-section slds-p-horizontal_medium slds-p-bottom_small">
+                <div class="collapsible-header slds-grid slds-grid_vertical-align-center slds-m-bottom_x-small" onclick={toggleTotals}>
+                    <lightning-icon 
+                        icon-name={totalsChevronIcon} 
+                        size="xx-small" 
+                        class="chevron-icon slds-m-right_xx-small">
+                    </lightning-icon>
+                    <span class="totals-header-title">Booking Totals</span>
+                </div>
+
+                <template if:true={isTotalsOpen}>
+                    <div class="slds-grid slds-gutters totals-grid slds-m-bottom_small">
+                        <!-- Left Column -->
+                        <div class="slds-col slds-size_1-of-2">
+                            <div class="metric-block">
+                                <label class="metric-label">Total Installment Amount:</label>
+                                <div class="metric-value font-semibold">₹{formattedInstallmentAmount}</div>
+                            </div>
+                            <div class="metric-block">
+                                <label class="metric-label">Total Outstanding Principal:</label>
+                                <div class="metric-value font-semibold">₹{formattedOutstandingPrincipal}</div>
+                            </div>
+                            <div class="metric-block">
+                                <label class="metric-label">Total Principal Received:</label>
+                                <div class="metric-value font-semibold">₹{formattedPrincipalReceived}</div>
+                            </div>
+                            <div class="metric-block">
+                                <label class="metric-label">Total Advance Applied:</label>
+                                <div class="metric-value font-semibold">₹{formattedAdvanceApplied}</div>
+                            </div>
+                            <div class="metric-block">
+                                <label class="metric-label">Total Tax on Interest (till today):</label>
+                                <div class="metric-value font-semibold">₹{formattedTaxOnInterest}</div>
+                            </div>
+                            <div class="metric-block">
+                                <label class="metric-label">Total Tax on Interest Outstanding:</label>
+                                <div class="metric-value font-bold red-highlight">₹{formattedTaxOnInterestOutstanding}</div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="slds-col slds-size_1-of-2">
+                            <div class="metric-block">
+                                <label class="metric-label">Total Interest (till today):</label>
+                                <div class="metric-value font-semibold">₹{formattedTotalInterest}</div>
+                            </div>
+                            <div class="metric-block">
+                                <label class="metric-label">Total Interest Received (allocated):</label>
+                                <div class="metric-value font-semibold">₹{formattedInterestReceived}</div>
+                            </div>
+                            <div class="metric-block">
+                                <label class="metric-label">Total Interest Outstanding:</label>
+                                <div class="metric-value font-bold red-highlight">₹{formattedInterestOutstanding}</div>
+                            </div>
+                            <div class="metric-block">
+                                <label class="metric-label">Total Interest Waived:</label>
+                                <div class="metric-value font-semibold">₹{formattedInterestWaived}</div>
+                            </div>
+                            <div class="metric-block">
+                                <label class="metric-label">Total Tax on Interest Received:</label>
+                                <div class="metric-value font-semibold">₹{formattedTaxOnInterestReceived}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Footnote -->
+                    <div class="schedules-subtext slds-p-top_xx-small">
+                        Schedules: {schedulesCount} • Next Due: {nextDueDate}
+                    </div>
+                </template>
+            </div>
+
+            <!-- Milestone Schedules Accordion List Matching Screenshot -->
+            <div class="schedules-accordion-container">
+                <template for:each={processedScheduleItems} for:item="item">
+                    <div key={item.id} class="schedule-accordion-item">
+                        <div class="schedule-accordion-bar slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-around_small" 
+                             data-id={item.id} 
+                             onclick={handleToggleScheduleItem}>
+                            <div class="slds-grid slds-grid_vertical-align-center">
+                                <lightning-icon 
+                                    icon-name={item.chevronIcon} 
+                                    size="xx-small" 
+                                    class="chevron-icon slds-m-right_x-small">
+                                </lightning-icon>
+                                <span class="schedule-title font-medium">
+                                    {item.milestoneName} - {item.dueDateFormatted}
+                                </span>
+                            </div>
+                            <span class={item.badgeClass}>{item.status}</span>
+                        </div>
+
+                        <!-- Expanded Schedule Details -->
+                        <template if:true={item.isExpanded}>
+                            <div class="schedule-details-content slds-p-around_small slds-theme_shade">
+                                <div class="slds-grid slds-grid_align-spread slds-m-bottom_xx-small">
+                                    <span class="text-muted text-xs">Milestone Amount:</span>
+                                    <span class="font-semibold text-xs">₹{item.formattedAmount}</span>
+                                </div>
+                                <div class="slds-grid slds-grid_align-spread slds-m-bottom_xx-small">
+                                    <span class="text-muted text-xs">Paid to Date:</span>
+                                    <span class="font-semibold text-xs text-success">₹{item.formattedPaid}</span>
+                                </div>
+                                <div class="slds-grid slds-grid_align-spread slds-m-bottom_xx-small">
+                                    <span class="text-muted text-xs">Balance Remaining:</span>
+                                    <span class="font-semibold text-xs">₹{item.formattedBalance}</span>
+                                </div>
+                                <template if:true={item.hasOverdueInterest}>
+                                    <div class="slds-grid slds-grid_align-spread slds-m-top_xx-small border-top-dotted">
+                                        <span class="text-muted text-xs red-highlight">Overdue Interest:</span>
+                                        <span class="font-bold text-xs red-highlight">₹{item.formattedInterest}</span>
+                                    </div>
+                                </template>
+                                <template if:true={item.sapInvoiceNumber}>
+                                    <div class="slds-grid slds-grid_align-spread slds-m-top_xx-small border-top-dotted">
+                                        <span class="text-muted text-xs">SAP Tax Invoice:</span>
+                                        <span class="font-bold text-xs" style="color: #234e52; font-family: monospace;">{item.sapInvoiceNumber}</span>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>

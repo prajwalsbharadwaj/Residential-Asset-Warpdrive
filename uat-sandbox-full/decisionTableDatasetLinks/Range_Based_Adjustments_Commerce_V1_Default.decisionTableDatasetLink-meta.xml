@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DecisionTableDatasetLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <decisionTableName>Range_Based_Adjustments_Commerce_V1</decisionTableName>
+    <isDefault>true</isDefault>
+    <setupName>Default Payload</setupName>
+    <sourceObject>PriceAdjustmentTier</sourceObject>
+</DecisionTableDatasetLink>

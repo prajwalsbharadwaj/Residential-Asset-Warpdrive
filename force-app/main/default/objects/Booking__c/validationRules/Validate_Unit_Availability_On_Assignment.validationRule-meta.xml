@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validate_Unit_Availability_On_Assignment</fullName>
+    <active>true</active>
+    <description>Prevents assigning a Unit to a Booking if the selected Unit is already associated with an active Booking record (i.e., its status is &apos;Reserved&apos; or &apos;Sold&apos;). This ensures that a Unit can only be assigned to one active Booking at a time.</description>
+    <errorConditionFormula>AND(
+    ISCHANGED( Unit_Id__c ),
+    NOT(ISBLANK(Unit_Id__c )),
+    OR(
+        TEXT( Unit_Id__r.Status__c ) = &apos;Sold&apos;,
+        TEXT(Unit_Id__r.Status__c) = &apos;Reserved&apos;
+    ),
+				 RecordType.DeveloperName = &quot;Residential_Sales_Booking&quot;
+)</errorConditionFormula>
+    <errorDisplayField>Unit_Id__c</errorDisplayField>
+    <errorMessage>This Unit is already assigned to an active Booking. Please select a different available Unit.</errorMessage>
+</ValidationRule>

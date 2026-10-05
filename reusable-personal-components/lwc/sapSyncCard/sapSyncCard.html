@@ -1,0 +1,64 @@
+<template>
+    <div class="sap-card slds-card">
+        <!-- Header -->
+        <div class="sap-header">
+            <div class="brand-row">
+                <div class="sap-badge">
+                    <span class="sap-logo-text">SAP</span>
+                    <span class="system-id">S/4HANA (PRD-100)</span>
+                </div>
+                <div class="sync-status-indicator">
+                    <span class={syncDotClass}></span>
+                    <span class="sync-status-text">{syncStateText}</span>
+                </div>
+            </div>
+            <div class="sap-sub">Enterprise Ledger &amp; Inventory Replication Engine</div>
+        </div>
+
+        <!-- Telemetry Data Grid -->
+        <div class="sap-body">
+            <div class="telemetry-grid">
+                <div class="telemetry-tile">
+                    <div class="tile-lbl">SAP Customer Code</div>
+                    <div class="tile-val highlight-blue">{sapCustomerCode}</div>
+                </div>
+                <div class="telemetry-tile">
+                    <div class="tile-lbl">Sales Order (SO)</div>
+                    <div class="tile-val highlight-emerald">{sapSalesOrder}</div>
+                </div>
+                <div class="telemetry-tile">
+                    <div class="tile-lbl">Material Master</div>
+                    <div class="tile-val">{sapMaterialCode}</div>
+                </div>
+                <div class="telemetry-tile">
+                    <div class="tile-lbl">FI-CO Ledger Status</div>
+                    <div class="tile-val status-green">✓ IN BALANCE</div>
+                </div>
+            </div>
+
+            <!-- Sync Animation Box -->
+            <template if:true={isSyncing}>
+                <div class="syncing-box">
+                    <div class="sync-spinner-row">
+                        <div class="sync-spinner"></div>
+                        <div class="sync-step-label">{activeSyncStep}</div>
+                    </div>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" style={progressBarStyle}></div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Sync Trigger Button -->
+            <template if:false={isSyncing}>
+                <div class="sync-action-row">
+                    <button class="btn-sync-sap" onclick={triggerSapSync}>
+                        <span class="sync-icon">🔄</span>
+                        <span>Synchronize with SAP S/4HANA</span>
+                    </button>
+                    <div class="last-sync-time">Last synchronized: <strong>{lastSyncTimestamp}</strong></div>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Themed Message Box</masterLabel>
+    <description>A customizable message box using SLDS themes and textures.</description>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__RecordPage,lightning__HomePage">
+            <property name="messageText" type="String" label="Message Text (HTML allowed)" default="Default Text"/>
+            
+            <property name="theme" type="String" label="Theme" default="Default" 
+                      datasource="Default,Shade,Inverse,Alternate Inverse,Success,Info,Warning,Error,Offline"/>
+            
+            <property name="texture" type="String" label="Texture" default="None" 
+                      datasource="None,Alert"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

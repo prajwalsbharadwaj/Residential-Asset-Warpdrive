@@ -1,0 +1,40 @@
+<template>
+  <lightning-quick-action-panel header="Generate Payment Ledger">
+    <p class="slds-p-bottom_small slds-text-color_weak slds-p-top_small slds-text-align_center"> 
+        Select the date range for which you want to generate the Payment Ledger document.
+    </p>
+
+    <!-- Modal Body -->
+    <div class="slds-m-bottom_medium">
+      <div class="slds-grid slds-gutters">
+        <!-- Start Date -->
+        <div class="slds-col">
+          <lightning-input 
+            type="date" 
+            label="Start Date" 
+            value={startDate}
+            onchange={handleStartDateChange}
+            required>
+          </lightning-input>
+        </div>
+
+        <!-- End Date -->
+        <div class="slds-col">
+          <lightning-input 
+            type="date" 
+            label="End Date" 
+            value={endDate}
+            onchange={handleEndDateChange}
+            required>
+          </lightning-input>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div slot="footer">
+      <lightning-button variant="neutral" label="Cancel" onclick={handleClose}></lightning-button>
+      <lightning-button variant="brand" label="Generate" class="slds-m-left_x-small" onclick={handleSuccess}></lightning-button>
+    </div>
+  </lightning-quick-action-panel>
+</template>

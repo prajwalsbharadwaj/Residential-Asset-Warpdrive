@@ -1,0 +1,49 @@
+<template>
+  <lightning-quick-action-panel header="Recalculate Ledger Entries">
+    <div class="slds-p-around_small">
+      <p class="slds-text-color_weak slds-m-bottom_small">
+        This will delete all ledger entries for the booking and recreate them from receipts in payment date order.
+      </p>
+
+      <template if:true={showProgress}>
+        <div class="slds-grid slds-grid_vertical-align-center slds-gutters">
+          <div class="slds-col slds-size_1-of-3 slds-text-align_center">
+            <lightning-progress-ring value={progressValue} size="large"></lightning-progress-ring>
+          </div>
+          <div class="slds-col slds-size_2-of-3">
+            <div class="slds-text-heading_small">{statusText}</div>
+            <template if:true={isWorking}>
+              <div class="slds-text-color_weak slds-m-top_x-small">Processing receipts one by one.</div>
+            </template>
+          </div>
+        </div>
+      </template>
+
+    </div>
+
+    <div slot="footer">
+      <template if:true={isCompleted}>
+        <lightning-button
+          variant="brand"
+          label="Close"
+          onclick={handleClose}
+        ></lightning-button>
+      </template>
+      <template if:false={isCompleted}>
+        <lightning-button
+          variant="neutral"
+          label="Cancel"
+          onclick={handleClose}
+          disabled={isWorking}
+        ></lightning-button>
+        <lightning-button
+          class="slds-m-left_x-small"
+          variant="brand"
+          label="Start"
+          onclick={handleStart}
+          disabled={startDisabled}
+        ></lightning-button>
+      </template>
+    </div>
+  </lightning-quick-action-panel>
+</template>

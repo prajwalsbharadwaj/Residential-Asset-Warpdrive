@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_Approval_Submission_Without_Plan</fullName>
+    <active>true</active>
+    <description>Prevent submitting the booking record for approval if there is no payment plan selected.</description>
+    <errorConditionFormula>AND(
+      ISPICKVAL( Approval_Status__c , &quot;Pending Approval&quot;),
+      ISBLANK( Payment_Plan_Id__c ) ,
+      RecordType.DeveloperName =&quot;Residential_Sales_Booking&quot;
+   )</errorConditionFormula>
+    <errorMessage>Payment Plan must be selected before submitting the Booking record for approval request.</errorMessage>
+</ValidationRule>

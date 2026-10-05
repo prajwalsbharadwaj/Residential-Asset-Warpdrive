@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Condition_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Condition Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>1/3 Agreement Value</fullName>
+                <default>false</default>
+                <label>Land Cost</label>
+            </value>
+            <value>
+                <fullName>2/3 Agreement Value</fullName>
+                <default>false</default>
+                <label>Construction Cost</label>
+            </value>
+            <value>
+                <fullName>Base Price</fullName>
+                <default>false</default>
+                <label>Base Price</label>
+            </value>
+            <value>
+                <fullName>Base Price Discount</fullName>
+                <default>false</default>
+                <label>Base Price Discount</label>
+            </value>
+            <value>
+                <fullName>BESCOM &amp; BWSSB</fullName>
+                <default>false</default>
+                <label>BESCOM &amp; BWSSB</label>
+            </value>
+            <value>
+                <fullName>Brokerage Fix Amt</fullName>
+                <default>false</default>
+                <label>Brokerage Fix Amt</label>
+            </value>
+            <value>
+                <fullName>Club House Membershi</fullName>
+                <default>false</default>
+                <label>Club House Membership</label>
+            </value>
+            <value>
+                <fullName>Corpus Fund Depositi</fullName>
+                <default>false</default>
+                <label>Corpus Fund Deposit</label>
+            </value>
+            <value>
+                <fullName>IN: 2/3 CGST Tax</fullName>
+                <default>false</default>
+                <label>CGST Construction Cost</label>
+            </value>
+            <value>
+                <fullName>IN: 2/3 SGST Tax</fullName>
+                <default>false</default>
+                <label>SGST Construction Cost</label>
+            </value>
+            <value>
+                <fullName>IN: O/P CGST Tax</fullName>
+                <default>false</default>
+                <label>CGST Other Charges</label>
+            </value>
+            <value>
+                <fullName>IN: O/P SGST Tax</fullName>
+                <default>false</default>
+                <label>SGST Other Charges</label>
+            </value>
+            <value>
+                <fullName>Legal charge/Expense</fullName>
+                <default>false</default>
+                <label>Legal charge/Expense</label>
+            </value>
+            <value>
+                <fullName>Access Card Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Access Card Charges</label>
+            </value>
+            <value>
+                <fullName>Advance Maintenance</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Advance Maintenance</label>
+            </value>
+            <value>
+                <fullName>Advance Property Tax</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Advance Property Tax</label>
+            </value>
+            <value>
+                <fullName>Banquet Hall Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Banquet Hall Charges</label>
+            </value>
+            <value>
+                <fullName>Brokerage</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Brokerage</label>
+            </value>
+            <value>
+                <fullName>CAM</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>CAM</label>
+            </value>
+            <value>
+                <fullName>Cancellation charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Cancellation charges</label>
+            </value>
+            <value>
+                <fullName>Car Parking Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Car Parking Charges</label>
+            </value>
+            <value>
+                <fullName>Clubhouse Maintenanc</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Clubhouse Maintenanc</label>
+            </value>
+            <value>
+                <fullName>Coach Fees</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Coach Fees</label>
+            </value>
+            <value>
+                <fullName>Common Area Maintena</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Common Area Maintena</label>
+            </value>
+            <value>
+                <fullName>Credit Note</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Credit Note</label>
+            </value>
+            <value>
+                <fullName>Customer Discount</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Customer Discount</label>
+            </value>
+            <value>
+                <fullName>Debit Note</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Debit Note</label>
+            </value>
+            <value>
+                <fullName>Development Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Development Charges</label>
+            </value>
+            <value>
+                <fullName>Electric Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Electric Charges</label>
+            </value>
+            <value>
+                <fullName>Electricity Connecti</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Electricity Connecti</label>
+            </value>
+            <value>
+                <fullName>Floor rise</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Floor rise</label>
+            </value>
+            <value>
+                <fullName>Freight Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Freight Charges</label>
+            </value>
+            <value>
+                <fullName>Gas Connection Charg</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Gas Connection Charg</label>
+            </value>
+            <value>
+                <fullName>Holding Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Holding Charges</label>
+            </value>
+            <value>
+                <fullName>IN: 1/3 CGST Tax</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>IN: 1/3 CGST Tax</label>
+            </value>
+            <value>
+                <fullName>IN: 1/3 SGST Tax</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>IN: 1/3 SGST Tax</label>
+            </value>
+            <value>
+                <fullName>IN: O/P IGST Tax</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>IN: O/P IGST Tax</label>
+            </value>
+            <value>
+                <fullName>IN: O/P TCS</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>IN: O/P TCS</label>
+            </value>
+            <value>
+                <fullName>IN: OC Recieved</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>IN: OC Recieved</label>
+            </value>
+            <value>
+                <fullName>Infra Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Infra Charges</label>
+            </value>
+            <value>
+                <fullName>Insurance Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Insurance Charges</label>
+            </value>
+            <value>
+                <fullName>Inter Company Servic</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Inter Company Servic</label>
+            </value>
+            <value>
+                <fullName>Interest Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Interest Charges</label>
+            </value>
+            <value>
+                <fullName>Interest Waive-off</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Interest Waive-off</label>
+            </value>
+            <value>
+                <fullName>Kessaku Club Mainten</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Kessaku Club Mainten</label>
+            </value>
+            <value>
+                <fullName>Maintenance Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Maintenance Charges</label>
+            </value>
+            <value>
+                <fullName>Maintenance Deposit</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Maintenance Deposit</label>
+            </value>
+            <value>
+                <fullName>Meter Connection Cha</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Meter Connection Cha</label>
+            </value>
+            <value>
+                <fullName>Mini Theatre Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Mini Theatre Charges</label>
+            </value>
+            <value>
+                <fullName>Miscellaneous Charge</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Miscellaneous Charge</label>
+            </value>
+            <value>
+                <fullName>Power Backup Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Power Backup Charges</label>
+            </value>
+            <value>
+                <fullName>Preferential Locatio</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Preferential Locatio</label>
+            </value>
+            <value>
+                <fullName>Recovery of Electric</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Recovery of Electric</label>
+            </value>
+            <value>
+                <fullName>Recovery of Housekee</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Recovery of Housekee</label>
+            </value>
+            <value>
+                <fullName>Recovery of Insuranc</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Recovery of Insuranc</label>
+            </value>
+            <value>
+                <fullName>Registration Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Registration Charges</label>
+            </value>
+            <value>
+                <fullName>Rent Price</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Rent Price</label>
+            </value>
+            <value>
+                <fullName>Rental on Immovable</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Rental on Immovable</label>
+            </value>
+            <value>
+                <fullName>Rounding Off</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Rounding Off</label>
+            </value>
+            <value>
+                <fullName>STO Basic Price</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>STO Basic Price</label>
+            </value>
+            <value>
+                <fullName>Sale of Asset</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Sale of Asset</label>
+            </value>
+            <value>
+                <fullName>Sales of Material</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Sales of Material</label>
+            </value>
+            <value>
+                <fullName>Schedule A Property</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Schedule A Property</label>
+            </value>
+            <value>
+                <fullName>Scrap Sale</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Scrap Sale</label>
+            </value>
+            <value>
+                <fullName>Share Application Mo</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Share Application Mo</label>
+            </value>
+            <value>
+                <fullName>Shifting Charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Shifting Charges</label>
+            </value>
+            <value>
+                <fullName>Society Formation</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Society Formation</label>
+            </value>
+            <value>
+                <fullName>Special charges</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Special charges</label>
+            </value>
+            <value>
+                <fullName>Stamp Duty</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Stamp Duty</label>
+            </value>
+            <value>
+                <fullName>Tower External CAM C</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Tower External CAM C</label>
+            </value>
+            <value>
+                <fullName>Tower Internal CAM C</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Tower Internal CAM C</label>
+            </value>
+            <value>
+                <fullName>Transfer Charge</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Transfer Charge</label>
+            </value>
+            <value>
+                <fullName>Water Connection Cha</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Water Connection Cha</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

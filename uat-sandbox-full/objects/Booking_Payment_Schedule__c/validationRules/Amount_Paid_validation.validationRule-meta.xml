@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Amount_Paid_validation</fullName>
+    <active>true</active>
+    <description>This validation will restrict user when amount paid is less than installment amount.</description>
+    <errorConditionFormula>Amount_Paid__c  &lt;  Installment_Amount__c</errorConditionFormula>
+    <errorDisplayField>Amount_Paid__c</errorDisplayField>
+    <errorMessage>Amount Paid cannot be less than the Installment Amount. Please enter a valid amount.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,252 @@
+<template>
+    <lightning-card title="Booking Condition Charges" icon-name="custom:custom64">
+        <lightning-button
+            label={editButtonLabel}
+            onclick={toggleEdit}
+            variant={editButtonVariant}
+            disabled={isReadOnly}
+            slot="actions">
+        </lightning-button>
+
+        <template if:true={isEditing}>
+            <lightning-button
+                label="Save"
+                onclick={handleSave}
+                variant="brand"
+                class="slds-m-left_x-small"
+                slot="actions">
+            </lightning-button>
+        </template>
+
+        <lightning-button-icon
+            label="Refresh"
+            icon-name="utility:refresh"
+            slot="actions"
+            class="slds-m-left_x-small"
+            onclick={refresh}>
+        </lightning-button-icon>
+
+        <div class="slds-p-horizontal_medium slds-p-vertical_small">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading..." size="small"></lightning-spinner>
+            </template>
+
+            <template if:false={isLoading}>
+                <template if:true={isReadOnly}>
+                    <div class="slds-text-color_error slds-m-bottom_small">
+                        {readonlyVar}
+                    </div>
+                </template>
+
+                <template if:true={message}>
+                    <div class={messageClass} role="alert">
+                        <span class="slds-assistive-text">{messageAssistive}</span>
+                        <span>{message}</span>
+                    </div>
+                </template>
+
+                <!-- Chargeable Area pill -->
+                <div class="slds-m-bottom_small slds-text-align_center" style="width: 100%;">
+                    <span class="slds-badge slds-theme_info slds-p-around_x-small slds-text-color_inverse">
+                        Chargeable Area :
+                        <lightning-formatted-number
+                            value={chargeableArea}
+                            maximum-fraction-digits="2"
+                            class="slds-m-left_xx-small">
+                        </lightning-formatted-number>
+                        <span class="slds-m-left_xx-small">ft²</span>
+                    </span>
+                </div>
+
+                <!-- Conditions table (scrolls instead of overflowing; folds Type under the name when narrow) -->
+                <div class="table-wrap">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped conditions">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col"><div class="slds-truncate">Condition Type</div></th>
+                                <th class="slds-text-align_right col-type" scope="col"><div class="slds-truncate">Type</div></th>
+                                <th class="slds-text-align_right" scope="col"><div class="slds-truncate">Value</div></th>
+                                <th class="slds-text-align_right" scope="col"><div class="slds-truncate">Amount</div></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={displayConditionTypes} for:item="cond">
+                                <tr key={cond.value}>
+                                    <td class="col-name">
+                                        <span class="cond-label slds-text-title_bold">{cond.label}</span>
+                                        <span class="type-inline">{cond.type}</span>
+                                    </td>
+
+                                    <td class="slds-text-align_right col-type">
+                                        <span class="slds-truncate slds-text-title_bold">{cond.type}</span>
+                                    </td>
+
+                                    <td class="slds-text-align_right col-value">
+                                        <template if:true={isEditing}>
+                                            <div class={cond.amountClass}>
+                                                <template if:true={cond.isDualValue}>
+                                                    <div class="slds-grid slds-gutters value-input-dual">
+                                                        <div class={cond.percentContainerClass}>
+                                                            <lightning-input
+                                                                class="slds-grow"
+                                                                type="number"
+                                                                step="0.01"
+                                                                min="0"
+                                                                max="100"
+                                                                variant="label-hidden"
+                                                                value={cond.percent}
+                                                                data-cond={cond.value}
+                                                                placeholder="Enter %"
+                                                                disabled={cond.readOnly}
+                                                                onchange={handlePercentChange}>
+                                                            </lightning-input>
+                                                            <span class="slds-m-left_x-small slds-text-color_weak">%</span>
+                                                        </div>
+                                                        <div class="slds-col slds-size_1-of-2">
+                                                            <lightning-input
+                                                                class="slds-grow"
+                                                                type="number"
+                                                                step="0.01"
+                                                                min="0"
+                                                                variant="label-hidden"
+                                                                value={cond.amount}
+                                                                data-cond={cond.value}
+                                                                placeholder="Enter amount"
+                                                                formatter="currency"
+                                                                disabled={cond.readOnly}
+                                                                onchange={handleAmountChange}>
+                                                            </lightning-input>
+                                                        </div>
+                                                    </div>
+                                                </template>
+
+                                                <template if:false={cond.isDualValue}>
+                                                    <div class="value-input slds-grid slds-grid_vertical-align-center">
+                                                        <lightning-input
+                                                            class="slds-grow"
+                                                            type="number"
+                                                            step="0.01"
+                                                            min="0"
+                                                            max={cond.max}
+                                                            variant="label-hidden"
+                                                            value={cond.amount}
+                                                            data-cond={cond.value}
+                                                            placeholder={cond.placeholder}
+                                                            formatter={cond.formatter}
+                                                            disabled={cond.readOnly}
+                                                            onchange={handleAmountChange}>
+                                                        </lightning-input>
+                                                        <template if:true={cond.isPercentage}>
+                                                            <span class="slds-m-left_x-small slds-text-color_weak">%</span>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+
+                                        <template if:false={isEditing}>
+                                            <template if:true={cond.isPercentage}>
+                                                <span><lightning-formatted-number value={cond.amount} maximum-fraction-digits="2"></lightning-formatted-number>%</span>
+                                            </template>
+                                            <template if:false={cond.isPercentage}>
+                                                <span><lightning-formatted-number value={cond.amount} maximum-fraction-digits="2"></lightning-formatted-number></span>
+                                            </template>
+                                        </template>
+                                    </td>
+
+                                    <td class="slds-text-align_right col-amount">
+                                        <span>{cond.amountByType}</span>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Summary card (computed from Amount_By_Type__c) -->
+                <div class="slds-m-top_large">
+                    <div class="slds-box slds-theme_default totals-card">
+                        <div class="slds-grid slds-wrap slds-gutters_small summary-grid">
+                            <div class="slds-col slds-size_1-of-1">
+                                <h3 class="slds-text-title_caps slds-m-bottom_small">Summary</h3>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-2 summary-col">
+                                <div class="summary-row">
+                                    <span>
+                                        Base price
+                                        <template if:true={summary.hasDiscount}>(after discount)</template>
+                                    </span>
+                                    <span class="summary-amt">
+                                        <lightning-formatted-number
+                                            value={summary.baseNet}
+                                            maximum-fraction-digits="2"
+                                            format-style="currency">
+                                        </lightning-formatted-number>
+                                    </span>
+                                </div>
+
+                                <div class="summary-row">
+                                    <span>Other charges</span>
+                                    <span class="summary-amt">
+                                        <lightning-formatted-number
+                                            value={summary.otherCharges}
+                                            maximum-fraction-digits="2"
+                                            format-style="currency">
+                                        </lightning-formatted-number>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-2 summary-col">
+                                <div class="summary-row">
+                                    <span>GST on construction</span>
+                                    <span class="summary-amt">
+                                        <lightning-formatted-number
+                                            value={summary.gstConstruction}
+                                            maximum-fraction-digits="2"
+                                            format-style="currency">
+                                        </lightning-formatted-number>
+                                    </span>
+                                </div>
+
+                                <div class="summary-row">
+                                    <span>GST on other charges</span>
+                                    <span class="summary-amt">
+                                        <lightning-formatted-number
+                                            value={summary.gstOther}
+                                            maximum-fraction-digits="2"
+                                            format-style="currency">
+                                        </lightning-formatted-number>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-m-top_small">
+                                <hr class="slds-m-vertical_small"/>
+                                <div class="summary-row summary-total">
+                                    <span>Total</span>
+                                    <span class="summary-amt">
+                                        <lightning-formatted-number
+                                            value={summary.finalTotal}
+                                            maximum-fraction-digits="2"
+                                            format-style="currency">
+                                        </lightning-formatted-number>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save / Cancel -->
+                <template if:true={isEditing}>
+                    <div class="slds-m-top_medium slds-align_absolute-center">
+                        <lightning-button label="Save" variant="brand" onclick={handleSave}></lightning-button>
+                        <lightning-button label="Cancel" variant="neutral" onclick={handleCancel} class="slds-m-left_small"></lightning-button>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

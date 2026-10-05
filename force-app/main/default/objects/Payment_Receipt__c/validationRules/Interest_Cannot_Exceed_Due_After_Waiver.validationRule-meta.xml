@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interest_Cannot_Exceed_Due_After_Waiver</fullName>
+    <active>false</active>
+    <errorConditionFormula>Interest_Applied__c &gt; ( Demand__r.Booking_Payment_Schedule_Id__r.AccruedInterestToDate__c 
+																							- Demand__r.Booking_Payment_Schedule_Id__r.TotalInterestReceived__c
+																							-  Demand__r.Booking_Payment_Schedule_Id__r.Interest_Waived__c )</errorConditionFormula>
+    <errorMessage>Interest exceeds current due (after waiver). Reduce the interest amount.</errorMessage>
+</ValidationRule>

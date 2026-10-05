@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Period_Start__c</fullName>
+    <description>Start date of the accrual or posting period.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>First day covered by this ledger entry, paired with Period End to show the interval.</inlineHelpText>
+    <label>Period Start</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

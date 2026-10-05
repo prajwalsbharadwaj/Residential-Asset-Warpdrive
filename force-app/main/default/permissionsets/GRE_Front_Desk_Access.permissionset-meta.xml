@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Access to GRE Welcome Desk and Front-Desk Reception Intake</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>GRE Front Desk Access</label>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Site_Visit__c.OTP_Verified__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Site_Visit__c.Visitor_Mobile__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Site_Visit__c.OTP_Code__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Site_Visit__c.Has_the_Guest_Visited_with_Family__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Site_Visit__c.Remarks__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Site_Visit__c.Comments__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <tabSettings>
+        <tab>GRE_Welcome_Desk</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+</PermissionSet>

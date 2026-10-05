@@ -1,0 +1,145 @@
+<template>
+    <div class="digio-card slds-card">
+        <!-- Header -->
+        <div class="digio-header">
+            <div class="brand-row">
+                <div class="digio-badge">
+                    <span class="digio-icon">🛡️</span>
+                    <span class="digio-text">DIGIO ENTERPRISE TRUST HUB</span>
+                </div>
+                <div class="compliance-badge">UIDAI & NSDL Compliant</div>
+            </div>
+            <div class="hub-sub">Digital KYC Verification & Legal e-Sign Portal</div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="hub-tabs">
+            <button class={tabKycClass} onclick={selectKycTab}>🪪 Identity KYC</button>
+            <button class={tabEsignClass} onclick={selectEsignTab}>✍️ Digital Agreement e-Sign</button>
+        </div>
+
+        <!-- Body -->
+        <div class="digio-body">
+            <!-- TAB 1: KYC VERIFICATION -->
+            <template if:true={isKycTab}>
+                <div class="kyc-section">
+                    <!-- Pre-Verification Form -->
+                    <template if:false={isKycVerified}>
+                        <div class="id-card-preview">
+                            <div class="id-row">
+                                <span class="id-lbl">Aadhaar (UIDAI):</span>
+                                <span class="id-val">XXXX-XXXX-8921</span>
+                            </div>
+                            <div class="id-row">
+                                <span class="id-lbl">Income Tax PAN:</span>
+                                <span class="id-val">BKZPM1924L</span>
+                            </div>
+                            <div class="id-row">
+                                <span class="id-lbl">Applicant Name:</span>
+                                <span class="id-val">{applicantName}</span>
+                            </div>
+                        </div>
+
+                        <template if:true={isScanningKyc}>
+                            <div class="scanning-wrapper">
+                                <div class="scanner-bar"></div>
+                                <div class="scan-status-text">{kycStatusMessage}</div>
+                            </div>
+                        </template>
+
+                        <template if:false={isScanningKyc}>
+                            <button class="btn-verify-kyc" onclick={runKycVerification}>
+                                <span class="btn-icon">⚡</span>
+                                <span>Verify via DigiLocker & NSDL</span>
+                            </button>
+                        </template>
+                    </template>
+
+                    <!-- KYC Verified State -->
+                    <template if:true={isKycVerified}>
+                        <div class="kyc-success-card">
+                            <div class="verified-header">
+                                <div class="green-check-icon">✓</div>
+                                <div>
+                                    <div class="verified-title">Identity Authenticated</div>
+                                    <div class="verified-sub">DigiLocker Bio-Auth Token Issued</div>
+                                </div>
+                            </div>
+                            <div class="kyc-audit-details">
+                                <div class="audit-row">
+                                    <span class="audit-lbl">NSDL PAN Status:</span>
+                                    <span class="audit-badge-green">ACTIVE & VERIFIED</span>
+                                </div>
+                                <div class="audit-row">
+                                    <span class="audit-lbl">UIDAI Aadhaar Link:</span>
+                                    <span class="audit-badge-green">MATCH 99.8%</span>
+                                </div>
+                                <div class="audit-row">
+                                    <span class="audit-lbl">Verification ID:</span>
+                                    <span class="audit-code">{kycVerificationId}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- TAB 2: DIGITAL AGREEMENT E-SIGN -->
+            <template if:true={isEsignTab}>
+                <div class="esign-section">
+                    <div class="document-card">
+                        <div class="doc-icon">📄</div>
+                        <div class="doc-info">
+                            <div class="doc-title">Bhartiya_Nikoo_Booking_Form.pdf</div>
+                            <div class="doc-meta">14 Pages • Hash: SHA-256 (e8f9b201...)</div>
+                        </div>
+                        <div class={agreementStatusBadgeClass}>{agreementStatusText}</div>
+                    </div>
+
+                    <template if:false={isAgreementSigned}>
+                        <div class="signatory-list">
+                            <div class="signatory-item">
+                                <span class="sig-status sig-done">✓</span>
+                                <span class="sig-name">Builder Signatory (Prajwal G.)</span>
+                            </div>
+                            <div class="signatory-item">
+                                <span class="sig-status sig-pending">⏳</span>
+                                <span class="sig-name">Buyer Signatory ({applicantName})</span>
+                            </div>
+                        </div>
+
+                        <template if:true={isSigning}>
+                            <div class="signing-loader">
+                                <div class="signing-spinner"></div>
+                                <div class="signing-text">Executing Aadhaar e-Sign with DigiO HSM...</div>
+                            </div>
+                        </template>
+
+                        <template if:false={isSigning}>
+                            <button class="btn-execute-esign" onclick={simulateBuyerSign}>
+                                <span class="btn-icon">✍️</span>
+                                <span>Simulate Buyer Aadhaar e-Sign</span>
+                            </button>
+                        </template>
+                    </template>
+
+                    <!-- E-Sign Completed View -->
+                    <template if:true={isAgreementSigned}>
+                        <div class="signed-stamp-box">
+                            <div class="digital-seal">
+                                <div class="seal-icon">🏛️</div>
+                                <div class="seal-header">DIGIO CERTIFIED E-SIGN</div>
+                                <div class="seal-signer">Signed by: {applicantNameUpper}</div>
+                                <div class="seal-time">{signatureTimestamp}</div>
+                                <div class="seal-cert">Cert ID: {esignCertId}</div>
+                            </div>
+                            <div class="seal-legal-notice">
+                                Digitally signed under Section 5 of the Information Technology Act, 2000. Legally binding in Indian Courts of Law.
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

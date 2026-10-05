@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Archive_Days_For_Archived_Lead</fullName>
+    <active>true</active>
+    <description>Prevents moving a Lead to Archive status without specifying the archive cooling-off duration in days.</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Status, "Archive"),
+    OR(
+        ISBLANK(Archive_For_In_Days__c),
+        Archive_For_In_Days__c &lt;= 0
+    )
+)</errorConditionFormula>
+    <errorMessage>To move this lead to Archive, please specify &#39;Archive For (in days)&#39;. You can also use the &#39;Cooling-Off / Archival&#39; component on the right panel to select the cooling-off duration.</errorMessage>
+</ValidationRule>

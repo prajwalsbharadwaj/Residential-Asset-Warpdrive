@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <decisions>
+        <name>Check_Due_Date_Passed</name>
+        <label>Check Due Date Passed</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Not Past Due</defaultConnectorLabel>
+        <rules>
+            <name>Is_Overdue</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Due_Date__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <elementReference>$Flow.CurrentDate</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Installment_Overdue_Interest</targetReference>
+            </connector>
+            <label>Is Overdue</label>
+        </rules>
+    </decisions>
+    <description>Calculates 18% p.a. simple interest on overdue installment when status is Due and Due Date has passed</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>DaysOverdueCalc</name>
+        <dataType>Number</dataType>
+        <expression>{!$Flow.CurrentDate} - {!$Record.Due_Date__c}</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <name>OverdueInterestCalc</name>
+        <dataType>Currency</dataType>
+        <expression>{!$Record.Outstanding_Amount__c} * 0.18 * (({!$Flow.CurrentDate} - {!$Record.Due_Date__c}) / 365.0)</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>Installment Calculate Overdue Interest {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Installment Calculate Overdue Interest</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Installment_Overdue_Interest</name>
+        <label>Update Overdue Interest</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>Days_Overdue__c</field>
+            <value>
+                <elementReference>DaysOverdueCalc</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Overdue_Interest__c</field>
+            <value>
+                <elementReference>OverdueInterestCalc</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Overdue</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Due_Date_Passed</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Due</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Interest_Waived__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Installment__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

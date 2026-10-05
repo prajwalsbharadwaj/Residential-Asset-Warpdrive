@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StandardValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sorted>true</sorted>
+    <standardValue>
+        <fullName>8147505558</fullName>
+        <default>false</default>
+        <label>8147505558</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Agent</fullName>
+        <default>false</default>
+        <label>Agent</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Channel Partner</fullName>
+        <default>false</default>
+        <label>Channel Partner</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Chatbot</fullName>
+        <default>false</default>
+        <label>Chatbot</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Cold Call</fullName>
+        <default>false</default>
+        <label>Cold Call</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Community</fullName>
+        <default>false</default>
+        <label>Community</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Data.com</fullName>
+        <default>false</default>
+        <label>Data.com</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Employee</fullName>
+        <default>false</default>
+        <label>Employee</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Events</fullName>
+        <default>false</default>
+        <label>Events</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Existing Customer</fullName>
+        <default>false</default>
+        <label>Existing Customer</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Facebook</fullName>
+        <default>false</default>
+        <label>Facebook</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Google</fullName>
+        <default>false</default>
+        <label>Google</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Inbound Call</fullName>
+        <default>false</default>
+        <label>Inbound Call</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Live Chat</fullName>
+        <default>false</default>
+        <label>Live Chat</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Manual</fullName>
+        <default>true</default>
+        <label>Manual</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Marketing Event</fullName>
+        <default>false</default>
+        <label>Marketing Event</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Partner</fullName>
+        <default>false</default>
+        <label>Partner</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Referral</fullName>
+        <default>false</default>
+        <label>Referral</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Referrals</fullName>
+        <default>false</default>
+        <label>Referrals</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Salesforce IoT</fullName>
+        <default>false</default>
+        <label>Salesforce IoT</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Self Generated</fullName>
+        <default>false</default>
+        <label>Self Generated</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Social Media</fullName>
+        <default>false</default>
+        <label>Social Media</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Taboola</fullName>
+        <default>false</default>
+        <label>Taboola</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Website</fullName>
+        <default>false</default>
+        <label>Website</label>
+    </standardValue>
+</StandardValueSet>

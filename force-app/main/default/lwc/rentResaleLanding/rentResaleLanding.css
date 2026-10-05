@@ -1,0 +1,126 @@
+.post-sale-landing-wrapper {
+    background-color: #f3f5f8;
+    min-height: 100vh;
+    padding: 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.landing-header-card {
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.header-dark {
+    background-color: #0b2345;
+    color: #ffffff;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.header-title {
+    font-size: 1.25rem;
+    color: #ffffff;
+}
+
+.header-subtitle {
+    font-size: 0.82rem;
+    color: #cbd5e1;
+}
+
+.header-avatar {
+    background-color: #1e3a8a;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.filter-bar-container {
+    background-color: #ffffff;
+}
+
+.filter-pills-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.filter-pill-btn {
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
+    padding: 5px 14px;
+    border-radius: 16px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.filter-pill-btn:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+    color: #0f172a;
+}
+
+.filter-pill-selected {
+    background: #0b2345 !important;
+    color: #ffffff !important;
+    border-color: #0b2345 !important;
+}
+
+.search-box-wrap {
+    min-width: 260px;
+}
+
+.requests-table {
+    border-collapse: separate;
+}
+
+.request-row {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.request-row:hover {
+    background-color: #f8fafc;
+}
+
+.record-link {
+    color: #0284c7;
+    text-decoration: none;
+}
+
+.record-link:hover {
+    text-decoration: underline;
+}
+
+.badge-rental {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    font-weight: 700;
+    border-radius: 4px;
+}
+
+.badge-resale {
+    background-color: #fef3c7;
+    color: #b45309;
+    font-weight: 700;
+    border-radius: 4px;
+}
+
+.stage-tag {
+    background: #f1f5f9;
+    color: #334155;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.empty-state-box {
+    color: #64748b;
+}
+
+.font-weight-bold {
+    font-weight: 700 !important;
+}

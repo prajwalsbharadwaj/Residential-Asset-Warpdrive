@@ -1,0 +1,20 @@
+{
+  "type" : "sfdc_cms__trustedSites",
+  "title" : "trustedSites",
+  "contentBody" : {
+    "trustedSites" : [ {
+      "isActive" : true,
+      "source" : "https://wa1775550540999.my.site.com",
+      "sourceName" : "WD Residential Trusted Site"
+    }, {
+      "isActive" : true,
+      "source" : "https://*.force.com",
+      "sourceName" : "Messaging_Endpoint"
+    }, {
+      "isActive" : true,
+      "source" : "https://*.salesforce.com",
+      "sourceName" : "Salesforce_Files"
+    } ]
+  },
+  "urlName" : "trustedsites"
+}

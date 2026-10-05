@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Residential_Sales_Site_Visit</fullName>
+    <active>true</active>
+    <label>Residential Sales Site Visit</label>
+</RecordType>

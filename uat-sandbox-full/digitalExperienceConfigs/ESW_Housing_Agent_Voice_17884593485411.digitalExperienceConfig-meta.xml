@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DigitalExperienceConfig xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>ESW_Housing_Agent_Voice_1788459348541</label>
+    <site>
+        <urlPathPrefix>ESWHousingAgentVoice1788459348541</urlPathPrefix>
+    </site>
+    <space>site/ESW_Housing_Agent_Voice_17884593485411</space>
+</DigitalExperienceConfig>

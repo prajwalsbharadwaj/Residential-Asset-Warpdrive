@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Receipt_Status_Validation</fullName>
+    <active>false</active>
+    <description>This validation will restrict user to change receipt status after it has been marked as bounced</description>
+    <errorConditionFormula>AND(
+    NOT(ISNEW()),
+    OR(
+        ISPICKVAL(Receipt_Status__c, &quot;Bounced&quot;),
+        ISPICKVAL(Receipt_Status__c, &quot;Cancelled&quot;)
+    ),
+    OR(
+        ISPICKVAL(PRIORVALUE(Receipt_Status__c), &quot;Bounced&quot;),
+        ISPICKVAL(PRIORVALUE(Receipt_Status__c), &quot;Cancelled&quot;)
+    )
+)</errorConditionFormula>
+    <errorMessage>You cannot modify this payment receipt as receipt status is bounced/cancelled</errorMessage>
+</ValidationRule>

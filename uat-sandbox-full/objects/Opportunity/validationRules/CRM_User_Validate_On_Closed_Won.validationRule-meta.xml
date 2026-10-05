@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CRM_User_Validate_On_Closed_Won</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISCHANGED(StageName),
+ISPICKVAL(StageName, &quot;Closed Won&quot;),
+RecordTypeDeveloperName__c = &quot;Residential_Sales_Opportunity&quot;,
+NOT(ISBLANK(Interested_Unit__c )),
+ISBLANK(Interested_Unit__r.Property__r.Allocated_User__c)
+)</errorConditionFormula>
+    <errorMessage>Before marking the Opportunity as &apos;Closed Won&apos;, please ensure a CRM User is assigned to the selected Unit’s Project.</errorMessage>
+</ValidationRule>

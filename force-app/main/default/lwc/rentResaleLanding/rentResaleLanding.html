@@ -1,0 +1,137 @@
+<template>
+    <div class="slds-scope post-sale-landing-wrapper">
+
+        <!-- Header Card -->
+        <article class="slds-card slds-card_boundary slds-m-bottom_medium landing-header-card">
+            <div class="slds-page-header header-dark slds-p-vertical_small slds-p-horizontal_medium">
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                    <div class="slds-media slds-no-space slds-grow">
+                        <div class="slds-media__figure">
+                            <span class="slds-avatar slds-avatar_medium header-avatar">
+                                <lightning-icon icon-name="standard:household" alternative-text="Post-Sale" size="medium" variant="inverse"></lightning-icon>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <h1 class="header-title font-weight-bold">
+                                Residential Post-Sale Management
+                            </h1>
+                            <p class="header-subtitle slds-m-top_xx-small">
+                                Rental &amp; Resale Control Centre · Post-Handover Lifecycle Operations
+                            </p>
+                        </div>
+                    </div>
+                    <div class="slds-no-flex slds-grid slds-grid_vertical-align-center">
+                        <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh" onclick={handleRefresh} class="slds-m-right_x-small" variant="border-filled"></lightning-button-icon>
+                        <span class="slds-badge slds-badge_lightest">{recordCount} Records</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Bar & Search -->
+            <div class="slds-p-around_small filter-bar-container slds-border_bottom">
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-wrap">
+                    
+                    <!-- Filter Pills -->
+                    <div class="filter-pills-group slds-m-bottom_xx-small">
+                        <template for:each={filterOptions} for:item="f">
+                            <button key={f.value} class={f.buttonClass} onclick={handleFilterSelect} data-filter={f.value}>
+                                {f.label}
+                            </button>
+                        </template>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="search-box-wrap slds-m-bottom_xx-small">
+                        <lightning-input type="search" placeholder="Search by Request, Unit, Owner..." value={searchKey} onchange={handleSearchChange} variant="label-hidden" class="search-input"></lightning-input>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Table Body -->
+            <div class="slds-card__body slds-card__body_inner slds-p-around_none">
+                
+                <template lwc:if={isLoading}>
+                    <div class="slds-p-around_large text-center">
+                        <lightning-spinner alternative-text="Loading requests..." size="small"></lightning-spinner>
+                    </div>
+                </template>
+
+                <template lwc:else>
+                    <template lwc:if={hasRecords}>
+                        <div class="slds-table_header-fixed_container">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered requests-table">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th scope="col"><div class="slds-truncate">Request #</div></th>
+                                        <th scope="col"><div class="slds-truncate">Type</div></th>
+                                        <th scope="col"><div class="slds-truncate">Unit</div></th>
+                                        <th scope="col"><div class="slds-truncate">Owner / Customer</div></th>
+                                        <th scope="col"><div class="slds-truncate">Project</div></th>
+                                        <th scope="col"><div class="slds-truncate">Stage</div></th>
+                                        <th scope="col"><div class="slds-truncate">Status</div></th>
+                                        <th scope="col"><div class="slds-truncate">Target Date</div></th>
+                                        <th scope="col"><div class="slds-truncate">Assigned To</div></th>
+                                        <th scope="col" class="text-right"><div class="slds-truncate">Action</div></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={filteredRecords} for:item="r">
+                                        <tr key={r.id} class="request-row" onclick={handleRowClick} data-id={r.id}>
+                                            <td>
+                                                <a href="javascript:void(0);" class="font-weight-bold record-link" onclick={handleOpenRecord} data-id={r.id}>
+                                                    {r.requestNumber}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <span class={r.typeBadgeClass}>{r.type}</span>
+                                            </td>
+                                            <td>
+                                                <span class="font-weight-bold">{r.unitName}</span>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate" style="max-width: 140px;">{r.ownerName}</div>
+                                            </td>
+                                            <td>
+                                                <span class="slds-text-body_small">{r.projectName}</span>
+                                            </td>
+                                            <td>
+                                                <span class="stage-tag">{r.currentStage}</span>
+                                            </td>
+                                            <td>
+                                                <span class={r.statusBadgeClass}>{r.status}</span>
+                                            </td>
+                                            <td>
+                                                <span class="slds-text-body_small">{r.targetDate}</span>
+                                            </td>
+                                            <td>
+                                                <span class="slds-text-body_small">{r.requestOwner}</span>
+                                            </td>
+                                            <td class="text-right">
+                                                <button class="slds-button slds-button_neutral slds-button_x-small" onclick={handleOpenRecord} data-id={r.id}>
+                                                    Open Workspace →
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+
+                    <template lwc:else>
+                        <div class="slds-p-around_xx-large text-center empty-state-box">
+                            <lightning-icon icon-name="utility:inbox" size="large" class="slds-m-bottom_small text-muted"></lightning-icon>
+                            <h3 class="font-weight-bold slds-text-heading_small">No Post-Sale Requests Found</h3>
+                            <p class="slds-text-color_weak slds-m-top_xx-small">
+                                There are no requests matching filter "{selectedFilter}". Post-sale requests are created when an owner completes Handover.
+                            </p>
+                        </div>
+                    </template>
+                </template>
+
+            </div>
+        </article>
+
+    </div>
+</template>

@@ -1,0 +1,11 @@
+.app-container { display: flex; justify-content: center; background: #f4f6f9; min-height: 100vh; padding: 20px; }
+.card { background: white; width: 100%; max-width: 700px; padding: 40px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+.brand-header { text-align: center; border-bottom: 2px solid #48c377; margin-bottom: 30px; }
+.brand-header h2 { letter-spacing: 3px; font-weight: 300; }
+.form-row { margin-bottom: 20px; }
+.sig-wrapper { margin-top: 30px; }
+.sig-label { font-weight: bold; color: #555; }
+canvas { border: 1px solid #ddd; border-radius: 4px; display: block; width: 100%; background: #fafafa; }
+.clear-link { background: none; border: none; color: #0070d2; cursor: pointer; float: right; font-size: 13px; }
+.submit-button { width: 100%; background: #48c377; color: white; padding: 20px; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; }
+.submit-button:hover { background: #3ead64; }

@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+    <members>ThreatDetectionFeedback-Threat Detection Feedback Layout</members>
+    <members>TimeSheet-Time Sheet Layout</members>
+    <members>TimeSheetEntry-Time Sheet Entry Layout</members>
+    <members>TimeSlot-Time Slot Layout</members>
+    <members>Tower__c-Building Layout</members>
+    <members>TravelMode-Travel Mode Layout</members>
+    <members>Trigger_Setting__mdt-Trigger Setting Layout</members>
+    <members>UIObjectRelationConfig-UI Object Relation Configuration Layout</members>
+    <members>UIObjectRelationFieldConfig-UI Object Relation Field Configuration Layout</members>
+    <members>UnitOfMeasure-Unit of Measure Layout</members>
+    <members>UnitOfMeasureClass-Unit of Measure Class Layout</members>
+    <members>Unit__c-Unit Layout</members>
+    <members>UniversalAnomalyEventStore-Universal Anomaly Event Store Layout</members>
+    <members>User-User Layout</members>
+    <members>UserAlt-User Profile Layout</members>
+    <members>UserProvAccount-User Provisioning Account Layout</members>
+    <members>UserProvisioningLog-User Provisioning Log Layout</members>
+    <members>UserProvisioningRequest-User Provisioning Request Layout</members>
+    <members>UserServicePresence__c-UserServicePresence%5F%5Fc Layout</members>
+    <members>Vehicle-Vehicle Layout</members>
+    <members>VehicleAssetEmssnSrc-Vehicle Asset Emissions Source Layout</members>
+    <members>VehicleAssetEnrgyUse-%5F%5FMISSING LABEL%5F%5F PropertyFile - val VehicleAssetEnrgyUse not found in section StandardLayouts</members>
+    <members>VehicleDefinition-Vehicle Definition Layout</members>
+    <members>Visit-Visit Layout</members>
+    <members>VisitedParty-Visited Party Layout</members>
+    <members>Visitor-Visitor Layout</members>
+    <members>VoiceCall-Voice Call Layout</members>
+    <members>Voucher__c-Voucher Layout</members>
+    <members>Waitlist-%5F%5FMISSING LABEL%5F%5F PropertyFile - val Waitlist not found in section StandardLayouts</members>
+    <members>WarrantyTerm-Warranty Term Layout</members>
+    <members>WebCart-Cart Layout</members>
+    <members>WebStore-Store Layout</members>
+    <members>WebStoreBuyerGroup-Store Buyer Group Layout</members>
+    <members>WebStoreCatalog-Store Catalog Layout</members>
+    <members>WebStoreConfig-Web Store Configuration Layout</members>
+    <members>WebStoreInventorySource-Web Store Inventory Source Layout</members>
+    <members>WebStorePricebook-Store Price Book Layout</members>
+    <members>WorkAccess-Access Layout</members>
+    <members>WorkBadge-Badge Received Layout</members>
+    <members>WorkBadgeDefinition-Badge Layout</members>
+    <members>WorkCapacityAvailability-Work Capacity Availability Layout</members>
+    <members>WorkCapacityLimit-Work Capacity Limit Layout</members>
+    <members>WorkCapacityUsage-Work Capacity Usage Layout</members>
+    <members>WorkOrder-SDO - SFS Partner Page</members>
+    <members>WorkOrder-SDO - Work Order Default</members>
+    <members>WorkOrder-SDO SFS Work Order Layout</members>
+    <members>WorkOrder-Work Order Layout</members>
+    <members>WorkOrderLineItem-SDO - Work Order Line Item</members>
+    <members>WorkOrderLineItem-Work Order Line Item Layout</members>
+    <members>WorkPlan-SDO - Work Plan Layout</members>
+    <members>WorkPlan-Work Plan Layout</members>
+    <members>WorkPlanSelectionRule-SDO - Work Plan Selection Rule Layout</members>
+    <members>WorkPlanSelectionRule-Work Plan Selection Rule Layout</members>
+    <members>WorkPlanTemplate-SDO - Work Plan Template Layout</members>
+    <members>WorkPlanTemplate-Work Plan Template Layout</members>
+    <members>WorkPlanTemplateEntry-Work Plan Template Entry Layout</members>
+    <members>WorkStep-SDO - Work Step Layout</members>
+    <members>WorkStep-Work Step Layout</members>
+    <members>WorkStepTemplate-SDO - Work Step Template Layout</members>
+    <members>WorkStepTemplate-Work Step Template Layout</members>
+    <members>WorkThanks-Thanks Layout</members>
+    <members>WorkType-Work Type Layout</members>
+    <members>WorkTypeGroup-Work Type Group Layout</members>
+    <members>WorkTypeGroupMember-Work Type Group Member Layout</members>
+    <members>WstDispoEmssnFctrSet-Waste Disposal Emissions Factor Set Layout</members>
+    <members>WstDispoEmssnFctrSetItm-Waste Disposal Emissions Factor Set Item Layout</members>
+    <members>XDO_Tool_Tracking_Event__c-Tracked Event Layout</members>
+    <members>scrubDemo_Interaction_Analysis__c-Interaction Analysis Layout</members>
+    <members>sfsp__AttainmentPlanConfigurationRowDetail__c-Attainment Plan Configuration Row Detail Layout</members>
+    <members>sfsp__AttainmentPlanConfiguration__c-Attainment Plan Configuration Layout</members>
+    <members>sfsp__AttainmentPlanRowDetail__c-Attainment Plan Row Detail Layout</members>
+    <members>sfsp__AttainmentPlanRow__c-Attainment Plan Row Layout</members>
+    <members>sfsp__AttainmentPlan__c-Attainment Plan Layout</members>
+    <members>sfsp__ListViewColumn__c-List View Column Layout</members>
+    <members>sfsp__ListView__c-List View Layout</members>
+    <members>sfsp__SalesActivity__c-Sales Activity Layout</members>
+    <members>sfsp__SalesAssignmentObject__c-Sales Assignment Object Layout</members>
+    <members>sfsp__SalesAsyncJob__c-Sales Async Job Layout</members>
+    <members>sfsp__SalesBoundary__c-Sales Boundary Layout</members>
+    <members>sfsp__SalesDataSourceCRMFieldMapping__c-Sales Data Source CRM Field Mapping Layout</members>
+    <members>sfsp__SalesDataSource__c-Sales Data Source Layout</members>
+    <members>sfsp__SalesGoal__c-Sales Goal Layout</members>
+    <members>sfsp__SalesMetric__c-Sales Metric Layout</members>
+    <members>sfsp__SalesMilestone__c-Sales Milestone Layout</members>
+    <members>sfsp__SalesNodeAssignment__c-Sales Node Assignment Layout</members>
+    <members>sfsp__SalesNodeBoundary__c-Sales Node Boundary Layout</members>
+    <members>sfsp__SalesNodeExternalAsset__c-Sales Node External Asset Layout</members>
+    <members>sfsp__SalesNodeMetric__c-Sales Node Metric Layout</members>
+    <members>sfsp__SalesNodeRuleItem__c-Sales Node Rule Item Layout</members>
+    <members>sfsp__SalesNodeRule__c-Sales Node Rule Layout</members>
+    <members>sfsp__SalesNodeUser__c-Sales Node User Layout</members>
+    <members>sfsp__SalesNode__c-Sales Node Layout</members>
+    <members>sfsp__SalesPlanUser__c-Sales Plan User Layout</members>
+    <members>sfsp__SalesPlan__c-Sales Plan Layout</members>
+    <members>sfsp__SalesProduct__c-Sales Product Layout</members>
+    <members>sfsp__SalesUserAccess__c-Sales Planning User Access Layout</members>
+    <members>sfsp__SalesUserPreference__c-Sales User Preference Layout</members>
+    <members>sfsp__Secret__mdt-Sales Planning Secret Layout</members>
+    <members>xDO_Base_QBrix_Register__mdt-xDO_InstalledQBrixLayout</members>
+    <members>xDO_Service_TrackedLoginApplication__mdt-xDO Service - Tracked Login Application Layout</members>
+    <members>xDO_Tool_TrackingEventJob__mdt-xDO Tool - Tracking Event Job Layout</members>
+        <name>Layout</name>
+    </types>
+    <version>60.0</version>
+</Package>

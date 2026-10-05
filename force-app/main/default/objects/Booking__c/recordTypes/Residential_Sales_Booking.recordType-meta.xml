@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Residential_Sales_Booking</fullName>
+    <active>true</active>
+    <label>Residential Sales Booking</label>
+    <picklistValues>
+        <picklist>Approval_Status__c</picklist>
+        <values>
+            <fullName>Booking Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booking Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancellation Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancellation Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transfer Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transfer Rejected</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Distribution_channel__c</picklist>
+        <values>
+            <fullName>Channel sale%28Broker%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Direct Sale</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral Sale</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Division__c</picklist>
+        <values>
+            <fullName>Residential Sales</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Document_type__c</picklist>
+        <values>
+            <fullName>Residential Sales</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Funding_Method__c</picklist>
+        <values>
+            <fullName>Loan-Availed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self-Funded</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>HomeLoanBank__c</picklist>
+        <values>
+            <fullName>AXIS Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Allahabad Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>American Express Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Andhra Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bahrain India International Exchange Co%2E BSC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bandhan Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Baroda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Faridabad</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Maharashtra</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Punjab Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank of Rajasthan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bharat Co-operative Bank %28Mumbai%29 Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Birla Home Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CSB Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Calyon Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Canara Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cash</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Central Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chartered Sahakari Bank Niyamitha</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cheque Payment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Citibank N%2EA%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Citizen Co-op%2E Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>City Union Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporation Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Credit Advice</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DBS Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DCB Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deutsche Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Development Credit Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Excellent Co-op Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Federal Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>H%2ES%2E Banking Corpn%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HDFC Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HSBC Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ICICI Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDBI Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IDFC Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Income Tax Dept Co-op Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indian Overseas Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IndusInd Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka Gramina Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karnataka Vikas Grameena Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Karur Vysya Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kotak Mahindra Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Life Insurance Corpn%2E India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>National Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online Payment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PNB Housing Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Piramal Finance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Post Office Saving Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab %26 Sind Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab Co-op%2E Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab National Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Punjab and Maharashtra Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RBL Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RBS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reserve Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SVC Co-operative Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shamrao Vitthal Co-op%2E Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sir M Visvesvaraya Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>South Indian Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Standard Chartered Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Syndicate Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tamilnadu Mercantile Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tata Finance Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Bangalore City Co-op%2E Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Bharat Co-operative Bank %28Mumbai%29 Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Janatha Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Karnataka State Co-op%2E Apex Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Malleswaram Co-operative Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>The Vysya Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Times Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tumkur Co-operative Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tumkur Grain Merchants Co-op%2E Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UAE Exchange Centre</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UCO Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UTI Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Union Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>United Bank Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>United Bank of India</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>United Western Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Veerashaiva Sahakari Bank Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vijaya Bank</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vysya Co-operative Ltd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>YES Bank</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Rejection_Reason__c</picklist>
+        <values>
+            <fullName>Approval delayed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank Loan rejection</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Buyer to Buyer Transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancellation opted by Company</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Excess payment received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Excessive Billing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial crisis</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>General Credit Note</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>General Debit Note</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>General inquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>High Pricing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Insuffucient budget</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medical reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Modification Charges</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Others</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ownership Transfer Refund</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Personal reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product dislike</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Recovery of charges</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Short fall of TDS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unit Change Charges</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unit cancellation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unit to Unit transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unsuitable Location</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SAP_Sync_Status__c</picklist>
+        <values>
+            <fullName>Error</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending update</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Success</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sales_Organization__c</picklist>
+        <values>
+            <fullName>WD Residential Pvt%2E Ltd%2E</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Allotment Letter Generated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancellation Requested</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancelled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Confirmed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Confirmation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transfer Requested</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transferred</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Tripartite_Agreement_Status__c</picklist>
+        <values>
+            <fullName>Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

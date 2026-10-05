@@ -1,0 +1,102 @@
+<template>
+    <lightning-quick-action-panel title="Official Executive Welcome Letter">
+        <template if:true={isLoading}>
+            <div class="slds-p-around_large slds-text-align_center">
+                <lightning-spinner alternative-text="Loading Welcome Letter..." size="medium"></lightning-spinner>
+                <p class="slds-m-top_small text-muted text-xs">Loading customer profile, community privileges, and dedicated RM information...</p>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <div class="printable-area slds-p-around_medium">
+                <!-- Welcome Brand Banner -->
+                <div class="welcome-banner slds-p-around_medium slds-m-bottom_medium slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                    <div>
+                        <div class="brand-title font-black">{letterData.projectName}</div>
+                        <div class="text-xs text-muted">{letterData.projectLocation}</div>
+                    </div>
+                    <div class="welcome-tag font-bold">
+                        WELCOME TO THE COMMUNITY
+                    </div>
+                </div>
+
+                <!-- Salutation & Congratulations -->
+                <div class="slds-m-bottom_medium">
+                    <h3 class="font-bold text-lg text-dark slds-m-bottom_x-small">Dear {letterData.customerName},</h3>
+                    <p class="text-sm leading-relaxed text-dark slds-m-bottom_small">
+                        On behalf of the entire leadership and project team at <strong>{letterData.projectName}</strong>, we extend our heartfelt congratulations and a warm welcome to our residential family!
+                    </p>
+                    <p class="text-sm leading-relaxed text-dark slds-m-bottom_small">
+                        We are delighted that you have chosen <strong>{letterData.unitName}</strong> ({letterData.configuration}, {letterData.sbaSqFt} Sq.Ft.) in <strong>{letterData.towerName}</strong> as your future residence. Our commitment is to provide you with an exceptional living experience with world-class engineering, vibrant social spaces, and seamless customer care throughout your homeownership journey.
+                    </p>
+                </div>
+
+                <!-- Community Highlights Card -->
+                <div class="community-highlights slds-p-around_medium slds-m-bottom_medium">
+                    <div class="font-bold text-xs uppercase text-primary slds-m-bottom_x-small">Your Township Privileges:</div>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-3 slds-m-bottom_xx-small">
+                            <div class="perk-item">🏊 <strong>Clubhouse &amp; Pool</strong><br/>Olympic pool, gymnasium &amp; badminton</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-m-bottom_xx-small">
+                            <div class="perk-item">🌳 <strong>Central Park Deck</strong><br/>Podium gardens &amp; jogging amphitheater</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-m-bottom_xx-small">
+                            <div class="perk-item">⚡ <strong>Smart Home Tech</strong><br/>High-speed OTIS lifts &amp; 100% backup</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dedicated Relationship Manager Card -->
+                <div class="rm-card slds-p-around_medium slds-m-bottom_medium slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                    <div class="slds-grid slds-grid_vertical-align-center">
+                        <div class="rm-avatar slds-m-right_medium">
+                            <lightning-icon icon-name="standard:user" size="medium"></lightning-icon>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted uppercase font-bold">Your Dedicated Relationship Manager:</div>
+                            <div class="font-bold text-base text-dark">{letterData.rmName}</div>
+                            <div class="text-xs text-muted">{letterData.rmDesignation}</div>
+                        </div>
+                    </div>
+                    <div class="slds-text-align_right">
+                        <div class="text-xs text-muted">Direct Phone: <strong class="text-dark">{letterData.rmPhone}</strong></div>
+                        <div class="text-xs text-muted">Email: <strong class="text-primary">{letterData.rmEmail}</strong></div>
+                        <div class="text-xs text-muted">Support Hours: Mon - Sat (9:30 AM - 6:30 PM)</div>
+                    </div>
+                </div>
+
+                <!-- Customer Portal Access -->
+                <div class="portal-box slds-p-around_small slds-m-bottom_medium slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                    <div>
+                        <div class="font-bold text-xs text-dark">Self-Service Customer Portal:</div>
+                        <div class="text-xs text-muted">Track construction progress photos, view receipts, and download demand notes 24/7.</div>
+                    </div>
+                    <div>
+                        <span class="portal-link font-semibold text-xs text-primary">{letterData.portalUrl}</span>
+                    </div>
+                </div>
+
+                <!-- Signatory -->
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-end border-top-primary slds-p-top_medium">
+                    <div>
+                        <div class="text-xs text-muted">Customer Service &amp; Experience Desk</div>
+                        <div class="text-xs font-semibold">{letterData.projectName}</div>
+                    </div>
+                    <div class="slds-text-align_right">
+                        <div class="font-handwriting text-lg text-primary">Siddharth Nambiar</div>
+                        <div class="text-xs font-semibold">Chief Operating Officer</div>
+                        <div class="text-xs text-muted">Residential Sales &amp; Communities</div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Quick Action Footer -->
+        <div slot="footer">
+            <lightning-button label="Close" variant="neutral" onclick={handleClose} class="slds-m-right_x-small"></lightning-button>
+            <lightning-button label="Print / Download PDF" variant="neutral" icon-name="utility:print" onclick={handlePrint} class="slds-m-right_x-small"></lightning-button>
+            <lightning-button label="Send PDF &amp; Update Stage" variant="brand" icon-name="utility:email" onclick={handleSendEmail} disabled={isSendingEmail}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

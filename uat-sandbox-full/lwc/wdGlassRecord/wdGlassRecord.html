@@ -1,0 +1,240 @@
+<template>
+    <c-wd-glass-canvas>
+        <header class="wd-hero">
+            <div class="hero-text">
+                <p class="wd-eyebrow">{eyebrow}</p>
+                <h1 class="wd-title">{title}</h1>
+                <p class="wd-subtitle">{subtitle}</p>
+            </div>
+            <div class="wd-actions">
+                <template for:each={visibleActions} for:item="a">
+                    <button
+                        key={a.key}
+                        type="button"
+                        class="wd-btn wd-btn_ghost"
+                        data-api={a.apiName}
+                        onclick={handleAction}
+                    >
+                        {a.label}
+                    </button>
+                </template>
+                <template lwc:if={hasMenu}>
+                    <div class="menu" onfocusout={handleMenuFocusOut} onkeydown={handleMenuKey}>
+                        <button
+                            type="button"
+                            class="wd-btn wd-btn_ghost menu-toggle"
+                            aria-haspopup="true"
+                            aria-expanded={menuOpen}
+                            onclick={toggleMenu}
+                        >
+                            More<span class="caret" aria-hidden="true"></span>
+                        </button>
+                        <template lwc:if={menuOpen}>
+                            <ul class="wd-glass menu-list" role="menu">
+                                <template for:each={menuActions} for:item="a">
+                                    <li key={a.key} role="none">
+                                        <button
+                                            type="button"
+                                            role="menuitem"
+                                            class="menu-item"
+                                            data-api={a.apiName}
+                                            onclick={handleAction}
+                                        >
+                                            {a.label}
+                                        </button>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+                    </div>
+                </template>
+                <button type="button" class="wd-btn wd-btn_primary" onclick={handleEditToggle}>{editLabel}</button>
+            </div>
+        </header>
+
+        <template lwc:if={error}>
+            <div class="wd-error" role="alert">{error}</div>
+        </template>
+
+        <template for:each={alerts} for:item="alert">
+            <div key={alert.key} class="wd-glass alert" role="status">
+                <span class="alert-dot" aria-hidden="true"></span>{alert.message}
+            </div>
+        </template>
+
+        <template lwc:if={pathFieldRef}>
+            <c-wd-glass-path
+                record-id={recordId}
+                field-ref={pathFieldRef}
+                record-type-id={recordTypeId}
+                value={pathValue}
+            ></c-wd-glass-path>
+        </template>
+
+        <template lwc:if={isLead}>
+            <c-lead-archive-banner record-id={recordId}></c-lead-archive-banner>
+        </template>
+
+        <template lwc:if={isCustomer}>
+            <div class="customer-summary">
+                <c-wd-glass-customer record-id={recordId} mode="summary"></c-wd-glass-customer>
+            </div>
+        </template>
+        <template lwc:elseif={hasHighlights}>
+            <div class="highlights">
+                <template for:each={highlights} for:item="h">
+                    <article key={h.key} class="wd-glass highlight">
+                        <span class="hl-label">{h.label}</span>
+                        <template lwc:if={h.isRecordLink}>
+                            <a href="#" class="hl-value hl-link" data-id={h.linkId} onclick={handleOpenRecord}>{h.text}</a>
+                        </template>
+                        <template lwc:else>
+                            <span class={h.valueClass}>{h.text}</span>
+                        </template>
+                    </article>
+                </template>
+            </div>
+        </template>
+
+        <div class="layout">
+            <div class="columns">
+                <div class="main">
+                    <template lwc:if={isCustomer}>
+                        <c-wd-glass-customer record-id={recordId} mode="holdings"></c-wd-glass-customer>
+                    </template>
+
+                    <template lwc:if={extras.schedule}>
+                        <section class="wd-glass card">
+                            <h2 class="wd-section-title card-title">Payment schedule</h2>
+                            <c-booking-schedule-cards record-id={recordId} object-api-name={objectApiName}></c-booking-schedule-cards>
+                        </section>
+                    </template>
+
+                    <template lwc:if={extras.conditions}>
+                        <section class="wd-glass card">
+                            <h2 class="wd-section-title card-title">Booking conditions</h2>
+                            <c-booking-condition-manager record-id={recordId} object-api-name={objectApiName}></c-booking-condition-manager>
+                        </section>
+                    </template>
+
+                    <template lwc:if={editing}>
+                        <lightning-record-edit-form
+                            record-id={recordId}
+                            object-api-name={objectApiName}
+                            record-type-id={recordTypeId}
+                            onsubmit={handleSubmit}
+                            onsuccess={handleSaved}
+                            onerror={handleSaveError}
+                        >
+                            <lightning-messages></lightning-messages>
+                            <template for:each={sections} for:item="section">
+                                <section key={section.key} class="wd-glass card">
+                                    <h2 class="wd-section-title card-title">{section.label}</h2>
+                                    <div class={section.gridClass}>
+                                        <template for:each={section.fields} for:item="f">
+                                            <div key={f.key} class="field field_edit">
+                                                <lightning-input-field field-name={f.api}></lightning-input-field>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </section>
+                            </template>
+                            <div class="wd-glass save-bar">
+                                <span class="save-hint">Editing {title}</span>
+                                <div class="wd-actions">
+                                    <button type="button" class="wd-btn wd-btn_ghost" onclick={handleEditToggle}>Cancel</button>
+                                    <lightning-button
+                                        class="save-btn"
+                                        variant="brand"
+                                        type="submit"
+                                        label="Save"
+                                        disabled={saving}
+                                    ></lightning-button>
+                                </div>
+                            </div>
+                        </lightning-record-edit-form>
+                    </template>
+                    <template lwc:else>
+                        <template lwc:if={loaded}>
+                            <template for:each={sections} for:item="section">
+                                <section key={section.key} class="wd-glass card">
+                                    <button
+                                        type="button"
+                                        class="section-head"
+                                        data-label={section.label}
+                                        aria-expanded={section.ariaExpanded}
+                                        onclick={handleToggleSection}
+                                    >
+                                        <span class={section.chevronClass} aria-hidden="true"></span>
+                                        <span class="wd-section-title">{section.label}</span>
+                                        <span class="section-count">{section.filled}</span>
+                                    </button>
+                                    <template lwc:if={section.isOpen}>
+                                        <dl class={section.gridClass} ondblclick={handleEditRequest}>
+                                            <template for:each={section.fields} for:item="f">
+                                                <div key={f.key} class="field">
+                                                    <dt class="label">{f.label}</dt>
+                                                    <dd class={f.valueClass}>
+                                                        <template lwc:if={f.isRecordLink}>
+                                                            <a href="#" class="link" data-id={f.linkId} onclick={handleOpenRecord}>{f.text}</a>
+                                                        </template>
+                                                        <template lwc:elseif={f.isHref}>
+                                                            <a href={f.href} class="link" target="_blank" rel="noopener">{f.text}</a>
+                                                        </template>
+                                                        <template lwc:elseif={f.isBoolean}>
+                                                            <span class={f.boolClass}><span class="bool-dot"></span>{f.text}</span>
+                                                        </template>
+                                                        <template lwc:else>{f.text}</template>
+                                                    </dd>
+                                                </div>
+                                            </template>
+                                        </dl>
+                                    </template>
+                                </section>
+                            </template>
+                        </template>
+                        <template lwc:else>
+                            <section class="wd-glass card loading-card">
+                                <lightning-spinner alternative-text="Loading record" size="small"></lightning-spinner>
+                            </section>
+                        </template>
+                    </template>
+                </div>
+
+                <aside class="side">
+                    <template lwc:if={isLeadOrContact}>
+                        <c-cti-dialer-widget
+                            record-id={recordId}
+                            object-api-name={objectApiName}
+                        ></c-cti-dialer-widget>
+                    </template>
+
+                    <template lwc:if={isCustomer}>
+                        <c-wd-glass-customer record-id={recordId} mode="sidebar"></c-wd-glass-customer>
+                    </template>
+
+                    <c-wd-glass-activity
+                        record-id={recordId}
+                        object-api-name={objectApiName}
+                        is-who={isWhoRecord}
+                    ></c-wd-glass-activity>
+                    <template lwc:if={extras.interest}>
+                        <section class="wd-glass card">
+                            <h2 class="wd-section-title card-title">Interest calculator</h2>
+                            <c-simple-interest-calculator></c-simple-interest-calculator>
+                        </section>
+                    </template>
+
+                    <template lwc:if={showRelatedLists}>
+                        <c-wd-glass-related
+                            record-id={recordId}
+                            object-api-name={objectApiName}
+                            record-type-id={recordTypeId}
+                            extra-lists={extraLists}
+                        ></c-wd-glass-related>
+                    </template>
+                </aside>
+            </div>
+        </div>
+    </c-wd-glass-canvas>
+</template>

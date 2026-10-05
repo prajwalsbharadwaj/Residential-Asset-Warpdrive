@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Send notification on payment plan finalization to Opportunity Manager</description>
+        <name>Send_notification_on_payment_plan_finalization_to_Opp_Manager</name>
+        <label>Send notification on payment plan finalization to Opp Manager</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>Get_Custom_Notification_ID.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>recipientsId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <elementReference>notificationTitle</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>notificationBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <assignments>
+        <name>Assignment_user_ids</name>
+        <label>Assignment user ids</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>recipientsId</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Opp_Owner_user.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Send_notification_on_payment_plan_finalization_to_Opp_Manager</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>isEmpty_Opp_Owner_User_manger</name>
+        <label>isEmpty(Opp Owner User manger )</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Owner.ManagerId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Opp_Owner_user</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>notificationBody</name>
+        <dataType>String</dataType>
+        <expression>&quot;The opportunity is now in Payment Plan Finalization. Confirm details and set status to Closed Won if everything checks out.&quot; &amp; BR() &amp;
+&quot;Account: &quot; &amp; {!$Record.Account.Name} &amp; 
+&quot;, Owner: &quot; &amp; 
+IF(
+    ISBLANK({!$Record.Owner.FirstName}),
+    {!$Record.Owner.LastName},
+    {!$Record.Owner.FirstName} &amp; &quot; &quot; &amp; {!$Record.Owner.LastName}
+) &amp;
+&quot;, Amount: &quot; &amp; TEXT({!$Record.Total_Amount__c})</expression>
+    </formulas>
+    <formulas>
+        <name>notificationTitle</name>
+        <dataType>String</dataType>
+        <expression>&quot;Review required: finalize &amp; close&quot; &amp; {!$Record.Name}</expression>
+    </formulas>
+    <formulas>
+        <name>OpportunityOwnerManagerId</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    ISBLANK($Record.Owner.ManagerId),
+    &quot;No Manager Assigned&quot;,
+    $Record.Owner.ManagerId
+)</expression>
+    </formulas>
+    <interviewLabel>Send notification on payment plan finalization {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RTF : Opportunity Send notification on payment plan finalization</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Custom_Notification_ID</name>
+        <label>Get Custom Notification ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>isEmpty_Opp_Owner_User_manger</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Send_notification_on_payment_plan_finalization</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Opp_Owner_user</name>
+        <label>Get Opp Owner user</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assignment_user_ids</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Custom_Notification_ID</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>RecordTypeDeveloperName__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Residential_Sales_Opportunity</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>StageName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Payment Plan Finalization</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>StageName</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recipientsId</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

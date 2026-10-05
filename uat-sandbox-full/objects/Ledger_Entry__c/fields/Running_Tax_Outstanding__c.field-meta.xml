@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Running_Tax_Outstanding__c</fullName>
+    <description>Running tax balance immediately after this entry posts.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Total tax still outstanding for the booking after this ledger entry is applied.</inlineHelpText>
+    <label>Running Tax Outstanding</label>
+    <precision>16</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

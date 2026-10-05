@@ -1,0 +1,72 @@
+<template>
+    <div class="sap-banner-container">
+        <!-- Left: System Identity -->
+        <div class="banner-left">
+            <div class="sap-tag">SAP</div>
+            <div class="sap-id">S/4HANA</div>
+            <div class="connection-status">
+                <span class={statusDotClass}></span>
+                <span class="status-label">{statusLabel}</span>
+            </div>
+        </div>
+
+        <!-- Center: Live Telemetry Ticker -->
+        <div class="banner-center">
+            <span class="ticker-item">
+                <span class="ticker-lbl">Ref ID:</span> 
+                <strong class="ticker-val text-cyan">{referenceIdText}</strong>
+            </span>
+            <span class="ticker-separator">•</span>
+            <span class="ticker-item">
+                <span class="ticker-lbl">SAP Sales Order:</span> 
+                <strong class="ticker-val">{salesOrderText}</strong>
+            </span>
+            <span class="ticker-separator">•</span>
+            <span class="ticker-item">
+                <span class="ticker-lbl">Customer Master:</span> 
+                <strong class="ticker-val">{customerCodeText}</strong>
+            </span>
+            <span class="ticker-separator">•</span>
+            <span class="ticker-item">
+                <span class="ticker-lbl">Inventory Lock:</span> 
+                <strong class="ticker-val text-green">BLOCKED ✔</strong>
+            </span>
+            <span class="ticker-separator">•</span>
+            <span class="ticker-time">{lastSyncTime}</span>
+        </div>
+
+        <!-- Right: Actions -->
+        <div class="banner-right">
+            <!-- On Opportunity: If Booking Exists, show Go to Booking button -->
+            <template if:true={hasExistingBooking}>
+                <button class="btn-go-booking" onclick={handleGoToBooking}>
+                    <span>🏢 Go to Booking ({existingBookingRefId})</span>
+                </button>
+            </template>
+
+            <!-- On Opportunity: If no Booking yet and Ready, show Create Booking button -->
+            <template if:false={hasExistingBooking}>
+                <template if:true={isOpportunity}>
+                    <button class="btn-create-booking" onclick={handleCreateBookingFromSap} disabled={isCreatingBooking}>
+                        <template if:true={isCreatingBooking}>
+                            <span class="spinner-small"></span> Creating Order...
+                        </template>
+                        <template if:false={isCreatingBooking}>
+                            <span>⚡ Generate SAP Order &amp; Create Booking</span>
+                        </template>
+                    </button>
+                </template>
+            </template>
+
+            <!-- Standard SAP Sync Buttons -->
+            <button class="btn-sync" onclick={handleSyncToSap} disabled={isSyncing}>
+                <span class={syncToIconClass}>🔄</span>
+                <span>Push SAP</span>
+            </button>
+            <button class="btn-sync-alt" onclick={handleSyncFromSap} disabled={isSyncing}>
+                <span class={syncFromIconClass}>📥</span>
+                <span>Pull SAP</span>
+            </button>
+        </div>
+    </div>
+</template>

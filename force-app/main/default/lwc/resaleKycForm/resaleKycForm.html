@@ -1,0 +1,421 @@
+<template>
+    <div class="stage" aria-hidden="true">
+        <svg class="mark" viewBox="0 0 400 260" focusable="false">
+            <polygon points="40,240 200,20 360,240" class="mark-a"></polygon>
+            <polygon points="120,240 260,60 400,240" class="mark-b"></polygon>
+        </svg>
+    </div>
+
+    <header class="topbar">
+        <div class="brand">
+            <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <polygon points="2,21 12,3 22,21"></polygon>
+            </svg>
+            <span class="brand-name">Nikoo Homes</span>
+            <span class="brand-sep" aria-hidden="true"></span>
+            <span class="brand-crumb">Resale KYC &amp; Booking Form</span>
+        </div>
+        <template lwc:if={context}>
+            <span class="ref">{context.opportunityName}</span>
+        </template>
+    </header>
+
+    <main class="app">
+
+        <!-- Loading -->
+        <template lwc:if={loading}>
+            <div class="card state-card" role="status">
+                <span class="spinner" aria-hidden="true"></span>
+                <p>Loading your KYC form…</p>
+            </div>
+        </template>
+
+        <!-- Load error -->
+        <template lwc:if={loadError}>
+            <div class="card state-card" role="alert">
+                <h1 class="card__title">We couldn't open this form</h1>
+                <p class="muted">{loadError}</p>
+            </div>
+        </template>
+
+        <!-- Submitted confirmation -->
+        <template lwc:if={isSubmitted}>
+            <div class="card state-card">
+                <div class="check-icon" aria-hidden="true">✓</div>
+                <h1 class="card__title">KYC Submitted Successfully</h1>
+                <p class="muted">Your KYC &amp; Booking Form has been submitted. Your Relationship Manager will be in touch shortly.</p>
+                <template lwc:if={context}>
+                    <div class="summary-box">
+                        <div class="summary-row"><span class="summary-label">Property</span><span>{context.project} – {context.tower} – {context.unit}</span></div>
+                        <div class="summary-row"><span class="summary-label">Agreed Value</span><span>{context.agreedValue}</span></div>
+                        <div class="summary-row"><span class="summary-label">RM</span><span>{context.rm}</span></div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- Main form -->
+        <template lwc:if={ready}>
+
+            <!-- ── STEP: Mobile Verification ── -->
+            <template lwc:if={isMobileStep}>
+                <div class="card verify-card">
+                    <h1 class="card__title">Verify Your Mobile Number</h1>
+                    <p class="muted">Enter the mobile number registered with this resale agreement to receive your OTP.</p>
+                    <div class="field-group">
+                        <label class="field-label" for="mobileInput">Mobile Number</label>
+                        <input
+                            id="mobileInput"
+                            class="field-input"
+                            type="tel"
+                            placeholder="10-digit mobile number"
+                            maxlength="10"
+                            value={mobileInput}
+                            oninput={handleMobileInput}
+                            onkeydown={handleMobileKeydown}
+                        />
+                    </div>
+                    <template lwc:if={mobileError}>
+                        <p class="error-text" role="alert">{mobileError}</p>
+                    </template>
+                    <button class="btn-primary" type="button" onclick={handleSendOtp} disabled={sendingOtp}>
+                        <template lwc:if={sendingOtp}>Sending OTP…</template>
+                        <template lwc:else>Send OTP</template>
+                    </button>
+                </div>
+            </template>
+
+            <!-- ── STEP: OTP Verification ── -->
+            <template lwc:if={isOtpStep}>
+                <div class="card verify-card">
+                    <h1 class="card__title">Enter OTP</h1>
+                    <p class="muted">A 6-digit verification code has been sent to <strong>{otpMasked}</strong>.</p>
+
+                    <!-- OTP display (no SMS gateway in this org — code shown on screen) -->
+                    <template lwc:if={otpCode}>
+                        <div class="otp-display" role="note">
+                            <span class="otp-label">Your OTP:</span>
+                            <span class="otp-value">{otpCode}</span>
+                        </div>
+                    </template>
+
+                    <div class="field-group">
+                        <label class="field-label" for="otpInput">6-Digit OTP</label>
+                        <input
+                            id="otpInput"
+                            class="field-input otp-input"
+                            type="tel"
+                            placeholder="Enter OTP"
+                            maxlength="6"
+                            value={otpInput}
+                            oninput={handleOtpInput}
+                            onkeydown={handleOtpKeydown}
+                            autocomplete="one-time-code"
+                        />
+                    </div>
+                    <template lwc:if={otpError}>
+                        <p class="error-text" role="alert">{otpError}</p>
+                    </template>
+                    <button class="btn-primary" type="button" onclick={handleVerifyOtp} disabled={verifyingOtp}>
+                        <template lwc:if={verifyingOtp}>Verifying…</template>
+                        <template lwc:else>Verify OTP</template>
+                    </button>
+                    <button class="btn-link" type="button" onclick={handleResendOtp}>
+                        Didn't receive it? Resend OTP
+                    </button>
+                </div>
+            </template>
+
+            <!-- ── Steps 3+ : KYC form ── -->
+            <template lwc:if={isFormStep}>
+                <!-- Context bar -->
+                <template lwc:if={context}>
+                    <div class="context-bar">
+                        <span class="ctx-item"><span class="ctx-label">Property</span> {context.project} – {context.tower} – {context.unit}</span>
+                        <span class="ctx-item"><span class="ctx-label">Agreed Value</span> {context.agreedValue}</span>
+                        <span class="ctx-item"><span class="ctx-label">Buyer</span> {context.buyerName}</span>
+                    </div>
+                </template>
+
+                <!-- Step nav -->
+                <nav class="steps" aria-label="KYC form steps">
+                    <template for:each={stepper} for:item="s">
+                        <button
+                            key={s.id}
+                            type="button"
+                            class={s.className}
+                            data-id={s.id}
+                            disabled={s.disabled}
+                            aria-current={s.ariaCurrent}
+                            onclick={handleStepClick}
+                        >
+                            <span class="step-num" aria-hidden="true">
+                                <template lwc:if={s.done}>✓</template>
+                                <template lwc:else>{s.number}</template>
+                            </span>
+                            <span class="step-label">{s.label}</span>
+                        </button>
+                    </template>
+                </nav>
+
+                <!-- Autosave indicator -->
+                <template lwc:if={savedAt}>
+                    <p class="autosave-note" aria-live="polite">Saved {savedAt}</p>
+                </template>
+
+                <!-- ── STEP: Personal Details ── -->
+                <template lwc:if={isStepPersonal}>
+                    <div class="card">
+                        <h2 class="section-title">Personal Details</h2>
+                        <div class="form-grid">
+                            <div class="field-group">
+                                <label class="field-label req" for="fullName">Full Name (as per ID)</label>
+                                <input id="fullName" class="field-input" type="text" value={d.fullName}
+                                    data-field="fullName" oninput={handleFieldInput} />
+                                <template lwc:if={errors.fullName}><p class="error-text">{errors.fullName}</p></template>
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label" for="mobile">Mobile Number</label>
+                                <input id="mobile" class="field-input" type="tel" value={d.mobile}
+                                    data-field="mobile" oninput={handleFieldInput} readonly />
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label req" for="email">Email Address</label>
+                                <input id="email" class="field-input" type="email" value={d.email}
+                                    data-field="email" oninput={handleFieldInput} />
+                                <template lwc:if={errors.email}><p class="error-text">{errors.email}</p></template>
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label req" for="pan">PAN Number</label>
+                                <input id="pan" class="field-input" type="text" value={d.pan}
+                                    data-field="pan" oninput={handleFieldInput} maxlength="10"
+                                    style="text-transform:uppercase" />
+                                <template lwc:if={errors.pan}><p class="error-text">{errors.pan}</p></template>
+                            </div>
+                            <div class="field-group span-2">
+                                <label class="field-label req" for="address">Current Address</label>
+                                <textarea id="address" class="field-textarea" value={d.address}
+                                    data-field="address" oninput={handleFieldInput} rows="3"></textarea>
+                                <template lwc:if={errors.address}><p class="error-text">{errors.address}</p></template>
+                            </div>
+                        </div>
+                        <div class="step-actions">
+                            <button class="btn-primary" type="button" onclick={handleNext}>Continue</button>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ── STEP: KYC Documents ── -->
+                <template lwc:if={isStepKyc}>
+                    <div class="card">
+                        <h2 class="section-title">KYC Documents</h2>
+                        <p class="muted">Please provide your identity and address proof details.</p>
+                        <div class="form-grid">
+                            <div class="field-group">
+                                <label class="field-label req" for="idType">Identity Proof Type</label>
+                                <select id="idType" class="field-select" data-field="idType" onchange={handleFieldInput}>
+                                    <option value="">– Select –</option>
+                                    <option value="Aadhaar" selected={isAadhaar}>Aadhaar Card</option>
+                                    <option value="Passport" selected={isPassport}>Passport</option>
+                                    <option value="Voter ID" selected={isVoterId}>Voter ID</option>
+                                    <option value="Driving Licence" selected={isDL}>Driving Licence</option>
+                                </select>
+                                <template lwc:if={errors.idType}><p class="error-text">{errors.idType}</p></template>
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label req" for="idNumber">ID Number</label>
+                                <input id="idNumber" class="field-input" type="text" value={d.idNumber}
+                                    data-field="idNumber" oninput={handleFieldInput} />
+                                <template lwc:if={errors.idNumber}><p class="error-text">{errors.idNumber}</p></template>
+                            </div>
+                            <div class="field-group span-2">
+                                <label class="field-label">Aadhaar Number (for PMLA compliance)</label>
+                                <input id="aadhaar" class="field-input" type="text" value={d.aadhaar}
+                                    data-field="aadhaar" oninput={handleFieldInput} maxlength="12"
+                                    placeholder="12-digit Aadhaar" />
+                            </div>
+                        </div>
+
+                        <!-- Document Uploads -->
+                        <div class="upload-section">
+                            <h3 class="section-subtitle">Upload Documents</h3>
+                            <p class="muted">Upload clear scans or photos (JPG, PNG or PDF, max 5 MB each).</p>
+
+                            <!-- PAN Card -->
+                            <div class="upload-row">
+                                <div class="upload-label-wrap">
+                                    <span class="upload-doc-name">PAN Card</span>
+                                    <template lwc:if={panUpload.done}>
+                                        <span class="upload-badge upload-badge--done">✓ Uploaded</span>
+                                    </template>
+                                    <template lwc:if={panUpload.uploading}>
+                                        <span class="upload-badge">Uploading…</span>
+                                    </template>
+                                    <template lwc:if={panUpload.name}>
+                                        <span class="upload-fname">{panUpload.name}</span>
+                                    </template>
+                                </div>
+                                <label class="btn-upload" for="panFile">
+                                    <template lwc:if={panUpload.done}>Replace</template>
+                                    <template lwc:else>Choose File</template>
+                                </label>
+                                <input id="panFile" type="file" accept=".jpg,.jpeg,.png,.pdf"
+                                    data-doctype="PAN" onchange={handleFileChange} class="visually-hidden" />
+                                <template lwc:if={panUpload.error}>
+                                    <p class="error-text">{panUpload.error}</p>
+                                </template>
+                            </div>
+
+                            <!-- Identity Proof -->
+                            <div class="upload-row">
+                                <div class="upload-label-wrap">
+                                    <span class="upload-doc-name">Identity Proof (Aadhaar / Passport / Voter ID)</span>
+                                    <template lwc:if={idUpload.done}>
+                                        <span class="upload-badge upload-badge--done">✓ Uploaded</span>
+                                    </template>
+                                    <template lwc:if={idUpload.uploading}>
+                                        <span class="upload-badge">Uploading…</span>
+                                    </template>
+                                    <template lwc:if={idUpload.name}>
+                                        <span class="upload-fname">{idUpload.name}</span>
+                                    </template>
+                                </div>
+                                <label class="btn-upload" for="idFile">
+                                    <template lwc:if={idUpload.done}>Replace</template>
+                                    <template lwc:else>Choose File</template>
+                                </label>
+                                <input id="idFile" type="file" accept=".jpg,.jpeg,.png,.pdf"
+                                    data-doctype="ID_Proof" onchange={handleFileChange} class="visually-hidden" />
+                                <template lwc:if={idUpload.error}>
+                                    <p class="error-text">{idUpload.error}</p>
+                                </template>
+                            </div>
+
+                            <!-- Address Proof -->
+                            <div class="upload-row">
+                                <div class="upload-label-wrap">
+                                    <span class="upload-doc-name">Address Proof (utility bill / bank statement)</span>
+                                    <template lwc:if={addrUpload.done}>
+                                        <span class="upload-badge upload-badge--done">✓ Uploaded</span>
+                                    </template>
+                                    <template lwc:if={addrUpload.uploading}>
+                                        <span class="upload-badge">Uploading…</span>
+                                    </template>
+                                    <template lwc:if={addrUpload.name}>
+                                        <span class="upload-fname">{addrUpload.name}</span>
+                                    </template>
+                                </div>
+                                <label class="btn-upload" for="addrFile">
+                                    <template lwc:if={addrUpload.done}>Replace</template>
+                                    <template lwc:else>Choose File</template>
+                                </label>
+                                <input id="addrFile" type="file" accept=".jpg,.jpeg,.png,.pdf"
+                                    data-doctype="Address_Proof" onchange={handleFileChange} class="visually-hidden" />
+                                <template lwc:if={addrUpload.error}>
+                                    <p class="error-text">{addrUpload.error}</p>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div class="step-actions">
+                            <button class="btn-ghost" type="button" onclick={handleBack}>Back</button>
+                            <button class="btn-primary" type="button" onclick={handleNext}>Continue</button>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ── STEP: Resale Details (read-only) ── -->
+                <template lwc:if={isStepResale}>
+                    <div class="card">
+                        <h2 class="section-title">Resale &amp; Booking Details</h2>
+                        <template lwc:if={context}>
+                            <div class="info-table">
+                                <div class="info-row"><span class="info-label">Project</span><span>{context.project}</span></div>
+                                <div class="info-row"><span class="info-label">Tower / Building</span><span>{context.tower}</span></div>
+                                <div class="info-row"><span class="info-label">Unit</span><span>{context.unit}</span></div>
+                                <div class="info-row"><span class="info-label">Final Approved Resale Value</span><span class="bold">{context.agreedValue}</span></div>
+                                <div class="info-row"><span class="info-label">Buyer Name</span><span>{context.buyerName}</span></div>
+                                <div class="info-row"><span class="info-label">Relationship Manager</span><span>{context.rm}</span></div>
+                            </div>
+                        </template>
+                        <p class="muted" style="margin-top:8px">The above details are fixed and cannot be modified. Contact your RM for any corrections.</p>
+                        <div class="form-grid" style="margin-top:16px">
+                            <div class="field-group">
+                                <label class="field-label" for="bankName">Bank Name (for home loan, if applicable)</label>
+                                <input id="bankName" class="field-input" type="text" value={d.bankName}
+                                    data-field="bankName" oninput={handleFieldInput} placeholder="Leave blank if self-funded" />
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label" for="loanAmount">Loan Amount (₹)</label>
+                                <input id="loanAmount" class="field-input" type="number" value={d.loanAmount}
+                                    data-field="loanAmount" oninput={handleFieldInput} />
+                            </div>
+                        </div>
+                        <div class="step-actions">
+                            <button class="btn-ghost" type="button" onclick={handleBack}>Back</button>
+                            <button class="btn-primary" type="button" onclick={handleNext}>Continue</button>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ── STEP: Declarations & Signature ── -->
+                <template lwc:if={isStepSign}>
+                    <div class="card">
+                        <h2 class="section-title">Declarations &amp; Signature</h2>
+                        <div class="declarations">
+                            <label class="check-label">
+                                <input type="checkbox" checked={d.decl1} data-field="decl1" onchange={handleCheck} />
+                                I confirm that the details provided are true and accurate to the best of my knowledge.
+                            </label>
+                            <label class="check-label">
+                                <input type="checkbox" checked={d.decl2} data-field="decl2" onchange={handleCheck} />
+                                I have read and understood the terms and conditions of this resale transaction.
+                            </label>
+                            <label class="check-label">
+                                <input type="checkbox" checked={d.decl3} data-field="decl3" onchange={handleCheck} />
+                                I confirm that the funds used for this purchase are from legitimate sources (PMLA compliance).
+                            </label>
+                            <label class="check-label">
+                                <input type="checkbox" checked={d.decl4} data-field="decl4" onchange={handleCheck} />
+                                I agree to provide original KYC documents at the time of registration/stamp duty.
+                            </label>
+                        </div>
+                        <template lwc:if={errors.declarations}><p class="error-text" role="alert">{errors.declarations}</p></template>
+
+                        <div class="signature-section">
+                            <h3 class="section-subtitle">Digital Signature</h3>
+                            <p class="muted">By typing your full name below, you are providing your electronic signature and agree that it is legally equivalent to your handwritten signature.</p>
+                            <div class="field-group">
+                                <label class="field-label req" for="sigName">Type your full name to sign</label>
+                                <input id="sigName" class="field-input sig-input" type="text" value={d.sigName}
+                                    data-field="sigName" oninput={handleFieldInput}
+                                    placeholder="Full name as per ID" />
+                                <template lwc:if={errors.sigName}><p class="error-text">{errors.sigName}</p></template>
+                            </div>
+                            <template lwc:if={d.sigName}>
+                                <div class="sig-preview" aria-label="Signature preview">
+                                    <span class="sig-text">{d.sigName}</span>
+                                    <span class="sig-date">{todayFormatted}</span>
+                                </div>
+                            </template>
+                        </div>
+
+                        <template lwc:if={submitError}>
+                            <p class="error-text" role="alert">{submitError}</p>
+                        </template>
+
+                        <div class="step-actions">
+                            <button class="btn-ghost" type="button" onclick={handleBack}>Back</button>
+                            <button class="btn-submit" type="button" onclick={handleSubmit} disabled={submitting}>
+                                <template lwc:if={submitting}>Submitting…</template>
+                                <template lwc:else>Submit KYC &amp; Booking Form</template>
+                            </button>
+                        </div>
+                    </div>
+                </template>
+
+            </template>
+        </template>
+
+    </main>
+</template>

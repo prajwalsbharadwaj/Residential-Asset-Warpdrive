@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Get_Active_User_IDs_and_Emails_from_Public_Group</name>
+        <label>Get Active User IDs and Emails from Public Group</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>GroupMemberUserExtractor</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Send_Agreement_Reminder_Alert</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>groupId</name>
+            <value>
+                <elementReference>Get_Target_Public_Group.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>GroupMemberUserExtractor</nameSegment>
+        <outputParameters>
+            <assignToReference>targetUserEmails</assignToReference>
+            <name>userEmails</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>targetUserIDs</assignToReference>
+            <name>userIds</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Agreement_Reminder_Alert</name>
+        <label>Send Agreement Reminder Alert</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <connector>
+            <targetReference>Send_Email</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>Get_Custom_Notification_ID.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>targetUserIDs</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <elementReference>notificationTitle</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>notificationBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email</name>
+        <label>Send Email</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddressesArray</name>
+            <value>
+                <elementReference>targetUserEmails</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>ccRecipientAddressList</name>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>emailSubject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>emailBody</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <decisions>
+        <name>Check_Status_and_Allotment_Letter_Sent_Date</name>
+        <label>Check Status and Allotment Letter Sent Date</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Status_Allotment_Letter_Shared_and_Allotment_Letter_Date_is_NOT_NULL</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Allotment Letter Shared</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Allotment_Letter_Sent_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Owner_Details</targetReference>
+            </connector>
+            <label>Status = Allotment Letter Shared and Allotment Letter Date is NOT NULL</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Record_Type_Check_Asynchronous</name>
+        <label>Record Type Check Asynchronous</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Residential_Record_Type_Asynchronous</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Residential_Sales_Booking</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Status_and_Allotment_Letter_Sent_Date</targetReference>
+            </connector>
+            <label>Residential Record Type Asynchronous</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Record_Type_Check_Synchronous</name>
+        <label>Record Type Check Synchronous</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Residential_Record_Type_Synchronous</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Residential_Sales_Booking</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Brokerage_Values_on_Related_Units</targetReference>
+            </connector>
+            <label>Residential Record Type Synchronous</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>notificationBody</name>
+        <dataType>String</dataType>
+        <expression>&apos;The Booking &apos; &amp; {!$Record.Name} &amp; &apos; for Customer &apos; &amp; {!$Record.Account_Id__r.Name} &amp; &apos; is still pending agreement signing.&apos; &amp; BR() &amp;
+&apos;1. Allotment Letter Sent On: &apos; &amp; 
+    TEXT(DAY({!$Record.Allotment_Letter_Sent_Date__c})) &amp; &apos; &apos; &amp;
+    CASE(MONTH({!$Record.Allotment_Letter_Sent_Date__c}),
+        1, &apos;January&apos;,
+        2, &apos;February&apos;,
+        3, &apos;March&apos;,
+        4, &apos;April&apos;,
+        5, &apos;May&apos;,
+        6, &apos;June&apos;,
+        7, &apos;July&apos;,
+        8, &apos;August&apos;,
+        9, &apos;September&apos;,
+        10, &apos;October&apos;,
+        11, &apos;November&apos;,
+        &apos;December&apos;
+    ) &amp; &apos; &apos; &amp; 
+    TEXT(YEAR({!$Record.Allotment_Letter_Sent_Date__c}))
+&amp; BR() &amp;
+&apos;2. Unit: &apos; &amp; {!$Record.Unit_Id__r.Name} &amp; BR() &amp;
+&apos;3. Assigned To: &apos; &amp; {!Get_Owner_Details.Name} &amp; BR() &amp;
+&apos;Please ensure the agreement is uploaded immediately to avoid delays.&apos;</expression>
+    </formulas>
+    <interviewLabel>RTF - Booking Agreement Follow Up and Validations {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RTF - Booking Agreement Follow Up and Validations</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Custom_Notification_ID</name>
+        <label>Get Custom Notification ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Target_Public_Group</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>General_Custom_Notification</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Owner_Details</name>
+        <label>Get Owner Details</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Custom_Notification_ID</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Owner:User.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Target_Public_Group</name>
+        <label>Get Target Public Group</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Active_User_IDs_and_Emails_from_Public_Group</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>CRM_and_Sales_Team</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Group</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Brokerage_Values_on_Related_Units</name>
+        <label>Update Brokerage Values on Related Units</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Brokerage_Value__c</field>
+            <value>
+                <elementReference>$Record.Brokerage_Value__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Unit_Id__r</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Record_Type_Check_Synchronous</targetReference>
+        </connector>
+        <object>Booking__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>X30_Days_After_Allotment_Letter_Agreement_Check</name>
+            <connector>
+                <targetReference>Record_Type_Check_Asynchronous</targetReference>
+            </connector>
+            <label>30 Days After Allotment Letter – Agreement Check</label>
+            <offsetNumber>30</offsetNumber>
+            <offsetUnit>Days</offsetUnit>
+            <recordField>Allotment_Letter_Sent_Date__c</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>emailBody</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;&amp;lt;html&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;lt;body style=&quot;font-family: Arial, sans-serif; color: #333;&quot;&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;h2 style=&quot;color: #d9534f;&quot;&amp;gt;⚠ Agreement Not Signed – 30 Day Reminder&amp;lt;/h2&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p&amp;gt;The booking record &amp;lt;strong&amp;gt;{!$Record.Name}&amp;lt;/strong&amp;gt; for customer&amp;nbsp;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;strong&amp;gt;{!$Record.Account_Id__r.Name}&amp;lt;/strong&amp;gt; is still pending agreement signing.&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;table style=&quot;border-collapse: collapse; margin-top: 15px;&quot;&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;tr&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;td style=&quot;padding: 6px 10px;&quot;&amp;gt;&amp;lt;strong&amp;gt;📄 Allotment Letter Sent On:&amp;lt;/strong&amp;gt;&amp;lt;/td&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;td style=&quot;padding: 6px 10px;&quot;&amp;gt;TEXT({!$Record.Allotment_Letter_Sent_Date__c})&amp;lt;/td&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/tr&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;tr&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;td style=&quot;padding: 6px 10px;&quot;&amp;gt;&amp;lt;strong&amp;gt;🏠 Unit:&amp;lt;/strong&amp;gt;&amp;lt;/td&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;td style=&quot;padding: 6px 10px;&quot;&amp;gt;{!$Record.Unit_Id__r.Name}&amp;lt;/td&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/tr&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;tr&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;td style=&quot;padding: 6px 10px;&quot;&amp;gt;&amp;lt;strong&amp;gt;👤 Assigned To:&amp;lt;/strong&amp;gt;&amp;lt;/td&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;td style=&quot;padding: 6px 10px;&quot;&amp;gt;{!Get_Owner_Details.Name}&amp;lt;/td&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/tr&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;/table&amp;gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p style=&quot;margin-top: 20px;&quot;&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;Please upload the signed agreement as soon as possible to avoid compliance delays.&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;If the agreement has already been signed, kindly update the system to reflect the same.&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;hr style=&quot;margin-top: 30px;&quot;&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;p style=&quot;font-size: 12px; color: #777;&quot;&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;This is an automated reminder triggered after 30 days of allotment letter issuance.&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;Please do not reply to this email.&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;lt;/p&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;lt;/body&amp;gt;&lt;/p&gt;&lt;p&gt;&amp;lt;/html&amp;gt;&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>emailSubject</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;⚠ Agreement Pending – Action Required for Booking {!$Record.Name}&lt;/p&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>ccEmailTestr</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>abisheke@warpdrivetech.in</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>notificationTitle</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>Agreement Not Signed – 30 Day Reminder</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>Residential_Record_Type_ID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>012F30000039w8eIAA</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>targetGroupID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>targetUserEmails</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>targetUserIDs</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

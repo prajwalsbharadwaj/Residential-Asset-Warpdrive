@@ -1,0 +1,99 @@
+<template>
+    <div class="main-wrapper">
+        <div class="form-card">
+            <div class="brand-header">
+                <h2>PHOENIX EXPERIENCE CENTER</h2>
+            </div>
+
+            <!-- Identity Grid -->
+            <div class="form-grid">
+                <lightning-input 
+                    label="Mobile" 
+                    name="mobile" 
+                    value={mobile}
+                    onchange={handleIdentityInput} 
+                    required>
+                </lightning-input>
+                <lightning-input 
+                    label="Email" 
+                    name="email" 
+                    value={email}
+                    onchange={handleIdentityInput}>
+                </lightning-input>
+                
+                <lightning-input 
+                    label="First Name" 
+                    name="firstName" 
+                    value={firstName} 
+                    required>
+                </lightning-input>
+                <lightning-input 
+                    label="Last Name" 
+                    name="lastName" 
+                    value={lastName} 
+                    required>
+                </lightning-input>
+            </div>
+
+            <!-- Property Grid -->
+            <div class="form-grid">
+                <lightning-combobox 
+                    label="Property" 
+                    options={propertyOptions} 
+                    onchange={handlePropertyChange} 
+                    required>
+                </lightning-combobox>
+                <lightning-combobox 
+                    label="Tower" 
+                    options={towerOptions} 
+                    onchange={handleTowerChange} 
+                    disabled={isTowerDisabled} 
+                    required>
+                </lightning-combobox>
+                <lightning-combobox 
+                    label="Unit" 
+                    options={unitOptions} 
+                    name="unitId" 
+                    disabled={isUnitDisabled}>
+                </lightning-combobox>
+            </div>
+
+            <!-- Feedback Grid -->
+            <div class="form-grid">
+                <lightning-combobox 
+                    label="Walk-in Source" 
+                    options={sourceOptions} 
+                    onchange={handleSourceChange} 
+                    required>
+                </lightning-combobox>
+                <lightning-combobox 
+                    label="Sales Interaction Rating" 
+                    name="rating" 
+                    options={ratingOptions}>
+                </lightning-combobox>
+                <lightning-combobox 
+                    label="Overall Experience" 
+                    name="overall" 
+                    options={ratingOptions}>
+                </lightning-combobox>
+            </div>
+
+            <!-- Signatures -->
+            <div class="signature-box">
+                <label class="sig-label">Customer Signature *</label>
+                <canvas class="customer-pad" lwc:dom="manual"></canvas>
+                <button class="clear-btn" onclick={clearCustomerPad}>Clear Signature</button>
+            </div>
+
+            <template if:true={showAgentSig}>
+                <div class="signature-box">
+                    <label class="sig-label">Agent Signature *</label>
+                    <canvas class="agent-pad" lwc:dom="manual"></canvas>
+                    <button class="clear-btn" onclick={clearAgentPad}>Clear Signature</button>
+                </div>
+            </template>
+
+            <button class="action-btn" onclick={handleSubmit}>SUBMIT VISIT DETAILS</button>
+        </div>
+    </div>
+</template>

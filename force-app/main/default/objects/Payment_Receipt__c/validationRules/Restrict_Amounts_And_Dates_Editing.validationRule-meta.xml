@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Restrict_Amounts_And_Dates_Editing</fullName>
+    <active>true</active>
+    <description>This rule will fire when user tries to edit any Amount or date related fields after creation.</description>
+    <errorConditionFormula>OR(
+ISCHANGED(Amount_Paid__c),  
+ISCHANGED(Principal_Applied__c), 
+ISCHANGED(Interest_Applied__c), 
+ISCHANGED(Tax_on_Interest__c), 
+ISCHANGED(Excess_Payment__c),  
+ISCHANGED(Date_Of_Payment__c),
+ISCHANGED(Company_Bank_Account__c)  
+)</errorConditionFormula>
+    <errorMessage>You cannot edit the receipts after creation to continue please cancel this receipt and create a new one.</errorMessage>
+</ValidationRule>

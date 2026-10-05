@@ -1,0 +1,91 @@
+{
+  "required" : [ "varFirstName", "varLastName", "varPhone", "varProject" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "TypeofUnits" : {
+      "title" : "TypeofUnits",
+      "description" : "The customer's preferred unit size. Valid options: 2BHK, 3BHK, 4BHK, Above 4BHK. This is optional; user can skip.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "varAge" : {
+      "title" : "varAge",
+      "description" : "The age of the customer for demographic profiling. This is optional.",
+      "lightning:type" : "lightning__numberType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "varBudget" : {
+      "title" : "varBudget",
+      "description" : "The customer's budget range. Valid options: 2-3 Cr, 3-4 Cr, 4-5 Cr, 5-6 Cr, 6-7 Cr, 7-8 Cr, 8-9 Cr, 9-10 Cr, 10-11 Cr, 11-12 Cr, 12 Cr & Above. This is optional",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "varDesiredStatus" : {
+      "title" : "varDesiredStatus",
+      "description" : "Construction status preference. Valid options: Ready-to-move-in, Under Construction, Nearing Completion, Pre-Launch. This is optional.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "varEmail" : {
+      "title" : "varEmail",
+      "description" : "The customer's personal email address.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "varFirstName" : {
+      "title" : "varFirstName",
+      "description" : "The first name of the potential buyer.(Required)",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "varInterestSiteVisit" : {
+      "title" : "varInterestSiteVisit",
+      "description" : "Set to True if the customer expresses immediate interest in visiting a site.",
+      "lightning:type" : "lightning__booleanType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "varLastName" : {
+      "title" : "varLastName",
+      "description" : "The last name of the potential buyer. (Required)",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "varLeadSource" : {
+      "title" : "varLeadSource",
+      "description" : "The source of the lead (e.g., Web, Walk-in, Referral)",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "varPhone" : {
+      "title" : "varPhone",
+      "description" : "The primary contact phone number for the customer. (Required)",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "varProject" : {
+      "title" : "varProject",
+      "description" : "The specific residential project of interest. Valid options: Varthur Vista, Yalahanka Yard, Miyapur Manor, Banjara Beam, Saket Square, Rohini Rise. (Required)",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "varSourceofFunding" : {
+      "title" : "varSourceofFunding",
+      "description" : "How the buyer intends to pay. Valid options: Self, Bank. This is optional",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

@@ -1,0 +1,94 @@
+{
+  "type" : "sfdc_cms__view",
+  "title" : "Home",
+  "contentBody" : {
+    "component" : {
+      "children" : [ {
+        "children" : [ {
+          "attributes" : {
+            "backgroundImageConfig" : "",
+            "backgroundImageOverlay" : "rgba(0,0,0,0)",
+            "componentSpacerSize" : "",
+            "layoutDirectionDesktop" : "row",
+            "layoutDirectionMobile" : "column",
+            "layoutDirectionTablet" : "column",
+            "maxContentWidth" : "",
+            "sectionColumnGutterWidth" : "",
+            "sectionConfig" : "{\"UUID\":\"18c3162a-c5ff-4252-a99d-ef932d54340c\",\"columns\":[{\"UUID\":\"d9bb8301-ea6f-488c-b370-6375535de438\",\"columnName\":\"Column 1\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
+            "sectionMinHeight" : "",
+            "sectionVerticalAlign" : "flex-start"
+          },
+          "children" : [ {
+            "children" : [ {
+              "attributes" : {
+                "clientVersion" : "WebV1",
+                "deploymentName" : "Housing_Service_Agent_Messaging_Voice",
+                "hideChatButtonOnLoad" : "Default",
+                "isExpSiteAuthMode" : false,
+                "scrtUrl" : "https://wa1775550540999.my.salesforce-scrt.com",
+                "siteEndpoint" : "https://wa1775550540999.my.site.com/ESWHousingServiceAgent1788442835185"
+              },
+              "definition" : "experience_messaging:embeddedMessaging",
+              "id" : "2a2900e2-9635-4600-ab35-7c9d8428b713",
+              "type" : "component"
+            }, {
+              "attributes" : {
+                "imageInfos" : "",
+                "richTextValue" : "<div style=\"display: flex; justify-content: center; align-items: center; margin: 50px 0; flex-direction: column; text-align: center;\"><div style=\"background-image: url(assets/img/desert.svg) !important; background-size: cover; background-position: center; height: 300px; width: 100%; max-width: 600px; min-width: 300px;\"></div><h1 class=\"slds-text-heading_medium slds-p-bottom_x-small\">Start Building Your Page</h1> <div>Drag and drop a component into the content slots.</div></div>"
+              },
+              "definition" : "community_builder:htmlEditor",
+              "id" : "2d967fed-9136-460e-8727-38ebdadeebea",
+              "type" : "component"
+            }, {
+              "attributes" : {
+                "clientVersion" : "WebV1",
+                "deploymentName" : "Housing_Service_Agent_Messaging_Voice",
+                "hideChatButtonOnLoad" : "Visible",
+                "isExpSiteAuthMode" : false,
+                "scrtUrl" : "https://wa1775550540999.my.salesforce-scrt.com",
+                "siteEndpoint" : "https://wa1775550540999.my.site.com/ESWHousingServiceAgent1788442835185"
+              },
+              "definition" : "experience_messaging:embeddedMessaging",
+              "id" : "b603b013-23c5-4947-9856-c639d68168ed",
+              "type" : "component"
+            } ],
+            "id" : "d9bb8301-ea6f-488c-b370-6375535de438",
+            "name" : "col1",
+            "title" : "Column 1",
+            "type" : "region"
+          } ],
+          "definition" : "community_layout:section",
+          "id" : "18c3162a-c5ff-4252-a99d-ef932d54340c",
+          "type" : "component"
+        } ],
+        "id" : "8b57af3c-7562-4684-b457-84d222878515",
+        "name" : "content",
+        "title" : "Content",
+        "type" : "region"
+      }, {
+        "children" : [ {
+          "attributes" : {
+            "customHeadTags" : "",
+            "description" : "",
+            "pageTitle" : "Home",
+            "recordId" : "{!recordId}"
+          },
+          "definition" : "community_builder:seoAssistant",
+          "id" : "277867a3-acfc-466c-bd74-c4a56d5cade0",
+          "type" : "component"
+        } ],
+        "id" : "34b39689-96fe-4543-b2ae-562195888e8a",
+        "name" : "sfdcHiddenRegion",
+        "title" : "sfdcHiddenRegion",
+        "type" : "region"
+      } ],
+      "definition" : "community_layout:sldsFlexibleLayout",
+      "id" : "72946213-dad4-4092-b698-43f62c6165f2",
+      "type" : "component"
+    },
+    "dataProviders" : [ ],
+    "themeLayoutType" : "Inner",
+    "viewType" : "home"
+  },
+  "urlName" : "home"
+}

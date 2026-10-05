@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>To allow updating date fields to CRM team on approved booking record</description>
+    <flowDefinition>Booking_Update_Date_Fields_on_Approved_Booking</flowDefinition>
+    <label>Update Date Fields</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <type>Flow</type>
+</QuickAction>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Advance_Amount__c</fullName>
+    <externalId>false</externalId>
+    <formula>/*IF(
+    TotalPrincipalReceived__c &gt; Installment_Amount__c,
+    Installment_Amount__c - 
+    IF(
+        Outstanding_Principal__c = 0,
+        TotalPrincipalReceived__c,
+        Outstanding_Principal__c
+    ),
+    0.00
+)*/
+IF(
+  TotalPrincipalReceived__c &gt; Installment_Amount__c,
+  TotalPrincipalReceived__c - 
+  IF(
+    Outstanding_Principal__c = 0,
+    Installment_Amount__c, /* Note: Looking closely at line 6 of Image 6, this is Installment_Amount__c */
+    Outstanding_Principal__c
+  ),
+  0.00
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Advance Amount</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

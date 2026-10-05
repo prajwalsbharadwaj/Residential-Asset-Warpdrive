@@ -1,0 +1,66 @@
+<template>
+    <lightning-modal-header label="Channel Partner 360 Portal">
+    </lightning-modal-header>
+    
+    <lightning-modal-body>
+        <div class="slds-p-around_medium">
+            <template lwc:if={isLoading}>
+                <lightning-spinner alternative-text="Loading Partner Data..." size="medium"></lightning-spinner>
+            </template>
+
+            <template lwc:if={partnerAccount}>
+                <div class="slds-media slds-media_center slds-m-bottom_medium">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="standard:portal" size="large" alternative-text="Partner Portal"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-text-heading_medium slds-font-weight_bold">{partnerAccount.name}</h2>
+                        <p class="slds-text-body_small slds-text-color_weak">
+                            RERA: <strong>{partnerAccount.reraNumber}</strong> &bull; Status: <span class="slds-badge slds-theme_success">{partnerAccount.status}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="slds-box slds-theme_shade slds-m-bottom_medium">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_1-of-2">
+                            <span class="slds-text-title">Active Brokerage Slab:</span>
+                            <div class="slds-text-heading_small slds-font-weight_bold slds-text-color_success">{partnerAccount.brokerageRate}%</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <span class="slds-text-title">Portal License Model:</span>
+                            <div class="slds-text-body_small">Passwordless Mobile OTP (0 SFDC User Licenses)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-form-element slds-m-bottom_medium">
+                    <label class="slds-form-element__label">Direct Partner Launch URL:</label>
+                    <div class="slds-form-element__control">
+                        <input class="slds-input" type="text" readonly value={portalUrl} />
+                    </div>
+                </div>
+
+                <div class="slds-text-align_center slds-m-top_large">
+                    <lightning-button 
+                        variant="brand" 
+                        label="Launch Broker Portal ↗" 
+                        icon-name="utility:new_window" 
+                        onclick={handleLaunchPortal}
+                        class="slds-m-right_x-small">
+                    </lightning-button>
+                    <lightning-button 
+                        variant="neutral" 
+                        label="Copy Link" 
+                        icon-name="utility:copy" 
+                        onclick={handleCopyLink}>
+                    </lightning-button>
+                </div>
+            </template>
+        </div>
+    </lightning-modal-body>
+    
+    <lightning-modal-footer>
+        <lightning-button label="Close" onclick={handleClose}></lightning-button>
+    </lightning-modal-footer>
+</template>

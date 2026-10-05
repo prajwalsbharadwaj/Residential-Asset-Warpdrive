@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Aadhar_Number_Length</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(Aadhar_Number__c)),
+    OR(
+        LEN(Aadhar_Number__c) &lt;&gt; 12,
+        NOT(ISNUMBER(Aadhar_Number__c))
+    )
+)</errorConditionFormula>
+    <errorDisplayField>Aadhar_Number__c</errorDisplayField>
+    <errorMessage>Aadhaar Number must be numeric and exactly 12 digits.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PaymentPlanIsRequiredBeforeTokenAmount</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISNULL(Token_Amount__c ) &amp;&amp; NOT(ISBLANK( Payment_Plan__c ))</errorConditionFormula>
+    <errorDisplayField>Token_Amount__c</errorDisplayField>
+    <errorMessage>Token amount is required before adding payment plan</errorMessage>
+</ValidationRule>

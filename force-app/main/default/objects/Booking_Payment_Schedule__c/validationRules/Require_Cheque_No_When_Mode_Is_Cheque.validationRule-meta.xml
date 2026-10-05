@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Cheque_No_When_Mode_Is_Cheque</fullName>
+    <active>true</active>
+    <description>If mode of payment is cheque then cheque no. is mandatory.</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Mode_Of_Payment__c, &quot;Cheque&quot;),
+    ISBLANK(Cheque_No__c)
+)</errorConditionFormula>
+    <errorDisplayField>Cheque_No__c</errorDisplayField>
+    <errorMessage>Cheque Number is required when Mode of Payment is Cheque.</errorMessage>
+</ValidationRule>

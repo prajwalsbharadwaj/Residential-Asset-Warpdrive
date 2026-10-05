@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AnimationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <animationFrequency>always</animationFrequency>
+    <developerName>Unit_Booking_Sales_Progress</developerName>
+    <isActive>true</isActive>
+    <masterLabel>Unit Booking Sales Progress</masterLabel>
+    <recordTypeContext>Custom</recordTypeContext>
+    <recordTypeName>Residential_Sales_Booking</recordTypeName>
+    <sobjectType>Booking__c</sobjectType>
+    <targetField>Status__c</targetField>
+    <targetFieldChangeToValues>Confirmed</targetFieldChangeToValues>
+</AnimationRule>

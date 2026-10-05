@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bank_Account_No_Length</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK( BANK_ACCOUNT_NO__c )),
+    OR(
+        LEN(BANK_ACCOUNT_NO__c ) &lt; 11,
+        LEN(BANK_ACCOUNT_NO__c ) &gt; 16,
+        NOT(ISNUMBER(BANK_ACCOUNT_NO__c ))
+    )
+)</errorConditionFormula>
+    <errorDisplayField>BANK_ACCOUNT_NO__c</errorDisplayField>
+    <errorMessage>Bank Account Number must be numeric and between 11 to 16 digits.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,9 @@
+{
+  "type" : "sfdc_cms__site",
+  "title" : "ESW_WD_Elite_Chat_1777956394506",
+  "contentBody" : {
+    "authenticationType" : "AUTHENTICATED_WITH_PUBLIC_ACCESS_ENABLED",
+    "geoBotsAllowed" : false
+  },
+  "urlName" : "esw-wd-elite-chat-1777956394506"
+}

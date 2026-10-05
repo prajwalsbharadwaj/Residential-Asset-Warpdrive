@@ -1,0 +1,31 @@
+<template>
+    <lightning-card title="SAP Sync Status" icon-name="utility:refresh">
+        <div class="slds-p-around_medium slds-text-align_center">
+
+            <!-- Loading State -->
+            <template if:true={loading}>
+                <lightning-spinner alternative-text="Syncing with SAP..." size="large" variant="brand"></lightning-spinner>
+                <p class="slds-m-top_medium slds-text-color_weak">Please wait, syncing with SAP...</p>
+            </template>
+
+            <!-- Result State -->
+            <template if:false={loading}>
+                <template if:true={isSuccess}>
+                    <div class="slds-box slds-theme_alert-texture">
+                        <lightning-icon icon-name="utility:success" alternative-text="Success"
+                            class="slds-m-right_small" size="small"></lightning-icon>
+                        <span class="slds-text-heading_small">{message}</span>
+                    </div>
+                </template>
+                <template if:true={isError}>
+                    <div class="slds-box  slds-theme_alert-texture">
+                        <lightning-icon icon-name="utility:error" alternative-text="Error"
+                            class="slds-m-right_small" size="small"></lightning-icon>
+                        <span class="slds-text-heading_small">{message}</span>
+                    </div>
+                </template>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

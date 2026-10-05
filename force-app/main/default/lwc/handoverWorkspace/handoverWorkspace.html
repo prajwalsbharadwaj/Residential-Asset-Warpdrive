@@ -1,0 +1,1952 @@
+﻿<template>
+    <div class="slds-theme_default main-page-wrapper">
+        <template lwc:if={isLoading}>
+            <lightning-spinner alternative-text="Loading Handover Workspace..." size="medium"></lightning-spinner>
+        </template>
+
+        <template lwc:if={handover}>
+            <!-- ================= WORKSPACE STAGE SUBNAV ================= -->
+            <div class="workspace-stage-bar slds-m-bottom_medium slds-p-horizontal_small slds-p-vertical_x-small slds-card slds-card_boundary slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                <div class="slds-grid slds-grid_vertical-align-center slds-wrap">
+                    <span class="stage-bar-label font-weight-bold slds-m-right_small">STAGE WORKSPACE:</span>
+                    <div class="slds-button-group" role="group">
+                        <button class={btnClassReadiness} onclick={handleSelectStage} data-stage="Readiness" title="Stage 1: Readiness Gate">
+                            <span class="stage-step-num">1</span> Readiness Gate
+                            <template lwc:if={isReadinessLocked}>
+                                <lightning-icon icon-name="utility:lock" size="xx-small" class="slds-m-left_xx-small"></lightning-icon>
+                            </template>
+                        </button>
+                        <button class={btnClassInspection} onclick={handleSelectStage} data-stage="Inspection" title="Stage 2: Comprehensive Unit Quality Audit">
+                            <span class="stage-step-num">2</span> Inspection &amp; Audit
+                            <template lwc:if={isInspectionLocked}>
+                                <lightning-icon icon-name="utility:lock" size="xx-small" class="slds-m-left_xx-small"></lightning-icon>
+                            </template>
+                        </button>
+                        <button class={btnClassResolution} onclick={handleSelectStage} data-stage="Resolution" title="Stage 3: Snag & Defect Rectification">
+                            <span class="stage-step-num">3</span> Snag Resolution
+                            <template lwc:if={isResolutionLocked}>
+                                <lightning-icon icon-name="utility:lock" size="xx-small" class="slds-m-left_xx-small"></lightning-icon>
+                            </template>
+                        </button>
+                        <button class={btnClassAppointment} onclick={handleSelectStage} data-stage="Appointment" title="Stage 4: Handover Appointment & Sign-off">
+                            <span class="stage-step-num">4</span> Appointment &amp; Handover
+                            <template lwc:if={isAppointmentLocked}>
+                                <lightning-icon icon-name="utility:lock" size="xx-small" class="slds-m-left_xx-small"></lightning-icon>
+                            </template>
+                        </button>
+                        <button class={btnClassCompleted} onclick={handleSelectStage} data-stage="Completed" title="Stage 5: Handover Completed">
+                            <span class="stage-step-num">5</span> Completed
+                        </button>
+                    </div>
+                </div>
+                <template lwc:if={isReviewMode}>
+                    <div class="review-mode-indicator slds-grid slds-grid_vertical-align-center">
+                        <span class="slds-badge slds-theme_warning slds-m-right_x-small">Review Mode (Locked Stage)</span>
+                        <lightning-button size="x-small" variant="neutral" label="Return to Active Stage" onclick={handleReturnToActiveStage}></lightning-button>
+                    </div>
+                </template>
+            </div>
+
+            <!-- ================= WORKSPACE STAGES (FULL WIDTH) ================= -->
+            <div class="workspace-stages-container slds-m-bottom_medium">
+                <!-- ------------------------------------------------ -->
+                            <template lwc:if={isStageReadiness}>
+                                <article class="slds-card slds-card_boundary slds-p-around_medium stage-card">
+                                    <!-- Stage 1 Locked Banner (Review Mode) -->
+                                    <template lwc:if={isReadinessLocked}>
+                                        <div class="stage-locked-banner slds-box slds-box_xx-small slds-theme_shade slds-m-bottom_medium slds-grid slds-grid_vertical-align-center">
+                                            <span class="stage-lock-badge slds-badge slds-theme_inverse slds-m-right_small">
+                                                <lightning-icon icon-name="utility:lock" size="xx-small" variant="inverse" class="slds-m-right_xxx-small"></lightning-icon>
+                                                STAGE 1 LOCKED &bull; REVIEW ONLY
+                                            </span>
+                                            <span class="slds-text-body_small slds-text-color_weak">
+                                                Preconditions verified. This stage is locked because the handover process has advanced to <strong>{recordStageName}</strong>. All records and documents are accessible below.
+                                            </span>
+                                        </div>
+                                    </template>
+
+                                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_medium slds-p-bottom_small slds-border_bottom">
+                                        <div>
+                                            <h2 class="slds-text-heading_small font-weight-bold">Handover Readiness Gate</h2>
+                                            <p class="slds-text-body_small slds-text-color_weak">
+                                                Commercial, financial, and construction preconditions verified from existing Booking &amp; Project data.
+                                            </p>
+                                        </div>
+                                        <template lwc:if={isReadinessLocked}>
+                                            <span class="slds-badge slds-theme_success font-weight-bold">
+                                                <lightning-icon icon-name="utility:check" size="xx-small" variant="inverse" class="slds-m-right_xx-small"></lightning-icon>
+                                                Clearances Passed &amp; Verified
+                                            </span>
+                                        </template>
+                                        <template lwc:else>
+                                            <button class="primary-stage-cta" onclick={openStartInspectionModal} disabled={cannotStartInspection}>
+                                                START INSPECTION â†’
+                                            </button>
+                                        </template>
+                                    </div>
+
+                                    <!-- 4 Readiness Gate Cards -->
+                                    <div class="slds-grid slds-gutters_small slds-wrap slds-m-bottom_medium">
+                                        <!-- Tile 1: Booking Clearance -->
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-m-bottom_x-small">
+                                            <div class="readiness-tile">
+                                                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                    <span class="readiness-icon-box icon-booking">
+                                                        <lightning-icon icon-name="standard:record" size="x-small"></lightning-icon>
+                                                    </span>
+                                                    <span class="slds-badge slds-theme_success">{readiness.approvalStatus}</span>
+                                                </div>
+                                                <div class="readiness-tile-title slds-m-top_small">Booking Clearance</div>
+                                                <div class="readiness-tile-meta slds-m-top_xx-small">
+                                                    Ref: <strong>#{unitSummary.bookingReference}</strong>
+                                                </div>
+                                                <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                                                    Booking confirmed &amp; customer allotment verified.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tile 2: Financial Clearance -->
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-m-bottom_x-small">
+                                            <div class="readiness-tile">
+                                                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                    <span class="readiness-icon-box icon-finance">
+                                                        <lightning-icon icon-name="standard:currency" size="x-small"></lightning-icon>
+                                                    </span>
+                                                    <span class="slds-badge slds-theme_success">Principal Paid: {readiness.paymentDetails}</span>
+                                                </div>
+                                                <div class="readiness-tile-title slds-m-top_small">Financial Clearance</div>
+                                                <div class="readiness-tile-meta slds-m-top_xx-small">
+                                                    Agreement Value: <strong>{unitSummary.finalAmountFormatted}</strong>
+                                                </div>
+                                                <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                                                    All milestones cleared; financial clearance confirmed.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tile 3: Occupancy Certificate -->
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-m-bottom_x-small">
+                                            <div class="readiness-tile">
+                                                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                    <span class="readiness-icon-box icon-oc">
+                                                        <lightning-icon icon-name="standard:task" size="x-small"></lightning-icon>
+                                                    </span>
+                                                    <span class="slds-badge slds-theme_success">{readiness.ocDetails}</span>
+                                                </div>
+                                                <div class="readiness-tile-title slds-m-top_small">Occupancy Certificate (OC)</div>
+                                                <div class="readiness-tile-meta slds-m-top_xx-small">
+                                                    Tower: <strong>{unitSummary.towerName}</strong> &bull; {unitSummary.floorName}
+                                                </div>
+                                                <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                                                    Statutory occupancy clearance received for tower and unit.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tile 4: Possession Readiness -->
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-m-bottom_x-small">
+                                            <div class="readiness-tile">
+                                                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                    <span class="readiness-icon-box icon-unit">
+                                                        <lightning-icon icon-name="standard:home" size="x-small"></lightning-icon>
+                                                    </span>
+                                                    <span class="slds-badge slds-theme_success">{unitSummary.possessionReadinessStatus}</span>
+                                                </div>
+                                                <div class="readiness-tile-title slds-m-top_small">Civil Construction Gate</div>
+                                                <div class="readiness-tile-meta slds-m-top_xx-small">
+                                                    Ready Date: <strong>{readiness.possessionReadyDate}</strong>
+                                                </div>
+                                                <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                                                    Unit civil and architectural finishes marked possession ready.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </template>
+
+                            <!-- ------------------------------------------------ -->
+                            <template lwc:if={isStageInspection}>
+                                <article class="slds-card slds-card_boundary slds-p-around_medium stage-card">
+                                    <!-- Stage 2 Locked Banner (Review Mode) -->
+                                    <template lwc:if={isInspectionLocked}>
+                                        <div class="stage-locked-banner slds-box slds-box_xx-small slds-theme_shade slds-m-bottom_medium slds-grid slds-grid_vertical-align-center">
+                                            <span class="stage-lock-badge slds-badge slds-theme_inverse slds-m-right_small">
+                                                <lightning-icon icon-name="utility:lock" size="xx-small" variant="inverse" class="slds-m-right_xxx-small"></lightning-icon>
+                                                STAGE 2 LOCKED &bull; REVIEW ONLY
+                                            </span>
+                                            <span class="slds-text-body_small slds-text-color_weak">
+                                                Inspection completed and locked. Checklist, report and attachments remain accessible for review and download.
+                                            </span>
+                                        </div>
+                                    </template>
+
+                                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                        <div>
+                                            <h2 class="slds-text-heading_small font-weight-bold">Stage 2: Comprehensive Unit Quality Audit</h2>
+                                            <p class="slds-text-body_small slds-text-color_weak">
+                                                Inspect architectural, MEP, fixtures and finishes. Marking an issue immediately creates a snag that can be resolved without blocking inspection progress.
+                                            </p>
+                                        </div>
+                                        <div class="slds-grid slds-gutters_x-small slds-grid_vertical-align-center">
+                                            <div class="slds-col">
+                                                <lightning-button variant="brand-outline" size="small" label="View Report" icon-name="utility:preview" onclick={handlePreviewInspectionReport}></lightning-button>
+                                            </div>
+                                            <div class="slds-col">
+                                                <template lwc:if={isInspectionLocked}>
+                                                    <span class="slds-badge slds-theme_success font-weight-bold">
+                                                        <lightning-icon icon-name="utility:check" size="xx-small" variant="inverse" class="slds-m-right_xx-small"></lightning-icon>
+                                                        Inspection Completed &amp; Locked
+                                                    </span>
+                                                </template>
+                                                <template lwc:else>
+                                                    <button class="primary-stage-cta" onclick={handleCompleteInspection} disabled={isCompleteInspectionDisabled} title="Complete inspection once all required checklist items are Pass">
+                                                        COMPLETE INSPECTION â†’
+                                                    </button>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- Checklist Summary Strip -->
+                                    <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_small slds-p-around_xx-small slds-theme_shade slds-box slds-box_xx-small">
+                                        <span class="metric-pill pill-passed slds-m-right_x-small">âœ“ Passed: <strong>{passedChecklistCount}</strong></span>
+                                        <span class="metric-pill pill-issue slds-m-right_x-small">âš  Issues: <strong>{issuesChecklistCount}</strong></span>
+                                        <span class="metric-pill pill-na slds-m-right_x-small">â€” N/A: <strong>{naChecklistCount}</strong></span>
+                                        <span class={pendingPillClass}>â—‹ Pending: <strong>{pendingChecklistCount}</strong></span>
+                                        <span class="slds-col slds-text-align_right slds-text-body_small slds-text-color_weak">{inspectionPercent}% Answered</span>
+                                    </div>
+
+                                    <!-- CHECKLIST ITEMS -->
+                                    <!-- External Inspection Status Banner (if submitted) -->
+                                    <template lwc:if={hasExternalSubmission}>
+                                        <div class="external-status-banner slds-box slds-box_xx-small slds-m-bottom_small slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                            <div>
+                                                <div class="slds-grid slds-grid_vertical-align-center">
+                                                    <span class="slds-badge slds-theme_success slds-m-right_x-small">âœ“ External Inspection Submitted</span>
+                                                    <span class="slds-text-body_small slds-text-color_weak">By: <strong>{externalInspectorName}</strong> {externalSubmissionDate}</span>
+                                                </div>
+                                            </div>
+                                            <div class="slds-text-body_small">
+                                                Passed: <strong>{passedChecklistCount}</strong> &bull; Issues: <strong>{issuesChecklistCount}</strong> &bull; N/A: <strong>{naChecklistCount}</strong>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <!-- ALL CATEGORIES WITH VISIBLE AND ACTIONABLE ROWS -->
+                                    <template for:each={checklistGroups} for:item="grp">
+                                        <div key={grp.category} class="category-block slds-m-bottom_small">
+                                            <div class="category-header slds-p-around_x-small slds-theme_shade slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                <h3 class="slds-text-title_bold font-weight-bold">
+                                                    {grp.category}
+                                                </h3>
+                                                <span class="category-count-badge">{grp.answeredCount} of {grp.totalCount} completed</span>
+                                            </div>
+                                            <div class="checklist-items-container">
+                                                <template for:each={grp.items} for:item="itm">
+                                                    <div key={itm.Id} class={itm.rowClass}>
+                                                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                            <div class="chk-item-main slds-grow slds-m-right_small">
+                                                                <div class="slds-grid slds-grid_vertical-align-center">
+                                                                    <span class={itm.statusIconClass}>{itm.statusIcon}</span>
+                                                                    <strong class="chk-item-title slds-m-right_small">{itm.Name}</strong>
+
+                                                                    <template lwc:if={itm.isPass}>
+                                                                        <span class="status-pill pill-pass">âœ“ Passed</span>
+                                                                    </template>
+                                                                    <template lwc:if={itm.isIssue}>
+                                                                        <template lwc:if={itm.hasLinkedSnag}>
+                                                                            <span class="status-pill pill-issue-linked">âš  Issue Found &bull; {itm.linkedSnagName}</span>
+                                                                        </template>
+                                                                        <template lwc:else>
+                                                                            <span class="status-pill pill-issue">âš  Issue Found</span>
+                                                                        </template>
+                                                                    </template>
+                                                                    <template lwc:if={itm.isNA}>
+                                                                        <span class="status-pill pill-na">â€” N/A</span>
+                                                                    </template>
+                                                                </div>
+                                                                <div class="chk-item-meta slds-m-top_xxx-small slds-text-body_small slds-text-color_weak">
+                                                                    Location: {itm.Location__c}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="chk-item-actions slds-no-flex slds-grid slds-grid_vertical-align-center">
+                                                                <div class="slds-button-group chk-btn-group" role="group">
+                                                                    <button class={itm.passBtnClass} onclick={handleSetPass} data-id={itm.Id} disabled={isActionDisabled}>
+                                                                        {itm.passBtnLabel}
+                                                                    </button>
+                                                                    <button class={itm.issueBtnClass} onclick={handleSetIssue} data-id={itm.Id} disabled={isActionDisabled}>
+                                                                        {itm.issueBtnLabel}
+                                                                    </button>
+                                                                    <button class={itm.naBtnClass} onclick={handleSetNA} data-id={itm.Id} disabled={isActionDisabled}>
+                                                                        {itm.naBtnLabel}
+                                                                    </button>
+                                                                    <template lwc:if={canEditChecklist}>
+                                                                        <lightning-button-icon icon-name="utility:delete" variant="border-filled" size="x-small" onclick={handleDeleteChecklistItem} data-id={itm.Id} title="Remove Line Item" alternative-text="Remove Line Item" class="slds-m-left_x-small"></lightning-button-icon>
+                                                                    </template>
+                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                                </div>
+                                            </div>
+                                        </template>
+
+                                    <!-- STAGE 2: REPORTS & ATTACHED DOCUMENTS -->
+                                    <div class="stage-docs-box slds-card slds-card_boundary slds-m-top_medium slds-p-around_small">
+                                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                            <div class="slds-grid slds-grid_vertical-align-center">
+                                                <lightning-icon icon-name="doctype:survey" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                                <div>
+                                                    <h3 class="slds-text-title_bold font-weight-bold">Stage 2 Quality Audit Reports &amp; Files</h3>
+                                                    <p class="slds-text-body_small slds-text-color_weak">Official inspection audit report, auditor sign-offs, and quality checklist documentation.</p>
+                                                </div>
+                                            </div>
+                                            <div class="slds-grid slds-gutters_xx-small">
+                                                <div class="slds-col">
+                                                    <button class="slds-button slds-button_brand-outline slds-button_small" onclick={handlePreviewInspectionReport} title="Preview Inspection Report">
+                                                        <lightning-icon icon-name="utility:preview" size="xx-small" class="slds-m-right_xxx-small"></lightning-icon>Preview Report
+                                                    </button>
+                                                </div>
+                                                <div class="slds-col">
+                                                    <button class="slds-button slds-button_neutral slds-button_small" onclick={handleDownloadInspectionReport} title="Download Inspection Report">
+                                                        <lightning-icon icon-name="utility:download" size="xx-small" class="slds-m-right_xxx-small"></lightning-icon>Download Report
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <template lwc:if={stageInspectionDocs.length}>
+                                            <div class="slds-grid slds-gutters_small slds-wrap">
+                                                <template for:each={stageInspectionDocs} for:item="doc">
+                                                    <div key={doc.docId} class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-m-bottom_x-small">
+                                                        <div class="doc-card slds-box slds-box_xx-small slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                            <div class="slds-grid slds-grid_vertical-align-center slds-truncate">
+                                                                <lightning-icon icon-name={doc.iconName} size="small" class="slds-m-right_x-small"></lightning-icon>
+                                                                <div class="slds-truncate">
+                                                                    <div class="slds-text-body_small font-weight-bold slds-truncate" title={doc.title}>{doc.title}</div>
+                                                                    <div class="slds-text-body_small slds-text-color_weak">{doc.fileType} &bull; {doc.createdDate}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-button-group slds-no-flex" role="group">
+                                                                <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small" title="View / Preview Document" onclick={handlePreviewDocument} data-id={doc.docId}>
+                                                                    <lightning-icon icon-name="utility:preview" size="xx-small"></lightning-icon>
+                                                                </button>
+                                                                <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small slds-m-left_xx-small" title="Download Document" onclick={handleDownloadDocument} data-id={doc.docId}>
+                                                                    <lightning-icon icon-name="utility:download" size="xx-small"></lightning-icon>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+                                        <template lwc:else>
+                                            <div class="slds-box slds-box_xx-small slds-theme_shade slds-text-align_center slds-p-around_small">
+                                                <p class="slds-text-body_small slds-text-color_weak">
+                                                    Click <strong>Preview Report</strong> or <strong>Download Report</strong> above to generate and access the official quality audit documentation anytime.
+                                                </p>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </article>
+                            </template>
+
+                            <!-- ------------------------------------------------ -->
+                            <template lwc:if={isStageResolution}>
+                                <article class="slds-card slds-card_boundary slds-p-around_medium stage-card">
+                                    <!-- Stage 3 Locked Banner (Review Mode) -->
+                                    <template lwc:if={isResolutionLocked}>
+                                        <div class="stage-locked-banner slds-box slds-box_xx-small slds-theme_shade slds-m-bottom_medium slds-grid slds-grid_vertical-align-center">
+                                            <span class="stage-lock-badge slds-badge slds-theme_inverse slds-m-right_small">
+                                                <lightning-icon icon-name="utility:lock" size="xx-small" variant="inverse" class="slds-m-right_xxx-small"></lightning-icon>
+                                                STAGE 3 LOCKED &bull; REVIEW ONLY
+                                            </span>
+                                            <span class="slds-text-body_small slds-text-color_weak">
+                                                Snag rectification verified and closed. All defect history and evidence photos are accessible for review.
+                                            </span>
+                                        </div>
+                                    </template>
+
+                                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                        <div>
+                                            <h2 class="slds-text-heading_small font-weight-bold">Stage 3: Snag &amp; Defect Rectification</h2>
+                                            <p class="slds-text-body_small slds-text-color_weak">
+                                                Track snags from identification to owner assignment, rectification evidence, verification, and closure.
+                                            </p>
+                                        </div>
+                                        <div class="slds-grid slds-gutters_x-small slds-grid_vertical-align-center">
+                                            <div class="slds-col">
+                                                <template lwc:if={isResolutionLocked}>
+                                                    <span class="slds-badge slds-theme_success font-weight-bold">
+                                                        <lightning-icon icon-name="utility:check" size="xx-small" variant="inverse" class="slds-m-right_xx-small"></lightning-icon>
+                                                        Rectifications Verified &amp; Closed
+                                                    </span>
+                                                </template>
+                                                <template lwc:else>
+                                                    <button class="primary-stage-cta" onclick={handleProceedToAppointment} disabled={isContinueToAppointmentDisabled}>
+                                                        CONTINUE TO APPOINTMENT â†’
+                                                    </button>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <template lwc:if={hasUnresolvedSnags}>
+                                        <div class="slds-notify slds-notify_alert slds-alert_warning slds-m-bottom_small" role="alert">
+                                            <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                            <span>Cannot advance to Appointment while required snags are unresolved or unverified ({unresolvedSnagsCount} pending).</span>
+                                        </div>
+                                    </template>
+
+                                    <!-- Top Snag Metrics Strip -->
+                                    <div class="slds-grid slds-gutters_small slds-m-bottom_small">
+                                        <div class="slds-col slds-size_1-of-5">
+                                            <div class="metric-tile">
+                                                <div class="metric-label">TOTAL SNAGS</div>
+                                                <div class="metric-val">{snagBoard.totalCount}</div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-5">
+                                            <div class="metric-tile">
+                                                <div class="metric-label">OPEN</div>
+                                                <div class="metric-val" style="color: #ea580c;">{snagBoard.openCount}</div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-5">
+                                            <div class="metric-tile">
+                                                <div class="metric-label">IN PROGRESS</div>
+                                                <div class="metric-val" style="color: #d97706;">{snagBoard.inProgressCount}</div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-5">
+                                            <div class="metric-tile">
+                                                <div class="metric-label">VERIFICATION</div>
+                                                <div class="metric-val" style="color: #2563eb;">{snagBoard.verificationCount}</div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-5">
+                                            <div class="metric-tile">
+                                                <div class="metric-label">CLOSED</div>
+                                                <div class="metric-val" style="color: #059669;">{snagBoard.closedCount}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 4-Column Kanban Board -->
+                                    <div class="kanban-grid">
+                                        <!-- Column 1: OPEN -->
+                                        <div class="kanban-col">
+                                            <div class="kanban-header">
+                                                <span>1. OPEN</span>
+                                                <span class="slds-badge slds-badge_lightest">{snagBoard.openCount}</span>
+                                            </div>
+                                            <template for:each={snagBoard.openSnags} for:item="s">
+                                                <div key={s.Id} class={s.cardClass}>
+                                                    <div class="slds-grid slds-grid_align-spread">
+                                                        <strong class="slds-text-body_small">{s.Name}</strong>
+                                                        <span class={s.severityBadgeClass}>{s.Severity__c}</span>
+                                                    </div>
+                                                    <div class="slds-text-title_bold slds-m-top_xx-small">{s.Location__c} &bull; {s.Category__c}</div>
+                                                    <p class="slds-text-body_small slds-m-top_xx-small">{s.Snag_Description__c}</p>
+                                                    <template lwc:if={s.Responsible_Team__c}>
+                                                        <div class="slds-text-body_small slds-m-top_xxx-small font-weight-bold" style="color: #0b2345;">
+                                                            Team: {s.Responsible_Team__c}
+                                                        </div>
+                                                    </template>
+                                                    <div class="slds-text-body_small slds-m-top_xx-small slds-text-color_weak">
+                                                        Due: {s.Due_Date__c}
+                                                    </div>
+                                                    <template lwc:if={s.Rejection_Reason__c}>
+                                                        <div class="slds-box slds-box_xx-small slds-m-top_xx-small slds-text-body_small" style="background:#fee2e2; border-color:#fca5a5; color:#991b1b;">
+                                                            Rejection Reason: <em>{s.Rejection_Reason__c}</em>
+                                                        </div>
+                                                    </template>
+                                                    <template lwc:if={isNotResolutionLocked}>
+                                                        <div class="slds-m-top_x-small slds-text-align_right">
+                                                            <lightning-button size="x-small" variant="brand-outline" label="Assign Owner &amp; Team" onclick={handleOpenAssignModal} data-id={s.Id}></lightning-button>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+
+                                        <!-- Column 2: IN PROGRESS -->
+                                        <div class="kanban-col">
+                                            <div class="kanban-header">
+                                                <span>2. IN PROGRESS</span>
+                                                <span class="slds-badge slds-badge_lightest">{snagBoard.inProgressCount}</span>
+                                            </div>
+                                            <template for:each={snagBoard.inProgressSnags} for:item="s">
+                                                <div key={s.Id} class={s.cardClass}>
+                                                    <div class="slds-grid slds-grid_align-spread">
+                                                        <strong class="slds-text-body_small">{s.Name}</strong>
+                                                        <span class={s.severityBadgeClass}>{s.Severity__c}</span>
+                                                    </div>
+                                                    <div class="slds-text-title_bold slds-m-top_xx-small">{s.Location__c} &bull; {s.Category__c}</div>
+                                                    <p class="slds-text-body_small slds-m-top_xx-small">{s.Snag_Description__c}</p>
+                                                    <div class="slds-text-body_small slds-m-top_xx-small font-weight-bold" style="color: #0b2345;">
+                                                        Assigned: {s.Assigned_Contractor_Name__c}
+                                                        <template lwc:if={s.Responsible_Team__c}>
+                                                            <span> &bull; {s.Responsible_Team__c}</span>
+                                                        </template>
+                                                    </div>
+                                                    <template lwc:if={isNotResolutionLocked}>
+                                                        <div class="slds-m-top_x-small slds-text-align_right">
+                                                            <lightning-button size="x-small" variant="brand" label="Resolve &amp; Upload Evidence" onclick={openResolveModal} data-id={s.Id}></lightning-button>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+
+                                        <!-- Column 3: VERIFICATION -->
+                                        <div class="kanban-col">
+                                            <div class="kanban-header">
+                                                <span>3. VERIFICATION</span>
+                                                <span class="slds-badge slds-badge_lightest">{snagBoard.verificationCount}</span>
+                                            </div>
+                                            <template for:each={snagBoard.verificationSnags} for:item="s">
+                                                <div key={s.Id} class={s.cardClass}>
+                                                    <div class="slds-grid slds-grid_align-spread">
+                                                        <strong class="slds-text-body_small">{s.Name}</strong>
+                                                        <span class={s.severityBadgeClass}>{s.Severity__c}</span>
+                                                    </div>
+                                                    <div class="slds-text-title_bold slds-m-top_xx-small">{s.Location__c} &bull; {s.Category__c}</div>
+                                                    <p class="slds-text-body_small slds-m-top_xx-small">{s.Snag_Description__c}</p>
+                                                    <template lwc:if={s.Resolution_Comments__c}>
+                                                        <div class="slds-box slds-box_xx-small slds-m-top_xx-small slds-text-body_small" style="background:#eff6ff; border-color:#bfdbfe; color:#1e40af;">
+                                                            <strong>Remarks:</strong> {s.Resolution_Comments__c}
+                                                        </div>
+                                                    </template>
+                                                    <template lwc:if={s.evidenceFiles.length}>
+                                                        <div class="slds-m-top_xx-small">
+                                                            <strong class="slds-text-body_small" style="font-size: 0.72rem; color: #1e3a8a;">Evidence Files ({s.evidenceFiles.length}):</strong>
+                                                            <template for:each={s.evidenceFiles} for:item="ef">
+                                                                <div key={ef.documentId} class="slds-m-top_xxx-small slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                                    <span class="slds-text-body_small slds-truncate" title={ef.title}>
+                                                                        <lightning-icon icon-name="doctype:image" size="xx-small" class="slds-m-right_xxx-small"></lightning-icon>
+                                                                        {ef.title}
+                                                                    </span>
+                                                                    <div class="slds-button-group slds-no-flex" role="group">
+                                                                        <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-x-small" title="Preview Evidence" onclick={handlePreviewDocument} data-id={ef.documentId}>
+                                                                            <lightning-icon icon-name="utility:preview" size="xx-small"></lightning-icon>
+                                                                        </button>
+                                                                        <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-x-small slds-m-left_xxx-small" title="Download Evidence" onclick={handleDownloadDocument} data-id={ef.documentId}>
+                                                                            <lightning-icon icon-name="utility:download" size="xx-small"></lightning-icon>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                    <template lwc:if={isNotResolutionLocked}>
+                                                        <div class="slds-grid slds-gutters_xx-small slds-m-top_x-small">
+                                                            <div class="slds-col slds-size_1-of-2">
+                                                                <lightning-button size="x-small" variant="success" label="âœ“ Approve" onclick={handleApproveSnag} data-id={s.Id} class="slds-button_stretch"></lightning-button>
+                                                            </div>
+                                                            <div class="slds-col slds-size_1-of-2">
+                                                                <lightning-button size="x-small" variant="destructive-text" label="âœ— Reject" onclick={handleOpenReopenModal} data-id={s.Id} class="slds-button_stretch"></lightning-button>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+
+                                        <!-- Column 4: CLOSED -->
+                                        <div class="kanban-col">
+                                            <div class="kanban-header">
+                                                <span>4. CLOSED</span>
+                                                <span class="slds-badge slds-theme_success">{snagBoard.closedCount}</span>
+                                            </div>
+                                            <template for:each={snagBoard.closedSnags} for:item="s">
+                                                <div key={s.Id} class={s.cardClass}>
+                                                    <div class="slds-grid slds-grid_align-spread">
+                                                        <strong class="slds-text-body_small">{s.Name}</strong>
+                                                        <lightning-icon icon-name="utility:check" size="xx-small" variant="success"></lightning-icon>
+                                                    </div>
+                                                    <div class="slds-text-body_small slds-m-top_xx-small">{s.Location__c} &bull; {s.Snag_Description__c}</div>
+                                                    <div class="slds-text-body_small slds-m-top_xx-small" style="color: #059669;">Verified &amp; Rectified &bull; Item Passed</div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+
+                                    <!-- STAGE 3: REPORTS & ATTACHED DOCUMENTS -->
+                                    <div class="stage-docs-box slds-card slds-card_boundary slds-m-top_medium slds-p-around_small">
+                                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                            <div class="slds-grid slds-grid_vertical-align-center">
+                                                <lightning-icon icon-name="doctype:image" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                                <div>
+                                                    <h3 class="slds-text-title_bold font-weight-bold">Stage 3 Defect Evidence &amp; Rectification Records</h3>
+                                                    <p class="slds-text-body_small slds-text-color_weak">Photographic defect evidence, contractor rectification logs, and verification sign-offs.</p>
+                                                </div>
+                                            </div>
+                                            <span class="slds-badge slds-badge_lightest">{stageResolutionDocsCount} Document(s)</span>
+                                        </div>
+
+                                        <template lwc:if={stageResolutionDocs.length}>
+                                            <div class="slds-grid slds-gutters_small slds-wrap">
+                                                <template for:each={stageResolutionDocs} for:item="doc">
+                                                    <div key={doc.docId} class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-m-bottom_x-small">
+                                                        <div class="doc-card slds-box slds-box_xx-small slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                            <div class="slds-grid slds-grid_vertical-align-center slds-truncate">
+                                                                <lightning-icon icon-name={doc.iconName} size="small" class="slds-m-right_x-small"></lightning-icon>
+                                                                <div class="slds-truncate">
+                                                                    <div class="slds-text-body_small font-weight-bold slds-truncate" title={doc.title}>{doc.title}</div>
+                                                                    <div class="slds-text-body_small slds-text-color_weak">{doc.fileType} &bull; {doc.createdDate}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-button-group slds-no-flex" role="group">
+                                                                <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small" title="View / Preview Document" onclick={handlePreviewDocument} data-id={doc.docId}>
+                                                                    <lightning-icon icon-name="utility:preview" size="xx-small"></lightning-icon>
+                                                                </button>
+                                                                <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small slds-m-left_xx-small" title="Download Document" onclick={handleDownloadDocument} data-id={doc.docId}>
+                                                                    <lightning-icon icon-name="utility:download" size="xx-small"></lightning-icon>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+                                        <template lwc:else>
+                                            <div class="slds-box slds-box_xx-small slds-theme_shade slds-text-align_center slds-p-around_small">
+                                                <p class="slds-text-body_small slds-text-color_weak">
+                                                    All photographic evidence files uploaded against snags and defects are accessible with View and Download above and in the Related Records tab.
+                                                </p>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </article>
+                            </template>
+
+                            <!-- ------------------------------------------------ -->
+                            <template lwc:if={isStageAppointment}>
+                                <article class="slds-card slds-card_boundary slds-p-around_medium stage-card">
+                                    <!-- Stage 4 Locked Banner (Review Mode) -->
+                                    <template lwc:if={isAppointmentLocked}>
+                                        <div class="stage-locked-banner slds-box slds-box_xx-small slds-theme_shade slds-m-bottom_medium slds-grid slds-grid_vertical-align-center">
+                                            <span class="stage-lock-badge slds-badge slds-theme_inverse slds-m-right_small">
+                                                <lightning-icon icon-name="utility:lock" size="xx-small" variant="inverse" class="slds-m-right_xxx-small"></lightning-icon>
+                                                STAGE 4 LOCKED &bull; REVIEW ONLY
+                                            </span>
+                                            <span class="slds-text-body_small slds-text-color_weak">
+                                                Physical possession formally executed. All handover records, documents and signed acknowledgements are accessible for review and download.
+                                            </span>
+                                        </div>
+                                    </template>
+
+                                    <!-- 1. Appointment & Invitation -->
+                                    <div class="appointment-section slds-m-bottom_large">
+                                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                            <div>
+                                                <h3 class="slds-text-title_bold font-weight-bold" style="font-size: 0.9375rem;">
+                                                    Appointment Scheduling
+                                                </h3>
+                                                <p class="slds-text-body_small slds-text-color_weak">
+                                                    Schedule possession appointment and dispatch customer calendar invitation.
+                                                </p>
+                                            </div>
+                                            <template lwc:if={isAppointmentScheduled}>
+                                                <span class="slds-badge slds-theme_success font-weight-bold">Appointment Scheduled</span>
+                                            </template>
+                                        </div>
+
+                                        <div class="slds-grid slds-gutters_small slds-wrap slds-m-bottom_small">
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                                <lightning-input type="date" label="Appointment Date" value={aptDate} onchange={handleAptDateChange} class="slds-m-bottom_x-small" disabled={isAppointmentReadOnly} required></lightning-input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                                <lightning-combobox label="Time Slot" value={aptSlot} options={timeSlotOptions} onchange={handleAptSlotChange} class="slds-m-bottom_x-small" disabled={isAppointmentReadOnly} required></lightning-combobox>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                                <lightning-input type="text" label="Location" value={aptLocation} onchange={handleAptLocationChange} class="slds-m-bottom_x-small" disabled={isAppointmentReadOnly} required></lightning-input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                                <lightning-input type="text" label="Handover Owner" value={handoverOwnerName} class="slds-m-bottom_x-small" readonly></lightning-input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                                <lightning-input type="text" label="Customer" value={customerName} class="slds-m-bottom_x-small" readonly></lightning-input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                                                <lightning-input type="email" label="Customer Email" value={customerEmail} class="slds-m-bottom_x-small" readonly></lightning-input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-1">
+                                                <lightning-textarea label="Customer Instructions / Notes" value={aptInstructions} onchange={handleAptInstructionsChange} class="slds-m-bottom_x-small" disabled={isAppointmentReadOnly}></lightning-textarea>
+                                            </div>
+                                        </div>
+
+                                        <!-- Appointment Action Controls: Hides "Send Customer Invite" when scheduled -->
+                                        <div class="slds-grid slds-gutters_x-small">
+                                            <template lwc:if={isNotAppointmentLocked}>
+                                                <template lwc:if={isNotCompleted}>
+                                                    <template lwc:if={isAppointmentScheduled}>
+                                                        <div class="slds-col">
+                                                            <lightning-button variant="brand" label="Reschedule Appointment" icon-name="utility:change_record_type" onclick={openRescheduleModal}></lightning-button>
+                                                        </div>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <div class="slds-col">
+                                                            <button class="primary-stage-cta" onclick={handleSendCustomerInvite} disabled={isLoading}>
+                                                                SEND CUSTOMER INVITE â†’
+                                                            </button>
+                                                        </div>
+                                                    </template>
+                                                </template>
+                                            </template>
+                                        </div>
+                                    </div>
+
+                                    <!-- 2. Physical Handover Protocol (Sections A, B, C) -->
+                                    <div class="handover-completion-section slds-border_top slds-p-top_medium">
+                                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                            <div>
+                                                <h3 class="slds-text-title_bold font-weight-bold" style="font-size: 0.95rem; color: #0b2345;">
+                                                    PHYSICAL HANDOVER PROTOCOL
+                                                </h3>
+                                                <p class="slds-text-body_small slds-text-color_weak">
+                                                    Mandatory possession handover checklist. Complete Sections A, B, and C to enable handover completion.
+                                                </p>
+                                            </div>
+                                            <template lwc:if={isAllHandoverSectionsComplete}>
+                                                <span class="slds-badge slds-theme_success font-weight-bold">âœ“ Ready for Completion</span>
+                                            </template>
+                                            <template lwc:else>
+                                                <span class="slds-badge slds-badge_lightest font-weight-bold">Checklist Incomplete</span>
+                                            </template>
+                                        </div>
+
+                                        <!-- SECTION A: KEYS & ACCESS -->
+                                        <div class="handover-section-box slds-box slds-box_small slds-m-bottom_medium">
+                                            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_x-small">
+                                                <h4 class="slds-text-title_bold font-weight-bold" style="color: #0b2345;">
+                                                    Section A: Keys &amp; Access Controls
+                                                </h4>
+                                                <span class={sectionABadgeClass}>{sectionABadgeLabel}</span>
+                                            </div>
+                                            <div class="slds-grid slds-gutters_small slds-wrap">
+                                                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-m-bottom_x-small">
+                                                    <div class="slds-box slds-box_xx-small slds-theme_shade">
+                                                        <lightning-input type="checkbox" label="Physical Key Sets Handed Over" checked={keysHandedOver} onchange={handleKeysHandedOverChange} disabled={isAppointmentReadOnly}></lightning-input>
+                                                        <div class="slds-m-top_xx-small slds-p-left_medium">
+                                                            <lightning-input type="number" label="Number of Key Sets" value={keysSetsCount} onchange={handleKeysSetsCountChange} min="1" max="10" disabled={isAppointmentReadOnly}></lightning-input>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-m-bottom_x-small">
+                                                    <div class="slds-box slds-box_xx-small slds-theme_shade">
+                                                        <lightning-input type="checkbox" label="Access Cards Handed Over" checked={cardsHandedOver} onchange={handleCardsHandedOverChange} disabled={isAppointmentReadOnly}></lightning-input>
+                                                        <div class="slds-m-top_xx-small slds-p-left_medium">
+                                                            <lightning-input type="number" label="Number of Access Cards" value={accessCardsCount} onchange={handleAccessCardsCountChange} min="1" max="10" disabled={isAppointmentReadOnly}></lightning-input>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- SECTION B: DOCUMENT HANDOVER -->
+                                        <div class="handover-section-box slds-box slds-box_small slds-m-bottom_medium">
+                                            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_x-small">
+                                                <h4 class="slds-text-title_bold font-weight-bold" style="color: #0b2345;">
+                                                    Section B: Document Handover
+                                                </h4>
+                                                <span class={sectionBBadgeClass}>{sectionBBadgeLabel}</span>
+                                            </div>
+                                            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_x-small">
+                                                Upload relevant handover documents: Occupancy Certificate copy, Warranty Documents &amp; Appliance Manuals, As-Built Drawings.
+                                            </p>
+                                            <div class="slds-m-bottom_small">
+                                                <lightning-input type="checkbox" label="Required Handover Documents Handed Over to Customer" checked={docsHandedOver} onchange={handleDocsHandedOverChange} disabled={isAppointmentReadOnly}></lightning-input>
+                                            </div>
+                                            <template lwc:if={isNotAppointmentLocked}>
+                                                <div class="slds-box slds-box_xx-small slds-theme_shade">
+                                                    <lightning-file-upload
+                                                        label="Upload Supporting Handover Documents (Certificates, Receipts, Manuals)"
+                                                        name="handoverDocsUploader"
+                                                        record-id={handover.Id}
+                                                        onuploadfinished={handleHandoverDocUploadFinished}
+                                                        multiple>
+                                                    </lightning-file-upload>
+                                                </div>
+                                            </template>
+                                            <template lwc:if={uploadedHandoverDocFiles.length}>
+                                                <div class="slds-m-top_x-small slds-p-around_x-small slds-theme_shade slds-box slds-box_xx-small">
+                                                    <strong class="slds-text-body_small">Possession Documents Uploaded ({uploadedHandoverDocFiles.length}):</strong>
+                                                    <template for:each={uploadedHandoverDocFiles} for:item="f">
+                                                        <div key={f.name} class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-top_xxx-small">
+                                                            <span class="slds-text-body_small slds-truncate" title={f.name}>
+                                                                <lightning-icon icon-name="doctype:attachment" size="xx-small" class="slds-m-right_xxx-small"></lightning-icon>
+                                                                {f.name}
+                                                            </span>
+                                                            <template lwc:if={f.documentId}>
+                                                                <div class="slds-button-group slds-no-flex" role="group">
+                                                                    <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-x-small" title="Preview Document" onclick={handlePreviewDocument} data-id={f.documentId}>
+                                                                        <lightning-icon icon-name="utility:preview" size="xx-small"></lightning-icon>
+                                                                    </button>
+                                                                    <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-x-small slds-m-left_xxx-small" title="Download Document" onclick={handleDownloadDocument} data-id={f.documentId}>
+                                                                        <lightning-icon icon-name="utility:download" size="xx-small"></lightning-icon>
+                                                                    </button>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+
+                                        <!-- SECTION C: CUSTOMER ACKNOWLEDGEMENT -->
+                                        <div class="handover-section-box slds-box slds-box_small slds-m-bottom_medium">
+                                            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_x-small">
+                                                <h4 class="slds-text-title_bold font-weight-bold" style="color: #0b2345;">
+                                                    Section C: Customer Acknowledgement
+                                                </h4>
+                                                <span class={sectionCBadgeClass}>{sectionCBadgeLabel}</span>
+                                            </div>
+                                            <div class="slds-m-bottom_small">
+                                                <lightning-input type="checkbox" label="Customer Acknowledged Physical Possession Handover" checked={customerAcknowledged} onchange={handleCustomerAcknowledgedChange} disabled={isAppointmentReadOnly}></lightning-input>
+                                            </div>
+                                            <template lwc:if={isNotAppointmentLocked}>
+                                                <div class="slds-box slds-box_xx-small slds-theme_shade">
+                                                    <lightning-file-upload
+                                                        label="Upload Signed Customer Acknowledgement Form / Possession Receipt"
+                                                        name="signedAckUploader"
+                                                        record-id={handover.Id}
+                                                        onuploadfinished={handleSignedAckUploadFinished}>
+                                                    </lightning-file-upload>
+                                                </div>
+                                            </template>
+                                            <template lwc:if={uploadedSignedAckFiles.length}>
+                                                <div class="slds-m-top_x-small slds-p-around_x-small slds-theme_shade slds-box slds-box_xx-small">
+                                                    <strong class="slds-text-body_small">Signed Form / Possession Receipt:</strong>
+                                                    <template for:each={uploadedSignedAckFiles} for:item="f">
+                                                        <div key={f.name} class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-top_xxx-small">
+                                                            <span class="slds-text-body_small slds-truncate font-weight-bold" style="color:#059669;" title={f.name}>
+                                                                <lightning-icon icon-name="doctype:pdf" size="xx-small" class="slds-m-right_xxx-small"></lightning-icon>
+                                                                âœ“ {f.name}
+                                                            </span>
+                                                            <template lwc:if={f.documentId}>
+                                                                <div class="slds-button-group slds-no-flex" role="group">
+                                                                    <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-x-small" title="Preview Signed Form" onclick={handlePreviewDocument} data-id={f.documentId}>
+                                                                        <lightning-icon icon-name="utility:preview" size="xx-small"></lightning-icon>
+                                                                    </button>
+                                                                    <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-x-small slds-m-left_xxx-small" title="Download Signed Form" onclick={handleDownloadDocument} data-id={f.documentId}>
+                                                                        <lightning-icon icon-name="utility:download" size="xx-small"></lightning-icon>
+                                                                    </button>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+
+                                        <!-- Final Remarks -->
+                                        <div class="slds-m-bottom_medium">
+                                            <lightning-input type="text" label="Final Remarks" value={finalRemarks} onchange={handleFinalRemarksChange} class="compact-remarks-input" disabled={isAppointmentReadOnly}></lightning-input>
+                                        </div>
+
+                                        <div class="slds-text-align_right">
+                                            <template lwc:if={isAppointmentLocked}>
+                                                <span class="slds-badge slds-theme_success font-weight-bold slds-p-around_x-small">
+                                                    <lightning-icon icon-name="utility:check" size="x-small" variant="inverse" class="slds-m-right_xx-small"></lightning-icon>
+                                                    Physical Handover Formally Executed &amp; Completed
+                                                </span>
+                                            </template>
+                                            <template lwc:else>
+                                                <template lwc:if={isNotCompleted}>
+                                                    <button class="primary-stage-cta" onclick={handleCompletePhysicalHandover} disabled={isCompleteHandoverDisabled}>
+                                                        COMPLETE HANDOVER â†’
+                                                    </button>
+                                                </template>
+                                            </template>
+                                        </div>
+                                    </div>
+
+                                    <!-- STAGE 4: UPLOADED HANDOVER DOCUMENTS -->
+                                    <div class="stage-docs-box slds-card slds-card_boundary slds-m-top_medium slds-p-around_small">
+                                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                            <div class="slds-grid slds-grid_vertical-align-center">
+                                                <lightning-icon icon-name="doctype:keynote" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                                <div>
+                                                    <h3 class="slds-text-title_bold font-weight-bold">Stage 4: Uploaded Handover Documents</h3>
+                                                    <p class="slds-text-body_small slds-text-color_weak">All documents uploaded during this stage â€” key acknowledgement receipts, occupancy certificates, warranty records and signed customer forms.</p>
+                                                </div>
+                                            </div>
+                                            <span class="slds-badge slds-badge_lightest">{stageAppointmentDocsCount} Document(s)</span>
+                                        </div>
+
+                                        <template lwc:if={stageAppointmentDocs.length}>
+                                            <div class="slds-grid slds-gutters_small slds-wrap">
+                                                <template for:each={stageAppointmentDocs} for:item="doc">
+                                                    <div key={doc.docId} class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-m-bottom_x-small">
+                                                        <div class="doc-card slds-box slds-box_xx-small slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                            <div class="slds-grid slds-grid_vertical-align-center slds-truncate">
+                                                                <lightning-icon icon-name={doc.iconName} size="small" class="slds-m-right_x-small"></lightning-icon>
+                                                                <div class="slds-truncate">
+                                                                    <div class="slds-text-body_small font-weight-bold slds-truncate" title={doc.title}>{doc.title}</div>
+                                                                    <div class="slds-text-body_small slds-text-color_weak">{doc.fileType} &bull; {doc.createdDate}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-button-group slds-no-flex" role="group">
+                                                                <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small" title="View / Preview Document" onclick={handlePreviewDocument} data-id={doc.docId}>
+                                                                    <lightning-icon icon-name="utility:preview" size="xx-small"></lightning-icon>
+                                                                </button>
+                                                                <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small slds-m-left_xx-small" title="Download Document" onclick={handleDownloadDocument} data-id={doc.docId}>
+                                                                    <lightning-icon icon-name="utility:download" size="xx-small"></lightning-icon>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+                                        <template lwc:else>
+                                            <div class="slds-box slds-box_xx-small slds-theme_shade slds-text-align_center slds-p-around_small">
+                                                <p class="slds-text-body_small slds-text-color_weak">
+                                                    Uploaded handover documents will appear here with View &amp; Download access, accessible even after stage is locked.
+                                                </p>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </article>
+                            </template>
+
+                            <!-- ------------------------------------------------ -->
+                            <template lwc:if={isStageCompleted}>
+                                <article class="slds-card slds-card_boundary slds-p-around_large stage-card completed-stage-card">
+                                    <div class="completed-hero-box slds-text-align_center">
+                                        <div class="hero-green-check">âœ“</div>
+                                        <h2 class="completed-hero-title font-weight-bold">
+                                            Handover Completed
+                                        </h2>
+                                        <p class="completed-hero-msg">
+                                            Handover <strong>{handoverNumber}</strong> has been successfully completed for Unit <strong>{unitName}</strong>.
+                                        </p>
+                                        <div class="completed-hero-date">
+                                            Completed on: <strong>{completedDateFormatted}</strong>
+                                        </div>
+                                        <div class="completed-hero-by">
+                                            Completed by: <strong>{completedByName}</strong>
+                                        </div>
+                                        <div class="slds-m-top_medium slds-p-top_small slds-border_top slds-text-color_weak slds-text-body_small">
+                                            Unit status updated to <strong>Sold / Handed Over</strong>. Physical delivery and document execution successfully completed.
+                                        </div>
+                                    </div>
+
+                                    <!-- STAGE 5: REPORTS & COMPLETED HANDOVER RECORDS -->
+                                    <div class="stage-docs-box slds-card slds-card_boundary slds-m-top_medium slds-p-around_small">
+                                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                            <div class="slds-grid slds-grid_vertical-align-center">
+                                                <lightning-icon icon-name="doctype:attachment" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                                <div>
+                                                    <h3 class="slds-text-title_bold font-weight-bold">Comprehensive Handover Records &amp; Generated Documents</h3>
+                                                    <p class="slds-text-body_small slds-text-color_weak">Official signed acknowledgement, key handover receipts, snag sign-off reports, and warranty certificates. Permanent View &amp; Download access.</p>
+                                                </div>
+                                            </div>
+                                            <span class="slds-badge slds-badge_lightest">{stageCompletedDocsCount} Document(s)</span>
+                                        </div>
+
+                                        <template lwc:if={stageCompletedDocs.length}>
+                                            <div class="slds-grid slds-gutters_small slds-wrap">
+                                                <template for:each={stageCompletedDocs} for:item="doc">
+                                                    <div key={doc.docId} class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-m-bottom_x-small">
+                                                        <div class="doc-card slds-box slds-box_xx-small slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                            <div class="slds-grid slds-grid_vertical-align-center slds-truncate">
+                                                                <lightning-icon icon-name={doc.iconName} size="small" class="slds-m-right_x-small"></lightning-icon>
+                                                                <div class="slds-truncate">
+                                                                    <div class="slds-text-body_small font-weight-bold slds-truncate" title={doc.title}>{doc.title}</div>
+                                                                    <div class="slds-text-body_small slds-text-color_weak">{doc.fileType} &bull; {doc.createdDate}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-button-group slds-no-flex" role="group">
+                                                                <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small" title="View / Preview Document" onclick={handlePreviewDocument} data-id={doc.docId}>
+                                                                    <lightning-icon icon-name="utility:preview" size="xx-small"></lightning-icon>
+                                                                </button>
+                                                                <button class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small slds-m-left_xx-small" title="Download Document" onclick={handleDownloadDocument} data-id={doc.docId}>
+                                                                    <lightning-icon icon-name="utility:download" size="xx-small"></lightning-icon>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+                                        <template lwc:else>
+                                            <div class="slds-box slds-box_xx-small slds-theme_shade slds-text-align_center slds-p-around_small">
+                                                <p class="slds-text-body_small slds-text-color_weak">
+                                                    No documents attached or generated yet.
+                                                </p>
+                                            </div>
+                                        </template>
+                                    </div>
+
+                                    <!-- STAGE 5: HISTORICAL STAGES REVIEW GRID -->
+                                    <div class="stage-review-grid-box slds-card slds-card_boundary slds-m-top_medium slds-p-around_small">
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_small">
+                                            <lightning-icon icon-name="utility:preview" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                            <div>
+                                                <h3 class="slds-text-title_bold font-weight-bold">Review Completed Stages (Read-Only)</h3>
+                                                <p class="slds-text-body_small slds-text-color_weak">Inspect historical records, snag audits, inspection checklists, and verified financials for any prior stage.</p>
+                                            </div>
+                                        </div>
+                                        <div class="slds-grid slds-gutters_small slds-wrap">
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_3-of-12 slds-m-bottom_x-small">
+                                                <div class="stage-nav-tile slds-box slds-box_xx-small slds-theme_shade slds-text-align_center">
+                                                    <span class="slds-badge slds-theme_success slds-m-bottom_xx-small">âœ“ Completed</span>
+                                                    <div class="font-weight-bold slds-m-bottom_xx-small">1. Readiness</div>
+                                                    <lightning-button variant="neutral" label="Review Stage" onclick={handleSelectStage} data-stage="Readiness" size="small" icon-name="utility:lock"></lightning-button>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_3-of-12 slds-m-bottom_x-small">
+                                                <div class="stage-nav-tile slds-box slds-box_xx-small slds-theme_shade slds-text-align_center">
+                                                    <span class="slds-badge slds-theme_success slds-m-bottom_xx-small">âœ“ Completed</span>
+                                                    <div class="font-weight-bold slds-m-bottom_xx-small">2. Inspection</div>
+                                                    <lightning-button variant="neutral" label="Review Stage" onclick={handleSelectStage} data-stage="Inspection" size="small" icon-name="utility:lock"></lightning-button>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_3-of-12 slds-m-bottom_x-small">
+                                                <div class="stage-nav-tile slds-box slds-box_xx-small slds-theme_shade slds-text-align_center">
+                                                    <span class="slds-badge slds-theme_success slds-m-bottom_xx-small">âœ“ Completed</span>
+                                                    <div class="font-weight-bold slds-m-bottom_xx-small">3. Snags</div>
+                                                    <lightning-button variant="neutral" label="Review Stage" onclick={handleSelectStage} data-stage="Resolution" size="small" icon-name="utility:lock"></lightning-button>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_3-of-12 slds-m-bottom_x-small">
+                                                <div class="stage-nav-tile slds-box slds-box_xx-small slds-theme_shade slds-text-align_center">
+                                                    <span class="slds-badge slds-theme_success slds-m-bottom_xx-small">âœ“ Completed</span>
+                                                    <div class="font-weight-bold slds-m-bottom_xx-small">4. Appointment</div>
+                                                    <lightning-button variant="neutral" label="Review Stage" onclick={handleSelectStage} data-stage="Appointment" size="small" icon-name="utility:lock"></lightning-button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- STAGE 5: POST-HANDOVER VALUE SERVICES (RESALE & RENTAL) -->
+                                    <div class="post-services-box slds-card slds-card_boundary slds-m-top_medium slds-p-around_small">
+                                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                            <div class="slds-grid slds-grid_vertical-align-center">
+                                                <lightning-icon icon-name="standard:service_contract" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                                <div>
+                                                    <h3 class="slds-text-title_bold font-weight-bold">Post-Handover Property Lifecycle Services</h3>
+                                                    <p class="slds-text-body_small slds-text-color_weak">Assist customer with resale brokerage, property leasing, and ongoing tenancy management.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-grid slds-gutters_small slds-wrap">
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-m-bottom_x-small">
+                                                <div class="slds-box slds-box_small slds-theme_default slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                    <div>
+                                                        <div class="font-weight-bold slds-text-heading_small slds-m-bottom_xxx-small" style="color: #0b2345;">Resale Assistance</div>
+                                                        <p class="slds-text-body_small slds-text-color_weak">Initiate resale opportunity, manage prospective buyer site visits, KYC, and transfer.</p>
+                                                    </div>
+                                                    <lightning-button variant="brand" label="Initiate Resale" icon-name="standard:opportunity" onclick={handleInitiateResale} class="slds-no-flex slds-m-left_small"></lightning-button>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-m-bottom_x-small">
+                                                <div class="slds-box slds-box_small slds-theme_default slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                    <div>
+                                                        <div class="font-weight-bold slds-text-heading_small slds-m-bottom_xxx-small" style="color: #0b2345;">Rental Management</div>
+                                                        <p class="slds-text-body_small slds-text-color_weak">Initiate rental inquiry, list property for lease, screen tenants, and manage rent agreements.</p>
+                                                    </div>
+                                                    <lightning-button variant="neutral" label="Initiate Rental" icon-name="standard:channel_program_members" onclick={handleInitiateRental} class="slds-no-flex slds-m-left_small"></lightning-button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </template>
+            </div>
+        </template>
+
+        <!-- ================= MODALS & DRAWERS ================= -->
+
+        <!-- Drawer: Property & Customer Details Drawer/Modal -->
+        <template lwc:if={showDetailsDrawer}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header dark-navy-modal-header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={toggleDetailsDrawer}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate font-weight-bold">Property &amp; Customer Reference Profile</h2>
+                        <p class="slds-text-body_small slds-m-top_xxx-small modal-subtitle">Unit {unitName} &bull; {projectName} &bull; Ref #{unitSummary.bookingReference}</p>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-grid slds-gutters_medium">
+                            <div class="slds-col slds-size_1-of-2 slds-border_right">
+                                <h3 class="slds-text-title_caps font-weight-bold slds-m-bottom_small" style="color: #0b2345;">
+                                    Unit Specification Profile
+                                </h3>
+                                <div class="specs-grid slds-m-bottom_medium">
+                                    <div class="spec-row slds-grid slds-grid_align-spread slds-p-vertical_xx-small slds-border_bottom">
+                                        <span class="slds-text-color_weak">Unit Number</span>
+                                        <strong class="slds-text-body_small">{unitName}</strong>
+                                    </div>
+                                    <div class="spec-row slds-grid slds-grid_align-spread slds-p-vertical_xx-small slds-border_bottom">
+                                        <span class="slds-text-color_weak">Configuration</span>
+                                        <strong class="slds-text-body_small">{unitSummary.configuration}</strong>
+                                    </div>
+                                    <div class="spec-row slds-grid slds-grid_align-spread slds-p-vertical_xx-small slds-border_bottom">
+                                        <span class="slds-text-color_weak">Tower / Floor</span>
+                                        <strong class="slds-text-body_small">{unitSummary.towerName} &bull; {unitSummary.floorName}</strong>
+                                    </div>
+                                    <template for:each={unitAttributesList} for:item="attr">
+                                        <div key={attr.label} class="spec-row slds-grid slds-grid_align-spread slds-p-vertical_xx-small slds-border_bottom">
+                                            <span class="slds-text-color_weak">{attr.label}</span>
+                                            <strong class="slds-text-body_small">{attr.value}</strong>
+                                        </div>
+                                    </template>
+                                </div>
+                                <div class="slds-text-align_right">
+                                    <button class="slds-button slds-button_neutral slds-text-body_small" onclick={navigateToUnit}>
+                                        <lightning-icon icon-name="utility:new_window" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>Open Unit Record
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-2">
+                                <h3 class="slds-text-title_caps font-weight-bold slds-m-bottom_small" style="color: #0b2345;">
+                                    Customer &amp; Ownership
+                                </h3>
+                                <div class="customer-info-box slds-box slds-box_xx-small slds-m-bottom_small">
+                                    <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_x-small">
+                                        <div class="customer-avatar slds-m-right_x-small">{customerInitials}</div>
+                                        <div>
+                                            <strong class="slds-text-body_regular">{customerName}</strong>
+                                            <div class="slds-text-body_small slds-text-color_weak">Primary Buyer / Owner</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-text-body_small slds-m-bottom_xxx-small">
+                                        <lightning-icon icon-name="utility:email" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                        <a href={customerEmailHref}>{customerEmail}</a>
+                                    </div>
+                                    <template lwc:if={customerPhone}>
+                                        <div class="slds-text-body_small">
+                                            <lightning-icon icon-name="utility:call" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                            <a href={customerPhoneHref}>{customerPhone}</a>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <template lwc:if={hasCoOwners}>
+                                    <div class="slds-text-title_caps font-weight-bold slds-m-bottom_xx-small slds-text-color_weak">
+                                        Co-Applicants / Co-Owners ({coOwnersCount})
+                                    </div>
+                                    <div class="co-owners-list slds-m-bottom_small">
+                                        <template for:each={coOwners} for:item="co">
+                                            <div key={co.name} class="slds-box slds-box_xx-small slds-m-bottom_xx-small slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                <div>
+                                                    <strong class="slds-text-body_small">{co.name}</strong>
+                                                    <div class="slds-text-body_small slds-text-color_weak">{co.email}</div>
+                                                </div>
+                                                <span class="slds-badge slds-badge_lightest">{co.role}</span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal 1: Start Inspection Modal -->
+        <template lwc:if={showStartInspectionModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeStartInspectionModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate font-weight-bold">Initiate Unit Inspection</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-combobox label="Audit Type" value={inspectionType} options={inspectionTypeOptions} onchange={handleInspectionTypeChange} class="slds-m-bottom_small" required></lightning-combobox>
+                        <lightning-input type="text" label="Lead Inspector Name" value={inspectorName} onchange={handleInspectorNameChange} class="slds-m-bottom_small" required></lightning-input>
+                        <lightning-input type="text" label="Inspection Agency / Department" value={inspectorCompany} onchange={handleInspectorCompanyChange} class="slds-m-bottom_small"></lightning-input>
+                        <lightning-input type="email" label="Inspector Email" value={inspectorEmail} onchange={handleInspectorEmailChange} class="slds-m-bottom_small"></lightning-input>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={closeStartInspectionModal} class="slds-m-right_x-small"></lightning-button>
+                        <lightning-button variant="brand" label="Start Inspection" onclick={handleConfirmStartInspection}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal 2: Raise Snag Modal -->
+        <template lwc:if={showRaiseSnagModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeRaiseSnagModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate font-weight-bold">Raise Snag / Defect</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-combobox label="Location / Area" value={newSnagLocation} options={locationOptions} onchange={handleSnagLocationChange} class="slds-m-bottom_small" required></lightning-combobox>
+                        <lightning-combobox label="Category" value={newSnagCategory} options={categoryOptions} onchange={handleSnagCategoryChange} class="slds-m-bottom_small" required></lightning-combobox>
+                        <lightning-combobox label="Responsible Team" value={newSnagTeam} options={teamOptions} onchange={handleSnagTeamChange} class="slds-m-bottom_small" required></lightning-combobox>
+                        <lightning-textarea label="Snag Description" value={newSnagDesc} onchange={handleSnagDescChange} class="slds-m-bottom_small" required></lightning-textarea>
+                        <lightning-combobox label="Severity" value={newSnagSeverity} options={severityOptions} onchange={handleSnagSeverityChange} class="slds-m-bottom_small" required></lightning-combobox>
+                        <lightning-combobox label="Assign Supervisor / Lead" value={newSnagContractor} options={contractorOptions} onchange={handleSnagContractorChange} class="slds-m-bottom_small"></lightning-combobox>
+                        <lightning-input type="date" label="Resolution Due Date" value={newSnagDueDate} onchange={handleSnagDueDateChange} class="slds-m-bottom_small"></lightning-input>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={closeRaiseSnagModal} class="slds-m-right_x-small"></lightning-button>
+                        <lightning-button variant="brand" label="Raise Snag" onclick={handleSaveSnag}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal 3: Assign Owner & Team Modal -->
+        <template lwc:if={showAssignModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeAssignModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate font-weight-bold">Assign Snag Supervisor &amp; Responsible Team</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-combobox label="Primary Owner / Supervisor" value={selectedContractor} options={contractorOptions} onchange={handleContractorSelectChange} required class="slds-m-bottom_small"></lightning-combobox>
+                        <lightning-combobox label="Responsible Team" value={selectedResponsibleTeam} options={teamOptions} onchange={handleResponsibleTeamChange} required class="slds-m-bottom_small"></lightning-combobox>
+                        <lightning-textarea label="Assignment Instructions / SLA Remarks" value={assignmentRemarks} onchange={handleAssignmentRemarksChange} class="slds-m-bottom_small" placeholder="Enter work instructions or SLA for this team..."></lightning-textarea>
+                        
+                        <template lwc:if={currentSnagExternalToken}>
+                            <div class="slds-box slds-box_xx-small slds-theme_shade slds-m-top_x-small">
+                                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                    <div>
+                                        <strong class="slds-text-body_small">External Resolver Link</strong>
+                                        <div class="slds-text-body_small slds-text-color_weak">Token: {currentSnagExternalToken}</div>
+                                    </div>
+                                    <lightning-button size="x-small" variant="neutral" label="Copy Link" icon-name="utility:copy" onclick={handleCopySnagExternalLink}></lightning-button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={closeAssignModal} class="slds-m-right_x-small"></lightning-button>
+                        <lightning-button variant="brand" label="Save Assignment" onclick={handleSaveAssignContractor}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal 4: Reject Snag Modal -->
+        <template lwc:if={showReopenModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeReopenModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate font-weight-bold">Reject Snag Verification</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-textarea label="Rejection Reason &amp; Required Rework" value={reopenReason} onchange={handleReopenReasonChange} required placeholder="Detail specific defects remaining or why rework is required..."></lightning-textarea>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={closeReopenModal} class="slds-m-right_x-small"></lightning-button>
+                        <lightning-button variant="destructive" label="Reject &amp; Reopen Snag" onclick={handleSaveReopenSnag}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal 5: Reschedule Appointment Modal -->
+        <template lwc:if={showRescheduleModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeRescheduleModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate font-weight-bold">Reschedule Handover Appointment</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-input type="date" label="New Appointment Date" value={rescheduleDate} onchange={handleRescheduleDateChange} class="slds-m-bottom_small" required></lightning-input>
+                        <lightning-combobox label="New Time Slot" value={rescheduleSlot} options={timeSlotOptions} onchange={handleRescheduleSlotChange} class="slds-m-bottom_small" required></lightning-combobox>
+                        <lightning-input type="text" label="Location" value={rescheduleLocation} onchange={handleRescheduleLocationChange} class="slds-m-bottom_small" required></lightning-input>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={closeRescheduleModal} class="slds-m-right_x-small"></lightning-button>
+                        <lightning-button variant="brand" label="Reschedule &amp; Notify Customer" onclick={handleSaveRescheduleAppointment}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal 6: Edit Target Handover Date Modal -->
+        <template lwc:if={showEditTargetDateModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeEditTargetDateModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate font-weight-bold">Update Target Handover Date</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-input type="date" label="Target Handover Date" value={targetDateVal} onchange={handleTargetDateChange} required></lightning-input>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={closeEditTargetDateModal} class="slds-m-right_x-small"></lightning-button>
+                        <lightning-button variant="brand" label="Save Target Date" onclick={handleSaveTargetDate}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal 7: Change Handover Owner Modal -->
+        <template lwc:if={showChangeOwnerModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeChangeOwnerModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate font-weight-bold">Change Handover Owner</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-input type="search" label="Search Active Users" value={ownerSearchTerm} onchange={handleOwnerSearchChange} placeholder="Type name or email to search..." class="slds-m-bottom_small"></lightning-input>
+                        <template lwc:if={searchedUsers.length}>
+                            <div class="slds-box slds-box_xx-small user-select-list slds-m-bottom_small">
+                                <template for:each={searchedUsers} for:item="u">
+                                    <div key={u.Id} class="user-select-row slds-p-around_x-small slds-grid slds-grid_align-spread slds-grid_vertical-align-center" onclick={handleSelectNewOwner} data-id={u.Id} data-name={u.Name}>
+                                        <div>
+                                            <div class="font-weight-bold">{u.Name}</div>
+                                            <div class="slds-text-body_small slds-text-color_weak">{u.Email} &bull; {u.Title}</div>
+                                        </div>
+                                        <template lwc:if={u.isSelected}>
+                                            <span class="slds-badge slds-theme_success">Selected</span>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template lwc:if={selectedNewOwnerName}>
+                            <div class="slds-box slds-box_xx-small slds-theme_shade slds-m-top_x-small">
+                                Selected Owner: <strong>{selectedNewOwnerName}</strong>
+                            </div>
+                        </template>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={closeChangeOwnerModal} class="slds-m-right_x-small"></lightning-button>
+                        <lightning-button variant="brand" label="Update Owner" onclick={handleSaveChangeOwner} disabled={isChangeOwnerSaveDisabled}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal 8: Add Checklist Item Modal -->
+        <template lwc:if={showAddChecklistItemModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeAddChecklistItemModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate font-weight-bold">Add Inspection Line Item</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-input type="text" label="Line Item Name / Inspection Check" value={newItemName} onchange={handleNewItemNameChange} required class="slds-m-bottom_small" placeholder="e.g. Electrical Socket Earthing &amp; Polarity"></lightning-input>
+                        <lightning-combobox label="Category" value={newItemCategory} options={categoryOptions} onchange={handleNewItemCategoryChange} required class="slds-m-bottom_small"></lightning-combobox>
+                        <lightning-combobox label="Location" value={newItemLocation} options={locationOptions} onchange={handleNewItemLocationChange} required class="slds-m-bottom_small"></lightning-combobox>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={closeAddChecklistItemModal} class="slds-m-right_x-small"></lightning-button>
+                        <lightning-button variant="brand" label="Add Line Item" onclick={handleSaveChecklistItem} disabled={isSaveNewItemDisabled}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal 9: Submit Snag for Verification (Actual File Upload via Salesforce Files) -->
+        <template lwc:if={showResolveSnagModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeResolveModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate font-weight-bold">Submit Snag for Verification &amp; Approval</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <p class="slds-text-body_small slds-m-bottom_small">
+                            Upload rectification photo/video evidence directly into Salesforce Files and enter work remarks:
+                        </p>
+                        
+                        <!-- Actual File Upload -->
+                        <div class="slds-box slds-box_xx-small slds-theme_shade slds-m-bottom_small">
+                            <label class="slds-form-element__label font-weight-bold">Rectification Evidence (Photos / Videos)</label>
+                            <lightning-file-upload
+                                label="Upload Evidence Files"
+                                name="snagEvidenceUploader"
+                                accept=".png,.jpg,.jpeg,.mp4,.mov,.pdf"
+                                record-id={selectedSnagId}
+                                onuploadfinished={handleSnagUploadFinished}
+                                multiple>
+                            </lightning-file-upload>
+                            <template lwc:if={selectedSnagFiles.length}>
+                                <div class="slds-m-top_x-small">
+                                    <strong class="slds-text-body_small">Attached Evidence Files ({selectedSnagFiles.length}):</strong>
+                                    <ul class="slds-list_dotted slds-m-top_xx-small">
+                                        <template for:each={selectedSnagFiles} for:item="f">
+                                            <li key={f.documentId}>
+                                                <a href={f.downloadUrl} target="_blank" class="slds-text-link">
+                                                    <lightning-icon icon-name="doctype:image" size="xx-small" class="slds-m-right_xxx-small"></lightning-icon>
+                                                    {f.title} ({f.fileType}) â†—
+                                                </a>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </template>
+                        </div>
+
+                        <lightning-textarea label="Rectification Remarks / Work Details" value={resolutionComments} onchange={handleResolutionCommentsChange} required class="slds-m-bottom_small" placeholder="e.g. Wall skirting repointed, polished, and touch-up paint applied. Ready for verification."></lightning-textarea>
+
+                        <div class="slds-text-body_small slds-text-color_weak">
+                            Submitting will notify the Approver ({handoverOwnerName}) to perform verification sign-off.
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={closeResolveModal} class="slds-m-right_x-small"></lightning-button>
+                        <lightning-button variant="brand" label="Submit for Verification" onclick={handleSaveResolveSnag}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- Modal 10: External Inspection Form Modal -->
+        <template lwc:if={showExternalFormModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeExternalFormModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate font-weight-bold">External Auditor Inspection Form</h2>
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_xxx-small">Third-Party Independent Audit Portal &bull; Unit: {unitName} &bull; Token: {currentInspectionToken}</p>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-grid slds-gutters_small slds-m-bottom_small">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input type="text" label="Auditor Name" value={externalAuditorName} onchange={handleExtAuditorNameChange} required></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input type="text" label="Auditing Agency / Company" value={externalAuditorCompany} onchange={handleExtAuditorCompanyChange} required></lightning-input>
+                            </div>
+                        </div>
+                        <lightning-textarea label="Overall Audit Summary &amp; Recommendations" value={externalOverallComments} onchange={handleExtCommentsChange} class="slds-m-bottom_medium" placeholder="Enter high-level findings..."></lightning-textarea>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancel" onclick={closeExternalFormModal} class="slds-m-right_x-small"></lightning-button>
+                        <lightning-button variant="brand" label="Submit External Audit" onclick={handleSubmitExternalInspectionForm}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+
+        <!-- Modal 12: View All Related Records Modal -->
+        <template lwc:if={showViewAllModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                        <div class="slds-grid slds-grid_vertical-align-center">
+                            <lightning-icon icon-name={viewAllConfig.icon} size="small" class="slds-m-right_x-small"></lightning-icon>
+                            <div class="slds-text-align_left">
+                                <h2 class="slds-modal__title slds-hyphenate font-weight-bold">{viewAllConfig.title}</h2>
+                                <p class="slds-text-body_small slds-text-color_weak slds-m-top_xxx-small">Showing {viewAllTotalCount} record(s) &bull; Click record name to view details</p>
+                            </div>
+                        </div>
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeViewAllModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                            <div class="slds-size_4-of-12">
+                                <lightning-input type="search" placeholder="Filter records..." onchange={handleViewAllFilter} variant="label-hidden"></lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="view-all-table-container">
+                            <!-- Inspections -->
+                            <template lwc:if={isViewAllInspections}>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered responsive-related-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col" style="width: 25%;"><div class="slds-truncate">Inspection Name</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Type</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Status</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Inspector</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Date</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Passed / Issues / N/A</div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={viewAllItems} for:item="insp">
+                                            <tr key={insp.Id}>
+                                                <td>
+                                                    <a href="javascript:void(0);" onclick={handleNavigateToRecord} data-id={insp.Id} class="related-record-link font-weight-bold">
+                                                        {insp.Name}
+                                                    </a>
+                                                </td>
+                                                <td><div class="slds-truncate">{insp.Inspection_Type__c}</div></td>
+                                                <td><span class="slds-badge slds-theme_success">{insp.Status__c}</span></td>
+                                                <td><div class="slds-truncate">{insp.Inspector_Name__c}</div></td>
+                                                <td><div class="slds-truncate">{insp.Inspection_Date__c}</div></td>
+                                                <td><div class="slds-truncate">{insp.Passed_Items_Count__c} / {insp.Issue_Items_Count__c} / {insp.NA_Items_Count__c}</div></td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </template>
+
+                            <!-- Checklist Items -->
+                            <template lwc:if={isViewAllChecklist}>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered responsive-related-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col" style="width: 30%;"><div class="slds-truncate">Checklist Item</div></th>
+                                            <th scope="col" style="width: 20%;"><div class="slds-truncate">Category</div></th>
+                                            <th scope="col" style="width: 20%;"><div class="slds-truncate">Location</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Result</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Snag Raised?</div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={viewAllItems} for:item="ci">
+                                            <tr key={ci.Id}>
+                                                <td>
+                                                    <a href="javascript:void(0);" onclick={handleNavigateToRecord} data-id={ci.Id} class="related-record-link font-weight-bold">
+                                                        {ci.Name}
+                                                    </a>
+                                                </td>
+                                                <td><div class="slds-truncate">{ci.Category__c}</div></td>
+                                                <td><div class="slds-truncate">{ci.Location__c}</div></td>
+                                                <td><span class="slds-badge">{ci.Result__c}</span></td>
+                                                <td><div class="slds-truncate">{ci.Has_Snag_Raised__c}</div></td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </template>
+
+                            <!-- Snags -->
+                            <template lwc:if={isViewAllSnags}>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered responsive-related-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Snag #</div></th>
+                                            <th scope="col" style="width: 30%;"><div class="slds-truncate">Description</div></th>
+                                            <th scope="col" style="width: 10%;"><div class="slds-truncate">Severity</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Status</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Responsible Team</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Assigned Contractor</div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={viewAllItems} for:item="sn">
+                                            <tr key={sn.Id}>
+                                                <td>
+                                                    <a href="javascript:void(0);" onclick={handleNavigateToRecord} data-id={sn.Id} class="related-record-link font-weight-bold">
+                                                        {sn.Name}
+                                                    </a>
+                                                </td>
+                                                <td><div class="slds-truncate" title={sn.Snag_Description__c}>{sn.Snag_Description__c}</div></td>
+                                                <td><span class={sn.severityBadgeClass}>{sn.Severity__c}</span></td>
+                                                <td><span class="slds-badge">{sn.Status__c}</span></td>
+                                                <td><div class="slds-truncate">{sn.Responsible_Team__c}</div></td>
+                                                <td><div class="slds-truncate">{sn.Assigned_Contractor_Name__c}</div></td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </template>
+
+                            <!-- Events -->
+                            <template lwc:if={isViewAllEvents}>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered responsive-related-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col" style="width: 30%;"><div class="slds-truncate">Subject</div></th>
+                                            <th scope="col" style="width: 20%;"><div class="slds-truncate">Start Date / Time</div></th>
+                                            <th scope="col" style="width: 20%;"><div class="slds-truncate">End Date / Time</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Location</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Assigned To</div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={viewAllItems} for:item="ev">
+                                            <tr key={ev.Id}>
+                                                <td>
+                                                    <a href="javascript:void(0);" onclick={handleNavigateToRecord} data-id={ev.Id} class="related-record-link font-weight-bold">
+                                                        {ev.Subject}
+                                                    </a>
+                                                </td>
+                                                <td><div class="slds-truncate">{ev.StartDateTime}</div></td>
+                                                <td><div class="slds-truncate">{ev.EndDateTime}</div></td>
+                                                <td><div class="slds-truncate">{ev.Location}</div></td>
+                                                <td><div class="slds-truncate">{ev.Owner.Name}</div></td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </template>
+
+                            <!-- Tasks -->
+                            <template lwc:if={isViewAllTasks}>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered responsive-related-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col" style="width: 35%;"><div class="slds-truncate">Subject</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Status</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Priority</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Due Date</div></th>
+                                            <th scope="col" style="width: 20%;"><div class="slds-truncate">Assigned To</div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={viewAllItems} for:item="tsk">
+                                            <tr key={tsk.Id}>
+                                                <td>
+                                                    <a href="javascript:void(0);" onclick={handleNavigateToRecord} data-id={tsk.Id} class="related-record-link font-weight-bold">
+                                                        {tsk.Subject}
+                                                    </a>
+                                                </td>
+                                                <td><span class="slds-badge">{tsk.Status}</span></td>
+                                                <td><div class="slds-truncate">{tsk.Priority}</div></td>
+                                                <td><div class="slds-truncate">{tsk.ActivityDate}</div></td>
+                                                <td><div class="slds-truncate">{tsk.Owner.Name}</div></td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </template>
+
+                            <!-- Documents -->
+                            <template lwc:if={isViewAllDocuments}>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered responsive-related-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col" style="width: 50%;"><div class="slds-truncate">Title</div></th>
+                                            <th scope="col" style="width: 25%;"><div class="slds-truncate">Type</div></th>
+                                            <th scope="col" style="width: 25%;"><div class="slds-truncate">Action</div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={viewAllItems} for:item="doc">
+                                            <tr key={doc.id}>
+                                                <td>
+                                                    <a href="javascript:void(0);" onclick={handleNavigateToRecord} data-id={doc.id} class="related-record-link font-weight-bold">
+                                                        {doc.title}
+                                                    </a>
+                                                </td>
+                                                <td><div class="slds-truncate">{doc.fileType}</div></td>
+                                                <td>
+                                                    <a href={doc.downloadUrl} target="_blank" class="slds-button slds-button_neutral slds-button_x-small">
+                                                        Download â†—
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </template>
+
+                            <!-- Activities -->
+                            <template lwc:if={isViewAllActivities}>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered responsive-related-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Log #</div></th>
+                                            <th scope="col" style="width: 20%;"><div class="slds-truncate">Event Type</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Actor</div></th>
+                                            <th scope="col" style="width: 15%;"><div class="slds-truncate">Timestamp</div></th>
+                                            <th scope="col" style="width: 10%;"><div class="slds-truncate">Status</div></th>
+                                            <th scope="col" style="width: 25%;"><div class="slds-truncate">Details</div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={viewAllItems} for:item="act">
+                                            <tr key={act.Id}>
+                                                <td>
+                                                    <a href="javascript:void(0);" onclick={handleNavigateToRecord} data-id={act.Id} class="related-record-link font-weight-bold">
+                                                        {act.Name}
+                                                    </a>
+                                                </td>
+                                                <td><div class="slds-truncate">{act.Event_Type__c}</div></td>
+                                                <td><div class="slds-truncate">{act.Actor_Name__c}</div></td>
+                                                <td><div class="slds-truncate">{act.Timestamp__c}</div></td>
+                                                <td><span class="slds-badge slds-theme_success">{act.Status__c}</span></td>
+                                                <td><div class="slds-truncate" title={act.Details__c}>{act.Details__c}</div></td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </template>
+
+                        </div>
+                    </div>
+
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Close" onclick={closeViewAllModal}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+    </div>
+
+    <!-- ------------------------------------------------ -->
+    <!-- FORMAL INSPECTION REPORT MODAL                                             -->
+    <!-- ------------------------------------------------ -->
+    <template lwc:if={showInspectionReportModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="formalReportModalHeading">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header" style="background: #0b2345; color: #fff;">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseInspectionReportModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"></lightning-icon>
+                    </button>
+                    <h2 id="formalReportModalHeading" class="slds-text-heading_medium slds-hyphenate">
+                        <lightning-icon icon-name="doctype:survey" size="small" class="slds-m-right_x-small" variant="inverse"></lightning-icon>
+                        Inspection Report
+                        <template lwc:if={formalReportData}>
+                            &nbsp;â€” {formalReportData.inspection.inspectionName}
+                        </template>
+                    </h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium" id="formalReportModalContent" style="max-height: 75vh; overflow-y: auto;">
+                    <template lwc:if={formalReportData}>
+                        <!-- Summary Section -->
+                        <div class="slds-box slds-box_small slds-m-bottom_medium" style="background:#f0f4ff; border-left: 4px solid #0b2345;">
+                            <div class="slds-grid slds-wrap slds-gutters_small">
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_x-small">
+                                    <div class="slds-text-body_small slds-text-color_weak">Inspector</div>
+                                    <div class="slds-text-body_small font-weight-bold">{formalReportData.inspection.inspectorName}</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_x-small">
+                                    <div class="slds-text-body_small slds-text-color_weak">Inspection Date</div>
+                                    <div class="slds-text-body_small font-weight-bold">{formalReportData.inspection.inspectionDate}</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_x-small">
+                                    <div class="slds-text-body_small slds-text-color_weak">Status</div>
+                                    <div class="slds-text-body_small font-weight-bold">{formalReportData.inspection.status}</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_x-small">
+                                    <div class="slds-text-body_small slds-text-color_weak">Total Snags</div>
+                                    <div class="slds-text-body_small font-weight-bold">{formalReportData.inspection.totalSnags}</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_x-small">
+                                    <div class="slds-text-body_small slds-text-color_weak">Passed Items</div>
+                                    <div class="slds-text-body_small font-weight-bold" style="color: #059669;">{formalReportData.inspection.passedCount}</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_x-small">
+                                    <div class="slds-text-body_small slds-text-color_weak">Issue Items</div>
+                                    <div class="slds-text-body_small font-weight-bold" style="color: #d97706;">{formalReportData.inspection.issueCount}</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_x-small">
+                                    <div class="slds-text-body_small slds-text-color_weak">Open Snags</div>
+                                    <div class="slds-text-body_small font-weight-bold" style="color: #dc2626;">{formalReportData.inspection.openSnags}</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_x-small">
+                                    <div class="slds-text-body_small slds-text-color_weak">Closed Snags</div>
+                                    <div class="slds-text-body_small font-weight-bold" style="color: #059669;">{formalReportData.inspection.closedSnags}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Checklist Audit Results Section -->
+                        <template lwc:if={formalReportData.checklistResults.length}>
+                            <h3 class="slds-text-heading_small font-weight-bold slds-m-bottom_small" style="color: #0b2345;">Checklist Audit Results ({formalReportData.checklistResults.length} Items)</h3>
+                            <div style="overflow-x: auto; max-height: 220px;" class="slds-m-bottom_medium">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped report-table" style="font-size: 0.8rem;">
+                                    <thead>
+                                        <tr class="slds-line-height_reset" style="background: #0b2345; color: #fff;">
+                                            <th scope="col" style="width: 20%;">Category</th>
+                                            <th scope="col" style="width: 35%;">Checklist Item</th>
+                                            <th scope="col" style="width: 20%;">Location</th>
+                                            <th scope="col" style="width: 15%;">Result</th>
+                                            <th scope="col" style="width: 10%;">Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={formalReportData.checklistResults} for:item="ci">
+                                            <tr key={ci.Id}>
+                                                <td><strong>{ci.Category__c}</strong></td>
+                                                <td>{ci.Name}</td>
+                                                <td>{ci.Location__c}</td>
+                                                <td>
+                                                    <span class={ci.badgeClass}>{ci.Result__c}</span>
+                                                </td>
+                                                <td>{ci.Comments__c}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+
+                        <!-- Snag Details Table -->
+                        <template lwc:if={formalReportData.snags.length}>
+                            <h3 class="slds-text-heading_small font-weight-bold slds-m-bottom_small" style="color: #0b2345;">Snag Details ({formalReportData.snags.length})</h3>
+                            <div style="overflow-x: auto;">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped report-table" style="font-size: 0.8rem;">
+                                    <thead>
+                                        <tr class="slds-line-height_reset" style="background: #0b2345; color: #fff;">
+                                            <th scope="col">Issue</th>
+                                            <th scope="col">Location</th>
+                                            <th scope="col">Assigned Supervisor</th>
+                                            <th scope="col">Resolution</th>
+                                            <th scope="col">Resolved By / Date</th>
+                                            <th scope="col">Verified By / Date</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Evidence</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={formalReportData.snags} for:item="snag">
+                                            <tr key={snag.snagId}>
+                                                <td><strong>{snag.description}</strong></td>
+                                                <td>{snag.location}</td>
+                                                <td>{snag.supervisor}</td>
+                                                <td>{snag.resolution}</td>
+                                                <td>
+                                                    <div>{snag.resolvedBy}</div>
+                                                    <div class="slds-text-color_weak">{snag.resolvedDate}</div>
+                                                </td>
+                                                <td>
+                                                    <div>{snag.verifiedBy}</div>
+                                                    <div class="slds-text-color_weak">{snag.verifiedDate}</div>
+                                                </td>
+                                                <td>
+                                                    <span class="slds-badge" style={snag.statusBadgeStyle}>{snag.status}</span>
+                                                </td>
+                                                <td>
+                                                    <template lwc:if={snag.hasEvidence}>
+                                                        <template for:each={snag.evidenceList} for:item="ev">
+                                                            <div key={ev.documentId} class="slds-m-bottom_xxx-small">
+                                                                <a href={ev.downloadUrl} target="_blank" class="slds-text-link font-weight-bold">
+                                                                    ðŸ“Ž {ev.title}
+                                                                </a>
+                                                            </div>
+                                                        </template>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <span class="slds-text-color_weak">â€”</span>
+                                                    </template>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+                        <template lwc:else>
+                            <div class="slds-box slds-box_xx-small slds-theme_shade slds-text-align_center slds-p-around_small slds-m-top_medium">
+                                <p class="slds-text-body_small slds-text-color_weak">No snags recorded for this inspection.</p>
+                            </div>
+                        </template>
+                    </template>
+                    <template lwc:else>
+                        <div class="slds-spinner_container">
+                            <lightning-spinner alternative-text="Loading report..." size="medium"></lightning-spinner>
+                        </div>
+                    </template>
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Close" onclick={handleCloseInspectionReportModal}></lightning-button>
+                    <lightning-button variant="brand-outline" label="Share Report" icon-name="utility:email" onclick={handleOpenShareReportModal}></lightning-button>
+                    <lightning-button variant="brand" label="Download PDF" icon-name="utility:download" onclick={handleDownloadReportFromModal}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+    <!-- ------------------------------------------------ -->
+    <!-- SHARE INSPECTION REPORT MODAL                                              -->
+    <!-- ------------------------------------------------ -->
+    <template lwc:if={showShareReportModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open" aria-labelledby="shareReportModalHeading">
+            <div class="slds-modal__container" style="max-width: 520px;">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseShareReportModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"></lightning-icon>
+                    </button>
+                    <h2 id="shareReportModalHeading" class="slds-text-heading_medium">Share Inspection Report</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                        Enter recipient email addresses (comma-separated) to share a summary of this inspection report.
+                    </p>
+                    <lightning-input type="email" label="Recipient Email(s)" value={shareReportEmails} onchange={handleShareReportEmailChange} placeholder="e.g. inspector@example.com, owner@example.com"></lightning-input>
+                    <lightning-textarea label="Optional Note" value={shareReportNote} onchange={handleShareReportNoteChange} max-length="500" class="slds-m-top_small" placeholder="Add a short note to accompany the report..."></lightning-textarea>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCloseShareReportModal}></lightning-button>
+                    <lightning-button variant="brand" label="Send Report" icon-name="utility:send" onclick={handleShareInspectionReport}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+    <!-- ------------------------------------------------ -->
+    <!-- SHARE SNAG WITH EXTERNAL USER MODAL                                        -->
+    <!-- ------------------------------------------------ -->
+    <template lwc:if={showShareSnagModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open" aria-labelledby="shareSnagModalHeading">
+            <div class="slds-modal__container" style="max-width: 520px;">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseShareSnagModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"></lightning-icon>
+                    </button>
+                    <h2 id="shareSnagModalHeading" class="slds-text-heading_medium">Share Snag with External Team Member</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                        Share this snag with a contractor or external person without creating duplicate records. They will receive a secure link to view details.
+                    </p>
+                    <lightning-input type="email" label="Recipient Email" value={shareSnagEmail} onchange={handleShareSnagEmailChange} placeholder="contractor@company.com" required></lightning-input>
+                    <lightning-textarea label="Message / Note" value={shareSnagNote} onchange={handleShareSnagNoteChange} max-length="500" class="slds-m-top_small" placeholder="Add any special instructions or context..."></lightning-textarea>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCloseShareSnagModal}></lightning-button>
+                    <lightning-button variant="brand" label="Share Snag" icon-name="utility:share" onclick={handleShareSnag}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+</template>

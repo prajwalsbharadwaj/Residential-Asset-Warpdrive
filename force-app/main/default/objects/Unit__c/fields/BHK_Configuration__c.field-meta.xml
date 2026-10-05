@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BHK_Configuration__c</fullName>
+    <externalId>false</externalId>
+    <label>BHK Configuration</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>2 BHK + Family</fullName>
+                <default>false</default>
+                <label>2 BHK + Family</label>
+            </value>
+            <value>
+                <fullName>3 BHK</fullName>
+                <default>false</default>
+                <label>3 BHK</label>
+            </value>
+            <value>
+                <fullName>3 BHK Canopy</fullName>
+                <default>false</default>
+                <label>3 BHK Canopy</label>
+            </value>
+            <value>
+                <fullName>3 BHK Classic</fullName>
+                <default>false</default>
+                <label>3 BHK Classic</label>
+            </value>
+            <value>
+                <fullName>3 BHK Smart</fullName>
+                <default>false</default>
+                <label>3 BHK Smart</label>
+            </value>
+            <value>
+                <fullName>4.5 BHK</fullName>
+                <default>false</default>
+                <label>4.5 BHK</label>
+            </value>
+            <value>
+                <fullName>4 BHK</fullName>
+                <default>false</default>
+                <label>4 BHK</label>
+            </value>
+            <value>
+                <fullName>4 BHK Classic</fullName>
+                <default>false</default>
+                <label>4 BHK Classic</label>
+            </value>
+            <value>
+                <fullName>4 BHK Compact</fullName>
+                <default>false</default>
+                <label>4 BHK Compact</label>
+            </value>
+            <value>
+                <fullName>4 BHK Garden Classic</fullName>
+                <default>false</default>
+                <label>4 BHK Garden Classic</label>
+            </value>
+            <value>
+                <fullName>4 BHK Smart</fullName>
+                <default>false</default>
+                <label>4 BHK Smart</label>
+            </value>
+            <value>
+                <fullName>5.5 BHK</fullName>
+                <default>false</default>
+                <label>5.5 BHK</label>
+            </value>
+            <value>
+                <fullName>5 BHK</fullName>
+                <default>false</default>
+                <label>5 BHK</label>
+            </value>
+            <value>
+                <fullName>6 BHK</fullName>
+                <default>false</default>
+                <label>6 BHK</label>
+            </value>
+            <value>
+                <fullName>7 BHK</fullName>
+                <default>false</default>
+                <label>7 BHK</label>
+            </value>
+            <value>
+                <fullName>8 BHK</fullName>
+                <default>false</default>
+                <label>8 BHK</label>
+            </value>
+            <value>
+                <fullName>Duplex</fullName>
+                <default>false</default>
+                <label>Duplex</label>
+            </value>
+            <value>
+                <fullName>Penthouse</fullName>
+                <default>false</default>
+                <label>Penthouse</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Due_In_Days_and_Month_Number_validation</fullName>
+    <active>false</active>
+    <errorConditionFormula>OR(
+AND(
+  NOT(ISBLANK(Due_In_Days__c)),
+  NOT(ISBLANK(Month_Number__c))
+),
+				AND(
+				ISBLANK(Due_In_Days__c),
+				ISBLANK(Month_Number__c)
+				)
+)</errorConditionFormula>
+    <errorMessage>Please enter either Due in Days or Month Number.</errorMessage>
+</ValidationRule>

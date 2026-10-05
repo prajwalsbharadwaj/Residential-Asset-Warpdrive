@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <assignments>
+        <name>Assign_Owner_ID</name>
+        <label>Assign Owner ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Booking_Owner_ID</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Owner_User.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Validation</targetReference>
+        </connector>
+    </assignments>
+    <customErrors>
+        <name>Validation_Error_Cannot_Confirm_Booking</name>
+        <label>Validation Error - Cannot Confirm Booking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>Booking cannot be confirmed. Please ensure that the allotment letter has been generated and the token amount has been received before proceeding.</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Check_for_Booking_Record_Type</name>
+        <label>Check for Booking Record Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Non Residential Record Type</defaultConnectorLabel>
+        <rules>
+            <name>Residential_Record_Type</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Residential_Sales_Booking</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_General_Notification</targetReference>
+            </connector>
+            <label>Residential Record Type</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Validation</name>
+        <label>Validation</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Validation_Error_Cannot_Confirm_Booking</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Check_for_Allotment_Letter_and_Token_Recieved</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Is_Token_Recieved__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Allotment_Generated__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Contact_Record</targetReference>
+            </connector>
+            <label>Check for Allotment Letter and Token Recieved</label>
+        </rules>
+    </decisions>
+    <description>This flow triggers when a Booking__c record is created with a confirmed status.
+It retrieves the related Contact, Project, and Owner (SPOC) details,
+then sends a customized welcome email with booking and project information.
+The email is HTML-formatted and sent directly via flow using Send Email action.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>Display_Customer_Name</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  {!$Record.Account_Id__r.IsPersonAccount},
+  {!$Record.Account_Id__r.PersonContact.FirstName} &amp; &quot; &quot; &amp; {!$Record.Account_Id__r.PersonContact.LastName},
+  {!Get_Contact_Record.Name}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>Flow_Error_Message</name>
+        <dataType>String</dataType>
+        <expression>&quot;Failed to send Welcome Email to Contact ID: &quot; &amp; {!Get_Contact_Record.Id}</expression>
+    </formulas>
+    <formulas>
+        <name>Flow_Error_Title</name>
+        <dataType>String</dataType>
+        <expression>&quot;Welcome Email Task Error – Booking: &quot; &amp; $Record.Name</expression>
+    </formulas>
+    <formulas>
+        <name>subject_SPOC_Introduction</name>
+        <dataType>String</dataType>
+        <expression>&quot;SPOC Introduction Call for &quot; &amp; {!$Record.Account_Id__r.Name}</expression>
+    </formulas>
+    <formulas>
+        <name>Task_Description</name>
+        <dataType>String</dataType>
+        <expression>&quot;Welcome Email sent for Booking ID &quot; &amp; $Record.Name &amp; &quot; on &quot; &amp; TEXT(TODAY())</expression>
+    </formulas>
+    <interviewLabel>Wel {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Send Welcome Email on Booking Confirmation</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_SPOC_Introduction_Task</name>
+        <label>Create SPOC Introduction Task</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>Get_Owner_User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>Normal</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Not Started</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>subject_SPOC_Introduction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Contact_Record</name>
+        <label>Get Contact Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Create_SPOC_Introduction_Task</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Account_Id__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_General_Notification</name>
+        <label>Get General Notification</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Owner_User</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>General_Custom_Notification</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Owner_User</name>
+        <label>Get Owner User</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Owner_ID</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_for_Booking_Record_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Confirmed</stringValue>
+            </value>
+        </filters>
+        <object>Booking__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>InvalidDraft</status>
+    <textTemplates>
+        <name>Email_Body</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;style&gt;
+        body {
+            font-family: &apos;Inter&apos;, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .email-container {
+            max-width: 650px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            box-sizing: border-box;
+            border: 1px solid #e2e8f0;
+        }
+        .date {
+            font-size: 0.9375rem;
+            color: #64748b;
+            margin-bottom: 25px;
+            text-align: right;
+        }
+        .salutation {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+        .paragraph {
+            font-size: 1.0625rem;
+            line-height: 1.7;
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+        .highlight {
+            font-weight: 600;
+            color: #1a202c;
+        }
+        .closing {
+            font-size: 1.0625rem;
+            color: #4a5568;
+            margin-top: 30px;
+            margin-bottom: 8px;
+        }
+        .signature-block {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .signature-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 5px;
+            margin-top: 100px;
+        }
+        .company-info {
+            font-size: 1rem;
+            color: #4a5568;
+        }
+        .disclaimer {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 40px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+            }
+            .email-container {
+                padding: 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            }
+            .salutation {
+                font-size: 1.125rem;
+            }
+            .paragraph {
+                font-size: 1rem;
+            }
+            .signature-name {
+                font-size: 1.125rem;
+            }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;email-container&quot;&gt;
+        &lt;p class=&quot;date&quot;&gt;Date: &lt;span class=&quot;highlight&quot;&gt;{!$Flow.CurrentDate}&lt;/span&gt;&lt;/p&gt;
+        &lt;p class=&quot;salutation&quot;&gt;Dear &lt;span class=&quot;highlight&quot;&gt;{!Display_Customer_Name}&lt;/span&gt;,&lt;/p&gt;
+
+        &lt;p class=&quot;paragraph&quot;&gt;
+            Congratulations on becoming a proud owner at {!$Record.Unit_Id__r.Property__r.Name}, {!$Record.Unit_Id__r.Property__r.Address__c}.
+            We confirm your booking of a &lt;span class=&quot;highlight&quot;&gt;{!$Record.Unit_Id__r.BHK_Configuration__c}&lt;/span&gt; BHK,
+            No &lt;span class=&quot;highlight&quot;&gt;{!$Record.Unit_Id__r.Name}&lt;/span&gt;,
+            of Carpet Area &lt;span class=&quot;highlight&quot;&gt;{!$Record.Unit_Id__r.Carpet_Area__c}&lt;/span&gt; sqft.
+            on floor number &lt;span class=&quot;highlight&quot;&gt;{!$Record.Unit_Id__r.Floor__r.Name}&lt;/span&gt;
+            of Tower &lt;span class=&quot;highlight&quot;&gt;{!$Record.Unit_Id__r.Tower__r.Name}&lt;/span&gt;.
+        &lt;/p&gt;
+
+        &lt;p class=&quot;paragraph&quot;&gt;
+            Thank you for placing your valued trust in us. We now hope to exceed your expectations in terms of service,
+            construction quality and delivery, in the days to come. As you are aware, we at ‘The Phoenix Mills Group’
+            have consistently completed all our projects exceeding our client&apos;s expectations in terms of quality and schedules
+            and we have all intentions of doing the same with {!$Record.Unit_Id__r.Property__r.Name}.
+        &lt;/p&gt;
+
+        &lt;p class=&quot;paragraph&quot;&gt;
+            In conclusion, may we once again thank you for being a part of us and look forward to a long and happy relationship.
+            We solicit your continued support and patronage in our brand.
+        &lt;/p&gt;
+
+        &lt;p class=&quot;paragraph highlight text-center mt-8 mb-8&quot;&gt;Welcome to the Phoenix family.&lt;/p&gt;
+
+        &lt;div class=&quot;signature-block&quot;&gt;
+            &lt;p class=&quot;closing&quot;&gt;Warm Regards,&lt;/p&gt;
+            &lt;p class=&quot;company-info&quot;&gt;For Palladium Constructions Pvt. Ltd.,&lt;/p&gt;
+            &lt;p class=&quot;signature-name&quot;&gt;Authorised Signatory&lt;/p&gt;
+        &lt;/div&gt;
+
+        &lt;p class=&quot;disclaimer&quot;&gt;
+            This is an auto-generated email. Please do not reply to this message.
+        &lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>Email_Subject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Welcome to Your New Home, {!Display_Customer_Name}</text>
+    </textTemplates>
+    <variables>
+        <name>Booking_Owner_ID</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Email_Recipient</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Residential_Record_Type_ID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

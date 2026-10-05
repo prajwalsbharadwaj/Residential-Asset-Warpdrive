@@ -1,0 +1,76 @@
+.totals-card {
+  border-radius: .5rem;
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .25rem 0;
+}
+.summary-row span:first-child {
+  color: var(--lwc-colorTextWeak, #5e5e5e);
+}
+.summary-amt {
+  font-weight: 600;
+}
+.summary-total {
+  font-size: 1.05rem;
+}
+/* Size to the container the component is placed in (record page sidebar, main column, glass card). */
+:host {
+  display: block;
+  container-type: inline-size;
+}
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.conditions {
+  width: 100%;
+}
+.conditions td,
+.conditions th {
+  white-space: nowrap;
+}
+.col-name {
+  white-space: normal !important;
+  min-width: 9rem;
+}
+.cond-label {
+  display: block;
+  white-space: normal;
+}
+.type-inline {
+  display: none;
+  font-size: 0.75rem;
+  color: var(--lwc-colorTextWeak, #5e5e5e);
+}
+.summary-row {
+  gap: 0.75rem;
+}
+.summary-amt {
+  white-space: nowrap;
+}
+
+@container (max-width: 560px) {
+  .col-type {
+    display: none;
+  }
+  .type-inline {
+    display: block;
+  }
+  .summary-col {
+    width: 100%;
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+}
+
+@container (max-width: 380px) {
+  .conditions td,
+  .conditions th {
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    font-size: 0.8rem;
+  }
+}

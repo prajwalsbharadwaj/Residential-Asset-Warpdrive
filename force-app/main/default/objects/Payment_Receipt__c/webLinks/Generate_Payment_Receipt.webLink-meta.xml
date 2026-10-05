@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Generate_Payment_Receipt</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <height>600</height>
+    <linkType>page</linkType>
+    <masterLabel>Generate Payment Receipt</masterLabel>
+    <openType>sidebar</openType>
+    <page>PaymentReceiptPDF</page>
+    <protected>false</protected>
+</WebLink>

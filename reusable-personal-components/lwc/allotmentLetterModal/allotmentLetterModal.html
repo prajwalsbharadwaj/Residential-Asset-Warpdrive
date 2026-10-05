@@ -1,0 +1,159 @@
+<template>
+    <lightning-quick-action-panel title="Provisional Letter of Allotment">
+        <template if:true={isLoading}>
+            <div class="slds-p-around_large slds-text-align_center">
+                <lightning-spinner alternative-text="Loading Allotment Letter..." size="medium"></lightning-spinner>
+                <p class="slds-m-top_small text-muted text-xs">Compiling allotment terms, property particulars, and milestone schedule...</p>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <div class="printable-area slds-p-around_medium">
+                <!-- Letterhead Header -->
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center border-bottom-primary slds-p-bottom_small slds-m-bottom_medium">
+                    <div>
+                        <div class="brand-logo-text font-black">{letterData.projectName}</div>
+                        <div class="brand-tagline">Integrated Township Experience • RERA Approved</div>
+                        <div class="text-xs text-muted">Thanisandra Main Road, North Bengaluru 560077</div>
+                    </div>
+                    <div class="slds-text-align_right">
+                        <span class="allotment-stamp-badge">PROVISIONAL ALLOTMENT</span>
+                        <div class="text-xs text-muted slds-m-top_xx-small">Ref: <strong class="text-dark">{letterData.letterRefNumber}</strong></div>
+                        <div class="text-xs text-muted">Date: <strong class="text-dark">{letterData.letterDate}</strong></div>
+                    </div>
+                </div>
+
+                <!-- Recipient Address -->
+                <div class="slds-m-bottom_medium">
+                    <div class="text-xs text-muted uppercase font-bold">To:</div>
+                    <div class="font-bold text-base text-dark">{letterData.customerName}</div>
+                    <div class="text-xs text-muted">Mobile: <strong class="text-dark">{letterData.customerPhone}</strong></div>
+                    <div class="text-xs text-muted">Email: <strong class="text-dark">{letterData.customerEmail}</strong></div>
+                </div>
+
+                <!-- Subject -->
+                <div class="subject-box slds-p-around_small slds-m-bottom_medium">
+                    <strong>Subject:</strong> Provisional Letter of Allotment for <strong>{letterData.unitName}</strong> ({letterData.configuration}) at <strong>{letterData.projectName}</strong>.
+                </div>
+
+                <!-- Salutation & Body -->
+                <div class="slds-m-bottom_medium text-sm leading-relaxed text-dark">
+                    <p class="slds-m-bottom_x-small">Dear <strong>{letterData.customerName}</strong>,</p>
+                    <p class="slds-m-bottom_x-small">
+                        We are pleased to inform you that following your booking application and receipt of token advance, you have been provisionally allotted the apartment described below in accordance with the standard terms and conditions of the Project.
+                    </p>
+                </div>
+
+                <!-- Unit Particulars Table -->
+                <div class="slds-m-bottom_medium">
+                    <div class="font-bold text-xs uppercase text-primary slds-m-bottom_xx-small">Allotted Property Specifications:</div>
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer spec-table">
+                        <tbody>
+                            <tr>
+                                <td class="font-semibold text-muted text-xs" style="width:25%;">Project &amp; Tower:</td>
+                                <td class="font-bold text-xs" style="width:25%;">{letterData.projectName} - {letterData.towerName}</td>
+                                <td class="font-semibold text-muted text-xs" style="width:25%;">Unit / Apartment No:</td>
+                                <td class="font-bold text-xs" style="width:25%;">{letterData.unitName}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-muted text-xs">Floor Level:</td>
+                                <td class="font-bold text-xs">Level {letterData.floorNumber}</td>
+                                <td class="font-semibold text-muted text-xs">Configuration:</td>
+                                <td class="font-bold text-xs">{letterData.configuration} Residence</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-muted text-xs">Super Built-Up Area (SBA):</td>
+                                <td class="font-bold text-xs">{letterData.sbaSqFt} Sq.Ft.</td>
+                                <td class="font-semibold text-muted text-xs">RERA Carpet Area:</td>
+                                <td class="font-bold text-xs">{letterData.carpetAreaSqFt} Sq.Ft.</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold text-muted text-xs">Car Parking Space:</td>
+                                <td class="font-bold text-xs">{letterData.parkingSlot}</td>
+                                <td class="font-semibold text-muted text-xs">Booking ID / Ref:</td>
+                                <td class="font-bold text-xs">{letterData.bookingReferenceId}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Financial Commercials Box -->
+                <div class="commercial-box slds-p-around_medium slds-m-bottom_medium">
+                    <div class="slds-grid slds-gutters slds-text-align_center">
+                        <div class="slds-col slds-size_1-of-3">
+                            <div class="text-xs text-muted uppercase font-bold">Total Agreement Cost</div>
+                            <div class="font-bold text-base text-dark slds-m-top_xx-small">₹{formattedAgreementValue}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <div class="text-xs text-muted uppercase font-bold">Token Amount Paid</div>
+                            <div class="font-bold text-base text-success slds-m-top_xx-small">₹{formattedTokenPaid}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <div class="text-xs text-muted uppercase font-bold">Balance Payable</div>
+                            <div class="font-bold text-base text-primary slds-m-top_xx-small">₹{formattedBalanceDue}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Milestone Payment Schedule Table -->
+                <div class="slds-m-bottom_medium">
+                    <div class="font-bold text-xs uppercase text-primary slds-m-bottom_xx-small">Construction Linked Payment Schedule:</div>
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer milestone-table">
+                        <thead>
+                            <tr class="table-header-row">
+                                <th scope="col">Milestone Stage</th>
+                                <th scope="col">Due Date</th>
+                                <th scope="col" class="slds-text-align_right">Amount (₹)</th>
+                                <th scope="col" class="slds-text-align_center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={letterData.milestones} for:item="m">
+                                <tr key={m.id}>
+                                    <td class="font-semibold text-xs text-dark">{m.milestoneName}</td>
+                                    <td class="text-xs text-muted">{m.dueDate}</td>
+                                    <td class="slds-text-align_right text-xs font-semibold">₹{m.amount}</td>
+                                    <td class="slds-text-align_center">
+                                        <span class="status-badge">{m.status}</span>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Terms & Signatures -->
+                <div class="slds-m-top_large border-top-primary slds-p-top_medium">
+                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-end">
+                        <div>
+                            <div class="sig-line"></div>
+                            <div class="text-xs font-bold text-dark">Customer Acknowledgment</div>
+                            <div class="text-xs text-muted">Signature of Allottee</div>
+                        </div>
+                        <div class="slds-text-align_center">
+                            <div class="digital-seal">
+                                <div class="seal-inner">
+                                    <span class="seal-text-top">AUTHENTICATED</span>
+                                    <lightning-icon icon-name="utility:approval" size="x-small" class="seal-icon"></lightning-icon>
+                                    <span class="seal-text-bottom">OFFICIAL SEAL</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-text-align_right">
+                            <div class="font-handwriting">Siddharth Nambiar</div>
+                            <div class="text-xs font-bold text-dark">Authorized Signatory</div>
+                            <div class="text-xs text-muted">For {letterData.projectName} Development Ltd</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Quick Action Footer -->
+        <div slot="footer">
+            <lightning-button label="Close" variant="neutral" onclick={handleClose} class="slds-m-right_x-small"></lightning-button>
+            <lightning-button label="Print / Download PDF" variant="neutral" icon-name="utility:print" onclick={handlePrint} class="slds-m-right_x-small"></lightning-button>
+            <lightning-button label="Send PDF to Customer Email" variant="brand" icon-name="utility:email" onclick={handleSendEmail} disabled={isSendingEmail}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

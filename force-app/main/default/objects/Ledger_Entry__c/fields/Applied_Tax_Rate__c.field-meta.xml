@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Applied_Tax_Rate__c</fullName>
+    <description>Tax rate applied when posting the entry.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Tax percentage that was in force for the interest component when this ledger entry posted.</inlineHelpText>
+    <label>Applied Tax Rate (%)</label>
+    <precision>5</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

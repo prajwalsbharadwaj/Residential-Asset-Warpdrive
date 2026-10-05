@@ -1,0 +1,232 @@
+<template>
+    <div class="gateway-card slds-card">
+        <!-- Card Header -->
+        <div class="gateway-header">
+            <div class="brand-row">
+                <div class="brand-badge">
+                    <span class="brand-icon">⚡</span>
+                    <span class="brand-text">EASEBUZZ DIRECT PAY</span>
+                </div>
+                <div class="security-pill">
+                    <span class="lock-icon">🔒</span> 256-bit SSL
+                </div>
+            </div>
+            <div class="payment-title">Token Advance Collection</div>
+            <div class="amount-display">
+                <span class="currency">₹</span>
+                <span class="amount-val">5,00,000</span>
+                <span class="amount-cents">.00</span>
+            </div>
+            <div class="fee-note">Inclusive of GST • Instant Merchant Settlement</div>
+        </div>
+
+        <!-- Card Body -->
+        <div class="gateway-body">
+            <template if:true={isPaid}>
+                <div class="paid-status-box">
+                    <div class="status-check-circle">✓</div>
+                    <div class="status-main-text">Token Payment Captured</div>
+                    <div class="status-utr">UTR: {transactionUtr}</div>
+                    <div class="status-time">Settled: {settlementTimestamp}</div>
+                    <button class="btn-secondary-sm" onclick={openModal}>View Payment Receipt</button>
+                </div>
+            </template>
+
+            <template if:false={isPaid}>
+                <div class="unpaid-action-box">
+                    <div class="order-ref">Order Reference: <strong>{orderReference}</strong></div>
+                    <button class="btn-pay-now" onclick={openModal}>
+                        <span class="btn-sparkle">✨</span>
+                        <span>Collect Token Advance (₹5,00,000)</span>
+                    </button>
+                    <div class="channel-logos">
+                        <span>UPI</span> • <span>NetBanking</span> • <span>Visa/Mastercard</span> • <span>NEFT/RTGS</span>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Interactive Payment Modal -->
+        <template if:true={showModal}>
+            <div class="modal-backdrop">
+                <div class="modal-container">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <div class="modal-brand">
+                            <span class="brand-logo-icon">⚡</span>
+                            <div>
+                                <div class="modal-title">Easebuzz Enterprise Checkout</div>
+                                <div class="modal-sub">Bhartiya City Developers Pvt Ltd</div>
+                            </div>
+                        </div>
+                        <button class="modal-close-btn" onclick={closeModal}>✕</button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <!-- Step 1: Selection Mode -->
+                        <template if:true={isModalInput}>
+                            <div class="modal-amount-banner">
+                                <div>
+                                    <div class="banner-sub">Payable Token Advance</div>
+                                    <div class="banner-amount">₹ 5,00,000.00</div>
+                                </div>
+                                <div class="order-pill">#ORD-90218</div>
+                            </div>
+
+                            <!-- Tabs -->
+                            <div class="payment-tabs">
+                                <button class={tabUpiClass} onclick={selectTabUpi}>📲 UPI & QR</button>
+                                <button class={tabNetbankingClass} onclick={selectTabNetbanking}>🏛 NetBanking</button>
+                                <button class={tabCardClass} onclick={selectTabCard}>💳 Cards</button>
+                            </div>
+
+                            <!-- Tab 1: UPI -->
+                            <template if:true={isTabUpi}>
+                                <div class="tab-content upi-content">
+                                    <div class="qr-wrapper">
+                                        <!-- Animated SVG QR Code -->
+                                        <svg class="qr-svg" viewBox="0 0 160 160" width="140" height="140">
+                                            <rect width="160" height="160" fill="#ffffff" rx="8" />
+                                            <!-- Corner Squares -->
+                                            <rect x="10" y="10" width="40" height="40" fill="#0f172a" rx="4" />
+                                            <rect x="16" y="16" width="28" height="28" fill="#ffffff" rx="2" />
+                                            <rect x="22" y="22" width="16" height="16" fill="#0f172a" rx="1" />
+
+                                            <rect x="110" y="10" width="40" height="40" fill="#0f172a" rx="4" />
+                                            <rect x="116" y="16" width="28" height="28" fill="#ffffff" rx="2" />
+                                            <rect x="122" y="22" width="16" height="16" fill="#0f172a" rx="1" />
+
+                                            <rect x="10" y="110" width="40" height="40" fill="#0f172a" rx="4" />
+                                            <rect x="16" y="116" width="28" height="28" fill="#ffffff" rx="2" />
+                                            <rect x="22" y="122" width="16" height="16" fill="#0f172a" rx="1" />
+
+                                            <!-- Data Pixels Mockup -->
+                                            <rect x="60" y="20" width="12" height="12" fill="#0f172a" />
+                                            <rect x="80" y="30" width="12" height="12" fill="#0f172a" />
+                                            <rect x="60" y="60" width="40" height="40" fill="#10b981" rx="6" />
+                                            <text x="73" y="85" font-size="16" fill="#ffffff" font-weight="bold">₹</text>
+                                            <rect x="20" y="65" width="15" height="15" fill="#0f172a" />
+                                            <rect x="115" y="70" width="20" height="12" fill="#0f172a" />
+                                            <rect x="60" y="120" width="20" height="12" fill="#0f172a" />
+                                            <rect x="90" y="115" width="15" height="25" fill="#0f172a" />
+                                            <rect x="125" y="125" width="18" height="18" fill="#0f172a" />
+                                        </svg>
+                                    </div>
+                                    <div class="qr-timer">
+                                        <span>⏳ QR Expires in </span>
+                                        <span class="timer-digits">{countdownFormatted}</span>
+                                    </div>
+                                    <div class="upi-apps-row">
+                                        <span class="app-chip">GPay</span>
+                                        <span class="app-chip">PhonePe</span>
+                                        <span class="app-chip">Paytm</span>
+                                        <span class="app-chip">BHIM</span>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Tab 2: NetBanking -->
+                            <template if:true={isTabNetbanking}>
+                                <div class="tab-content">
+                                    <div class="bank-grid">
+                                        <div class={bankHdfcClass} onclick={selectBankHdfc}>
+                                            <span class="bank-icon">🏦</span>
+                                            <span class="bank-title">HDFC Bank</span>
+                                        </div>
+                                        <div class={bankIciciClass} onclick={selectBankIcici}>
+                                            <span class="bank-icon">🏦</span>
+                                            <span class="bank-title">ICICI Bank</span>
+                                        </div>
+                                        <div class={bankSbiClass} onclick={selectBankSbi}>
+                                            <span class="bank-icon">🏦</span>
+                                            <span class="bank-title">State Bank of India</span>
+                                        </div>
+                                        <div class={bankAxisClass} onclick={selectBankAxis}>
+                                            <span class="bank-icon">🏦</span>
+                                            <span class="bank-title">Axis Bank</span>
+                                        </div>
+                                    </div>
+                                    <div class="selected-bank-note">Selected: <strong>{selectedBank}</strong> (Corporate NetBanking)</div>
+                                </div>
+                            </template>
+
+                            <!-- Tab 3: Cards -->
+                            <template if:true={isTabCard}>
+                                <div class="tab-content card-form">
+                                    <div class="card-input-group">
+                                        <label class="card-label">Card Number</label>
+                                        <input class="card-input" type="text" value="4532 •••• •••• 8912" readonly />
+                                    </div>
+                                    <div class="card-row">
+                                        <div class="card-input-group">
+                                            <label class="card-label">Expiry</label>
+                                            <input class="card-input" type="text" value="08/29" readonly />
+                                        </div>
+                                        <div class="card-input-group">
+                                            <label class="card-label">CVV</label>
+                                            <input class="card-input" type="password" value="•••" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Trigger Simulation Button -->
+                            <div class="modal-footer-btn">
+                                <button class="btn-execute-pay" onclick={simulatePayment}>
+                                    <span>🚀 Simulate Gateway Authorization</span>
+                                </button>
+                            </div>
+                        </template>
+
+                        <!-- Step 2: Processing -->
+                        <template if:true={isModalProcessing}>
+                            <div class="processing-view">
+                                <div class="spinner-3d-wrapper">
+                                    <div class="spinner-3d"></div>
+                                </div>
+                                <div class="proc-title">Authorizing with Banking Gateway</div>
+                                <div class="proc-step-ticker">{processingStepText}</div>
+                                <div class="proc-sub">Do not close this window or refresh your browser</div>
+                            </div>
+                        </template>
+
+                        <!-- Step 3: Success -->
+                        <template if:true={isModalSuccess}>
+                            <div class="success-view">
+                                <div class="checkmark-wrapper">
+                                    <div class="checkmark-circle">✓</div>
+                                </div>
+                                <div class="success-title">Payment Successful!</div>
+                                <div class="success-amount">₹ 5,00,000.00 Received</div>
+
+                                <div class="receipt-card">
+                                    <div class="receipt-row">
+                                        <span class="receipt-lbl">Transaction Reference:</span>
+                                        <span class="receipt-val">{transactionUtr}</span>
+                                    </div>
+                                    <div class="receipt-row">
+                                        <span class="receipt-lbl">Bank UTR / Auth Code:</span>
+                                        <span class="receipt-val">HDFC-N9821876402</span>
+                                    </div>
+                                    <div class="receipt-row">
+                                        <span class="receipt-lbl">Customer:</span>
+                                        <span class="receipt-val">{customerName}</span>
+                                    </div>
+                                    <div class="receipt-row">
+                                        <span class="receipt-lbl">CRM Ledger Status:</span>
+                                        <span class="receipt-badge-green">Synchronized</span>
+                                    </div>
+                                </div>
+
+                                <button class="btn-done" onclick={finishSuccess}>
+                                    <span>Complete & Update Opportunity</span>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

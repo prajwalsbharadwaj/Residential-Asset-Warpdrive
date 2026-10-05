@@ -1,0 +1,120 @@
+<template>
+    <div class="archive-container slds-m-bottom_medium">
+        <template if:true={isLoading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading archive status" size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <!-- STATE 1: FOLLOW UP DUE (ALERT) -->
+            <template if:true={isFollowUpDue}>
+                <div class="banner-box banner-due slds-p-around_medium">
+                    <div class="slds-grid slds-grid_vertical-align-center">
+                        <div class="banner-icon-pulse slds-m-right_small">
+                            <lightning-icon icon-name="utility:notification" size="small" variant="warning"></lightning-icon>
+                        </div>
+                        <div class="slds-col">
+                            <div class="slds-grid slds-grid_vertical-align-center">
+                                <h3 class="banner-title text-warning">Customer might be ready, follow up! 🔔</h3>
+                                <span class="badge-due slds-m-left_small">Action Required</span>
+                            </div>
+                            <p class="banner-subtitle slds-m-top_xx-small">
+                                This customer was archived for <strong>{archiveDays} days</strong>. The cooling-off period has elapsed. Time to re-engage and schedule a site visit!
+                            </p>
+                        </div>
+                        <div class="banner-actions slds-grid slds-grid_vertical-align-center">
+                            <lightning-button 
+                                variant="brand" 
+                                label="Mark Followed Up" 
+                                icon-name="utility:check" 
+                                onclick={handleCompleteFollowUp}
+                                class="btn-action">
+                            </lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- STATE 2: CURRENTLY ARCHIVED (COOLING OFF) -->
+            <template if:true={isArchived}>
+                <div class="banner-box banner-archived slds-p-around_medium">
+                    <div class="slds-grid slds-grid_vertical-align-center">
+                        <div class="banner-icon slds-m-right_small">
+                            <lightning-icon icon-name="utility:clock" size="small" variant="bare"></lightning-icon>
+                        </div>
+                        <div class="slds-col">
+                            <div class="slds-grid slds-grid_vertical-align-center">
+                                <h3 class="banner-title text-neutral">Lead Archived: Cooling-off Period 📦</h3>
+                                <span class="badge-archived slds-m-left_small">{archiveDays} Days</span>
+                            </div>
+                            <p class="banner-subtitle slds-m-top_xx-small">
+                                Auto follow-up scheduled for <strong>{formattedFollowUpDate}</strong>. A notification will alert you when customer is ready.
+                            </p>
+                        </div>
+                        <div class="banner-actions slds-grid slds-grid_vertical-align-center">
+                            <lightning-button-menu alternative-text="Archive Actions" menu-alignment="right" onselect={handleMenuSelect}>
+                                <lightning-menu-item value="trigger_now" label="Simulate Follow-Up Now (Demo)" icon-name="utility:notification"></lightning-menu-item>
+                                <lightning-menu-item value="clear_archive" label="Clear Archive / Unarchive" icon-name="utility:clear"></lightning-menu-item>
+                            </lightning-button-menu>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- STATE 3: ACTIVE LEAD (QUICK ARCHIVE ACTION) -->
+            <template if:true={isIdle}>
+                <div class="banner-box banner-idle slds-p-around_small slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+                    <div class="slds-grid slds-grid_vertical-align-center">
+                        <lightning-icon icon-name="utility:archive" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        <span class="idle-text">Need to cool off this lead?</span>
+                    </div>
+                    <div class="slds-grid slds-grid_vertical-align-center">
+                        <button class="chip-btn" data-days="7" onclick={handleQuickArchive}>7 Days</button>
+                        <button class="chip-btn" data-days="15" onclick={handleQuickArchive}>15 Days</button>
+                        <button class="chip-btn" data-days="30" onclick={handleQuickArchive}>30 Days</button>
+                        <button class="chip-btn" data-days="60" onclick={handleQuickArchive}>60 Days</button>
+                        <lightning-button 
+                            variant="base" 
+                            label="Custom..." 
+                            onclick={handleOpenCustomModal} 
+                            class="slds-m-left_x-small custom-link">
+                        </lightning-button>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </div>
+
+    <!-- CUSTOM ARCHIVE MODAL -->
+    <template if:true={isCustomModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header modal-head">
+                    <h2 class="slds-text-heading_medium font-bold">📦 Archive Lead for Follow-up</h2>
+                    <p class="slds-text-color_weak slds-m-top_xx-small">Set cooling-off duration in days before follow-up alert fires</p>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-input 
+                        type="number" 
+                        label="Archive For (in days)" 
+                        value={customDaysInput} 
+                        min="1" 
+                        max="365"
+                        onchange={handleDaysInputChange} 
+                        placeholder="e.g. 45"
+                        required>
+                    </lightning-input>
+                    <p class="slds-text-color_weak slds-m-top_x-small slds-text-body_small">
+                        The system will schedule an automated notification: <em>"Customer might be ready, follow up"</em> exactly when this duration completes.
+                    </p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCloseCustomModal} class="slds-m-right_x-small"></lightning-button>
+                    <lightning-button variant="brand" label="Save &amp; Archive" onclick={handleSaveCustomArchive} disabled={isSaveDisabled}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Updated_Source__c</fullName>
+    <externalId>false</externalId>
+    <label>Updated Source</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>8147505558</fullName>
+                <default>false</default>
+                <label>8147505558</label>
+            </value>
+            <value>
+                <fullName>99Acres</fullName>
+                <default>false</default>
+                <label>99Acres</label>
+            </value>
+            <value>
+                <fullName>Ad</fullName>
+                <default>false</default>
+                <label>Ad</label>
+            </value>
+            <value>
+                <fullName>Agent</fullName>
+                <default>false</default>
+                <label>Agent</label>
+            </value>
+            <value>
+                <fullName>ANAROCK Property Consultants Pvt. Ltd.</fullName>
+                <default>false</default>
+                <label>ANAROCK Property Consultants Pvt. Ltd.</label>
+            </value>
+            <value>
+                <fullName>BMW Event 2021</fullName>
+                <default>false</default>
+                <label>BMW Event 2021</label>
+            </value>
+            <value>
+                <fullName>Channel Partner</fullName>
+                <default>false</default>
+                <label>Channel Partner</label>
+            </value>
+            <value>
+                <fullName>Common Floor</fullName>
+                <default>false</default>
+                <label>Common Floor</label>
+            </value>
+            <value>
+                <fullName>Database</fullName>
+                <default>false</default>
+                <label>Database</label>
+            </value>
+            <value>
+                <fullName>Database BP</fullName>
+                <default>false</default>
+                <label>Database BP</label>
+            </value>
+            <value>
+                <fullName>Database ISML</fullName>
+                <default>false</default>
+                <label>Database ISML</label>
+            </value>
+            <value>
+                <fullName>Database VK</fullName>
+                <default>false</default>
+                <label>Database VK</label>
+            </value>
+            <value>
+                <fullName>EDM</fullName>
+                <default>false</default>
+                <label>EDM</label>
+            </value>
+            <value>
+                <fullName>Employee</fullName>
+                <default>false</default>
+                <label>Employee</label>
+            </value>
+            <value>
+                <fullName>ETconnect</fullName>
+                <default>false</default>
+                <label>ETconnect</label>
+            </value>
+            <value>
+                <fullName>Events</fullName>
+                <default>false</default>
+                <label>Events</label>
+            </value>
+            <value>
+                <fullName>Exhibition</fullName>
+                <default>false</default>
+                <label>Exhibition</label>
+            </value>
+            <value>
+                <fullName>Existing Customer</fullName>
+                <default>false</default>
+                <label>Existing Customer</label>
+            </value>
+            <value>
+                <fullName>Existing Prospect&apos;s Reference</fullName>
+                <default>false</default>
+                <label>Existing Prospect&apos;s Reference</label>
+            </value>
+            <value>
+                <fullName>Facebook (LP)</fullName>
+                <default>false</default>
+                <label>Facebook (LP)</label>
+            </value>
+            <value>
+                <fullName>Facebook Conversion (LP)</fullName>
+                <default>false</default>
+                <label>Facebook Conversion (LP)</label>
+            </value>
+            <value>
+                <fullName>Fests</fullName>
+                <default>false</default>
+                <label>Fests</label>
+            </value>
+            <value>
+                <fullName>Friends</fullName>
+                <default>false</default>
+                <label>Friends</label>
+            </value>
+            <value>
+                <fullName>Google Discovery</fullName>
+                <default>false</default>
+                <label>Google Discovery</label>
+            </value>
+            <value>
+                <fullName>Google Display (LP)</fullName>
+                <default>false</default>
+                <label>Google Display (LP)</label>
+            </value>
+            <value>
+                <fullName>Google Performance Max</fullName>
+                <default>false</default>
+                <label>Google Performance Max</label>
+            </value>
+            <value>
+                <fullName>Google search (LP)</fullName>
+                <default>false</default>
+                <label>Google search (LP)</label>
+            </value>
+            <value>
+                <fullName>Hoardings</fullName>
+                <default>false</default>
+                <label>Hoardings</label>
+            </value>
+            <value>
+                <fullName>Housing.Com</fullName>
+                <default>false</default>
+                <label>Housing.Com</label>
+            </value>
+            <value>
+                <fullName>Influencer</fullName>
+                <default>false</default>
+                <label>Influencer</label>
+            </value>
+            <value>
+                <fullName>Instagram</fullName>
+                <default>false</default>
+                <label>Instagram</label>
+            </value>
+            <value>
+                <fullName>Kessaku Vitual Number</fullName>
+                <default>false</default>
+                <label>Kessaku Vitual Number</label>
+            </value>
+            <value>
+                <fullName>linkedin</fullName>
+                <default>false</default>
+                <label>linkedin</label>
+            </value>
+            <value>
+                <fullName>MagicBricks</fullName>
+                <default>false</default>
+                <label>MagicBricks</label>
+            </value>
+            <value>
+                <fullName>Management Reference</fullName>
+                <default>false</default>
+                <label>Management Reference</label>
+            </value>
+            <value>
+                <fullName>Manual</fullName>
+                <default>false</default>
+                <label>Manual</label>
+            </value>
+            <value>
+                <fullName>Native</fullName>
+                <default>false</default>
+                <label>Native</label>
+            </value>
+            <value>
+                <fullName>Needtoday.com</fullName>
+                <default>false</default>
+                <label>Needtoday.com</label>
+            </value>
+            <value>
+                <fullName>Newspaper Insert</fullName>
+                <default>false</default>
+                <label>Newspaper Insert</label>
+            </value>
+            <value>
+                <fullName>OBW landingPage</fullName>
+                <default>false</default>
+                <label>OBW landingPage</label>
+            </value>
+            <value>
+                <fullName>OBW Virtual number</fullName>
+                <default>false</default>
+                <label>OBW Virtual number</label>
+            </value>
+            <value>
+                <fullName>One Bangalore West Landing Page(OBWLP)</fullName>
+                <default>false</default>
+                <label>One Bangalore West Landing Page(OBWLP)</label>
+            </value>
+            <value>
+                <fullName>Online Advertisement</fullName>
+                <default>false</default>
+                <label>Online Advertisement</label>
+            </value>
+            <value>
+                <fullName>Online Magazine</fullName>
+                <default>false</default>
+                <label>Online Magazine</label>
+            </value>
+            <value>
+                <fullName>Palladium construction pvt ltd Demo</fullName>
+                <default>false</default>
+                <label>Palladium construction pvt ltd Demo</label>
+            </value>
+            <value>
+                <fullName>Portal</fullName>
+                <default>false</default>
+                <label>Portal</label>
+            </value>
+            <value>
+                <fullName>Print</fullName>
+                <default>false</default>
+                <label>Print</label>
+            </value>
+            <value>
+                <fullName>Radio</fullName>
+                <default>false</default>
+                <label>Radio</label>
+            </value>
+            <value>
+                <fullName>Referrals</fullName>
+                <default>false</default>
+                <label>Referrals</label>
+            </value>
+            <value>
+                <fullName>Relative</fullName>
+                <default>false</default>
+                <label>Relative</label>
+            </value>
+            <value>
+                <fullName>Response to Ad</fullName>
+                <default>false</default>
+                <label>Response to Ad</label>
+            </value>
+            <value>
+                <fullName>Roof And Floor</fullName>
+                <default>false</default>
+                <label>Roof And Floor</label>
+            </value>
+            <value>
+                <fullName>Self Generated</fullName>
+                <default>false</default>
+                <label>Self Generated</label>
+            </value>
+            <value>
+                <fullName>Site Enquiry</fullName>
+                <default>false</default>
+                <label>Site Enquiry</label>
+            </value>
+            <value>
+                <fullName>Telephone</fullName>
+                <default>false</default>
+                <label>Telephone</label>
+            </value>
+            <value>
+                <fullName>TOI Road block</fullName>
+                <default>false</default>
+                <label>TOI Road block</label>
+            </value>
+            <value>
+                <fullName>Tower 7 (LandingPage)</fullName>
+                <default>false</default>
+                <label>Tower 7 (LandingPage)</label>
+            </value>
+            <value>
+                <fullName>Vapp</fullName>
+                <default>false</default>
+                <label>Vapp</label>
+            </value>
+            <value>
+                <fullName>Walk-In</fullName>
+                <default>false</default>
+                <label>Walk-In</label>
+            </value>
+            <value>
+                <fullName>Web</fullName>
+                <default>false</default>
+                <label>Web</label>
+            </value>
+            <value>
+                <fullName>Web Enquiry</fullName>
+                <default>false</default>
+                <label>Web Enquiry</label>
+            </value>
+            <value>
+                <fullName>Web Portals</fullName>
+                <default>false</default>
+                <label>Web Portals</label>
+            </value>
+            <value>
+                <fullName>Website Inquiry</fullName>
+                <default>false</default>
+                <label>Website Inquiry</label>
+            </value>
+            <value>
+                <fullName>Website Lead(KESSAKU)</fullName>
+                <default>false</default>
+                <label>Website Lead(KESSAKU)</label>
+            </value>
+            <value>
+                <fullName>Website Lead (One Bangalore West)</fullName>
+                <default>false</default>
+                <label>Website Lead (One Bangalore West)</label>
+            </value>
+            <value>
+                <fullName>whatsapp</fullName>
+                <default>false</default>
+                <label>whatsapp</label>
+            </value>
+            <value>
+                <fullName>WhatsApp Lead Gen</fullName>
+                <default>false</default>
+                <label>WhatsApp Lead Gen</label>
+            </value>
+            <value>
+                <fullName>YouTube (LP)</fullName>
+                <default>false</default>
+                <label>YouTube (LP)</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

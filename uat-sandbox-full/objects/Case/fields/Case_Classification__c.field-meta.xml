@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Case_Classification__c</fullName>
+    <description>SIMPLE cases are answered by the Nikoo Homes Email Support Agent; COMPLEX cases go to the CRM team. Set by CaseClassificationTrigger and the Escalate To CRM Team action.</description>
+    <externalId>false</externalId>
+    <label>Case Classification</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>SIMPLE</fullName>
+                <default>false</default>
+                <label>SIMPLE</label>
+            </value>
+            <value>
+                <fullName>COMPLEX</fullName>
+                <default>false</default>
+                <label>COMPLEX</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

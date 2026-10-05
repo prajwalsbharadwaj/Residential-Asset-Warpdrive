@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_60Min_Reminder_Emails</name>
+        <label>Send 60Min Reminder Emails</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddressesArray</name>
+            <value>
+                <elementReference>emailList_recipient</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>Subject_Template</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>Reminder60_Template</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_90Min_Reminder_Emails</name>
+        <label>Send 90Min Reminder Emails</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddressesArray</name>
+            <value>
+                <elementReference>emailList_recipient</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>Subject_Template</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>Reminder90_TextTemplate</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Bell_Notification_for_both_reminders</name>
+        <label>Send Bell Notification for both reminders</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <connector>
+            <targetReference>Check_for_reminder_type</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>Get_Custom_Notification.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>id_List_recipients</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <elementReference>title_template</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>notification_body_template</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>Get_Initial_Contact_Task.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <assignments>
+        <name>Creating_Email_Id_list_of_recipients</name>
+        <label>Creating Email &amp; Id list of recipients</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>emailList_recipient</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Initial_Contact_Task.Owner:User.Manager.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>emailList_recipient</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Initial_Contact_Task.Owner:User.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>id_List_recipients</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Initial_Contact_Task.Owner:User.Manager.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>id_List_recipients</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Initial_Contact_Task.OwnerId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Lead_related_Task</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_for_reminder_type</name>
+        <label>Check for reminder type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>X60</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>reminderType</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>60</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_60Min_Reminder_Emails</targetReference>
+            </connector>
+            <label>60</label>
+        </rules>
+        <rules>
+            <name>X90</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>reminderType</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>90</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_90Min_Reminder_Emails</targetReference>
+            </connector>
+            <label>90</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_Task_is_closed</name>
+        <label>Check if Task is closed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Closed</defaultConnectorLabel>
+        <rules>
+            <name>Not_Closed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Initial_Contact_Task.IsClosed</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Initial_Contact_Task.Subject</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Initial Contact</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Null_and_Active_check_on_the_Owner_and_Manager_record</targetReference>
+            </connector>
+            <label>Not Closed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Null_and_Active_check_on_the_Owner_and_Manager_record</name>
+        <label>Null and Active check on the Owner and Manager record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Active_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Initial_Contact_Task.Owner:User.ManagerId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Initial_Contact_Task.Owner:User.Manager.IsActive</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Initial_Contact_Task.Owner:User.IsActive</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Creating_Email_Id_list_of_recipients</targetReference>
+            </connector>
+            <label>Active &amp; Not Null</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>Email_Body_template</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  {!reminderType} = &apos;60&apos;,
+  &quot;&lt;p&gt;Dear &quot; &amp; {!Get_Lead_related_Task.FirstName} &amp; &quot;,&lt;/p&gt;&lt;p style=&apos;color: #E67E22;&apos;&gt;&lt;strong&gt;This is an urgent reminder!&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The &lt;strong&gt;&apos;Initial Contact&apos;&lt;/strong&gt; task for Lead: &lt;strong&gt;&quot; &amp; {!Get_Lead_related_Task.FirstName} &amp; &quot; &quot; &amp; {!Get_Lead_related_Task.LastName} &amp; &quot;&lt;/strong&gt; has not been completed within &lt;strong&gt;60 minutes&lt;/strong&gt; of assignment.&lt;/p&gt;&lt;p&gt;Please make immediate contact with the customer and mark the task as complete in the system.&lt;/p&gt;&lt;p&gt;Your prompt attention to this matter is crucial to maintain our response time standards.&lt;/p&gt;&lt;p&gt;Best regards,&lt;br/&gt;Phoenix Residential Notifications&lt;/p&gt;&quot;,
+  
+  &quot;&lt;p&gt;Dear &quot; &amp; {!Get_Lead_related_Task.FirstName} &amp; &quot; and Leadership Team,&lt;/p&gt;&lt;p style=&apos;color: #C0392B;&apos;&gt;&lt;strong&gt;This is a critical and final reminder!&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;The &lt;strong&gt;&apos;Initial Contact&apos;&lt;/strong&gt; task for Lead: &lt;strong&gt;&quot; &amp; {!Get_Lead_related_Task.FirstName} &amp; &quot; &quot; &amp; {!Get_Lead_related_Task.LastName} &amp; &quot;&lt;/strong&gt; has &lt;u&gt;still not been completed 90 minutes after assignment&lt;/u&gt;, despite previous notifications.&lt;/p&gt;&lt;p&gt;Immediate action is required to contact the customer and mark this task as complete. This ongoing delay directly impacts our response time metrics.&lt;/p&gt;&lt;p style=&apos;color: #C0392B;&apos;&gt;&lt;strong&gt;If this task is not resolved immediately, further internal escalation will occur.&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Best regards,&lt;br/&gt;Phoenix Residential Notifications&lt;/p&gt;&quot;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>notification_body_template</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  {!reminderType} = &apos;60&apos;,
+  &quot;The &apos;Initial Contact&apos; task for Lead &quot; &amp; {!Get_Lead_related_Task.FirstName} &amp; &quot; &quot; &amp; {!Get_Lead_related_Task.LastName} &amp; &quot; has not been completed within 60 minutes of assignment. Immediate follow-up is required to meet response time standards.&quot;,
+  &quot;The &apos;Initial Contact&apos; task for Lead &quot; &amp; {!Get_Lead_related_Task.FirstName} &amp; &quot; &quot; &amp; {!Get_Lead_related_Task.LastName} &amp; &quot; remains incomplete 90 minutes after assignment, despite previous reminders. Immediate action is mandatory — internal escalation will follow if unresolved.&quot;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>Subject_Template</name>
+        <dataType>String</dataType>
+        <expression>IF({!reminderType}==&apos;60&apos;, 
+&apos;ACTION REQUIRED: Initial Contact Overdue for Lead: Get_Lead_related_Task.FirstName Get_Lead_related_Task.LastName&apos;, 
+&apos;FINAL URGENT: Lead Get_Lead_related_Task.FirstName Get_Lead_related_Task.LastName - Initial Contact STILL Not Made (90 Mins)&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>title_template</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  {!reminderType} = &apos;60&apos;,
+  &quot;⚠️ Urgent: Initial Contact Pending&quot;,
+  &quot;🚨 Critical: Final Reminder for Initial Contact&quot;
+)</expression>
+    </formulas>
+    <interviewLabel>Task Reminder Subflow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Task Reminder Subflow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Custom_Notification</name>
+        <label>Get Custom Notification</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Send_Bell_Notification_for_both_reminders</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>General_Custom_Notification</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Initial_Contact_Task</name>
+        <label>Get Initial Contact Task</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_if_Task_is_closed</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Lead_related_Task</name>
+        <label>Get Lead related Task</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Custom_Notification</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Initial_Contact_Task.WhoId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Initial_Contact_Task</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>Reminder60_Template</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;div style=&quot;max-width: 600px; margin: 20px auto; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; font-family: Arial, sans-serif; color: #333333; background-color: #ffffff; padding: 25px;&quot;&gt;
+
+  &lt;div style=&quot;background-color: #FFF6E5; padding: 20px; text-align: center; border-radius: 6px; border: 1px solid #FFE0B2; margin-bottom: 25px;&quot;&gt;
+    &lt;h2 style=&quot;color: #E67E22; font-size: 22px; margin: 0;&quot;&gt;Urgent Reminder ⚠️&lt;/h2&gt;
+  &lt;/div&gt;
+
+  &lt;p style=&quot;font-size: 16px; margin-bottom: 20px;&quot;&gt;Dear &lt;strong&gt;{!Get_Lead_related_Task.FirstName} {!Get_Lead_related_Task.LastName}&lt;/strong&gt;,&lt;/p&gt;
+
+  &lt;p style=&quot;font-size: 15px; line-height: 1.6; margin-bottom: 15px;&quot;&gt;
+    This is a kind reminder that the &lt;strong&gt;&apos;Initial Contact&apos;&lt;/strong&gt; task for Lead: 
+    &lt;strong&gt;{!Get_Lead_related_Task.FirstName} {!Get_Lead_related_Task.LastName}&lt;/strong&gt; 
+    has not been completed within &lt;strong&gt;60 minutes&lt;/strong&gt; of assignment.
+  &lt;/p&gt;
+
+  &lt;div style=&quot;background-color: #FCF3CF; padding: 15px; border: 1px solid #F9E79F; border-radius: 5px; margin: 25px 0; text-align: center;&quot;&gt;
+    &lt;p style=&quot;margin: 0; font-size: 15px; color: #555555;&quot;&gt;
+      📞 &lt;strong&gt;Please contact the customer immediately&lt;/strong&gt; and mark the task as &lt;strong&gt;Complete&lt;/strong&gt; in the system.
+    &lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;p style=&quot;font-size: 14px; color: #555555; margin-bottom: 30px;&quot;&gt;
+    Your prompt attention is essential to uphold our response time standards.
+  &lt;/p&gt;
+
+  &lt;p style=&quot;font-size: 14px; margin-top: 40px;&quot;&gt;Best regards,&lt;br/&gt;&lt;strong&gt;Phoenix Residential Notifications&lt;/strong&gt;&lt;/p&gt;
+
+&lt;/div&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>Reminder90_TextTemplate</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;div style=&quot;max-width: 600px; margin: 20px auto; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; font-family: Arial, sans-serif; color: #333333; background-color: #ffffff; padding: 25px;&quot;&gt;
+
+
+
+ &lt;div style=&quot;background-color: #FDECEA; padding: 20px; text-align: center; border-radius: 6px; border: 1px solid #F5B7B1; margin-bottom: 25px;&quot;&gt;
+
+  &lt;h2 style=&quot;color: #C0392B; font-size: 22px; margin: 0;&quot;&gt;Critical &amp; Final Reminder 🚨&lt;/h2&gt;
+
+ &lt;/div&gt;
+
+
+
+ &lt;p style=&quot;font-size: 16px; margin-bottom: 20px;&quot;&gt;Dear &lt;strong&gt;{!Get_Lead_related_Task.FirstName} {!Get_Lead_related_Task.LastName}&lt;/strong&gt; and Leadership Team,&lt;/p&gt;
+
+
+
+ &lt;p style=&quot;font-size: 15px; line-height: 1.6; margin-bottom: 15px;&quot;&gt;
+
+  The &lt;strong&gt;&apos;Initial Contact&apos;&lt;/strong&gt; task for Lead: 
+
+  &lt;strong&gt;{!Get_Lead_related_Task.FirstName} {!Get_Lead_related_Task.LastName}&lt;/strong&gt; 
+
+  has &lt;u&gt;still not been completed 90 minutes after assignment&lt;/u&gt;, despite previous notifications.
+
+ &lt;/p&gt;
+
+
+
+ &lt;div style=&quot;background-color: #F9D6D5; padding: 15px; border: 1px solid #F5B7B1; border-radius: 5px; margin: 25px 0; text-align: center;&quot;&gt;
+
+  &lt;p style=&quot;margin: 0; font-size: 15px; color: #C0392B;&quot;&gt;
+
+   ⚠️ &lt;strong&gt;Immediate action is required.&lt;/strong&gt;&lt;br/&gt;
+
+   Contact the customer and mark this task as &lt;strong&gt;Complete&lt;/strong&gt; without delay.
+
+  &lt;/p&gt;
+
+ &lt;/div&gt;
+
+
+
+ &lt;p style=&quot;font-size: 14px; color: #C0392B; font-weight: bold; margin-bottom: 25px;&quot;&gt;
+
+  This delay impacts our response time metrics. Further internal escalation will occur if unresolved.
+
+ &lt;/p&gt;
+
+
+
+ &lt;p style=&quot;font-size: 14px; margin-top: 40px;&quot;&gt;Best regards,&lt;br/&gt;&lt;strong&gt;Phoenix Residential Notifications&lt;/strong&gt;&lt;/p&gt;
+
+
+
+&lt;/div&gt;</text>
+    </textTemplates>
+    <variables>
+        <description>Body content for the reminder email.</description>
+        <name>emailBody</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>emailList_recipient</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Subject line for the reminder email.</description>
+        <name>emailSubject</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>id_List_recipients</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>ID of the Lead record that triggered the main flow.</description>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Indicates whether it&apos;s the &apos;60Min&apos; or &apos;90Min&apos; reminder.</description>
+        <name>reminderType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

@@ -1,0 +1,347 @@
+:host {
+    display: block;
+    position: relative;
+    min-height: 100vh;
+    background: radial-gradient(1200px 600px at 10% -10%, rgba(31, 178, 98, 0.12), transparent 60%),
+        radial-gradient(900px 500px at 110% 10%, rgba(20, 151, 79, 0.1), transparent 60%),
+        linear-gradient(#eef2f1, #e9efec);
+    overflow-x: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #1a1a1a;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* ── Background decoration ── */
+.stage {
+    position: fixed;
+    inset: auto 0 0 0;
+    height: 560px;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 0;
+}
+.mark { width: min(900px, 120vw); height: auto; }
+.mark-a { fill: #14974f; opacity: 0.17; }
+.mark-b { fill: #14974f; opacity: 0.1; }
+
+/* ── Header ── */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 18px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(15, 42, 30, 0.06);
+}
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand-icon { width: 24px; height: 24px; fill: #14974f; flex: none; }
+.brand-name { font-size: 13.5px; font-weight: 600; }
+.brand-sep { width: 1px; height: 16px; background: #dce3dc; }
+.brand-crumb { font-size: 12px; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ref { font-size: 12px; color: #555; white-space: nowrap; }
+
+/* ── Main layout ── */
+.app {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ── Cards ── */
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+}
+.state-card {
+    text-align: center;
+    padding: 48px 24px;
+}
+.state-card .spinner {
+    display: block;
+    width: 36px; height: 36px;
+    border: 3px solid #e0e9e2;
+    border-top-color: #14974f;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Typography ── */
+.card__title { font-size: 20px; font-weight: 600; margin: 0 0 8px; }
+.section-title { font-size: 16px; font-weight: 600; margin: 0 0 16px; color: #1a1a1a; }
+.section-subtitle { font-size: 14px; font-weight: 600; margin: 16px 0 8px; color: #333; }
+.muted { color: #666; margin: 0 0 8px; font-size: 13px; }
+.bold { font-weight: 600; }
+
+/* ── Context bar ── */
+.context-bar {
+    background: #f0f7f2;
+    border: 1px solid #c8e6d0;
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    font-size: 13px;
+}
+.ctx-item { display: flex; gap: 6px; align-items: baseline; }
+.ctx-label { font-weight: 600; color: #2d6a4f; white-space: nowrap; }
+
+/* ── Step nav ── */
+.steps {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 0 2px;
+    scrollbar-width: none;
+}
+.steps::-webkit-scrollbar { display: none; }
+.step {
+    flex: 1;
+    min-width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #888;
+    font-size: 11px;
+    position: relative;
+}
+.step::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: #dde4de;
+    border-radius: 2px;
+}
+.step--active { color: #14974f; font-weight: 600; }
+.step--active::after { background: #14974f; }
+.step--done { color: #14974f; }
+.step--done::after { background: #c8e6d0; }
+.step:disabled { cursor: default; }
+.step-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: #eee;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600;
+}
+.step--active .step-num { background: #14974f; color: #fff; }
+.step--done .step-num { background: #c8e6d0; color: #2d6a4f; }
+.step-label { white-space: nowrap; }
+
+/* ── Autosave ── */
+.autosave-note { font-size: 11px; color: #888; text-align: right; margin: -8px 0 0; }
+
+/* ── Form fields ── */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+.span-2 { grid-column: 1 / -1; }
+.field-group { display: flex; flex-direction: column; gap: 4px; }
+.field-label { font-size: 12px; font-weight: 600; color: #444; }
+.field-label.req::after { content: ' *'; color: #e05; }
+.field-input, .field-textarea, .field-select {
+    border: 1px solid #cdd5cd;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 14px;
+    color: #1a1a1a;
+    background: #fafbfa;
+    transition: border-color 0.15s;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+.field-input:focus, .field-textarea:focus, .field-select:focus {
+    outline: none;
+    border-color: #14974f;
+    background: #fff;
+}
+.field-input[readonly] { background: #f0f0f0; color: #666; cursor: default; }
+.field-textarea { resize: vertical; }
+.error-text { font-size: 11px; color: #c0392b; margin: 2px 0 0; }
+
+/* ── Verify card ── */
+.verify-card { max-width: 400px; margin: 0 auto; }
+
+/* ── Info table (resale details) ── */
+.info-table { display: flex; flex-direction: column; gap: 0; border: 1px solid #e0e6e0; border-radius: 8px; overflow: hidden; }
+.info-row { display: flex; padding: 10px 14px; gap: 12px; border-bottom: 1px solid #f0f4f0; }
+.info-row:last-child { border-bottom: none; }
+.info-label { font-weight: 600; color: #555; min-width: 140px; font-size: 13px; }
+
+/* ── Declarations ── */
+.declarations { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.check-label { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.5; cursor: pointer; }
+.check-label input[type=checkbox] { margin-top: 2px; flex: none; accent-color: #14974f; width: 16px; height: 16px; }
+
+/* ── Signature ── */
+.sig-input { font-size: 16px; }
+.sig-preview {
+    margin-top: 12px;
+    padding: 16px 20px;
+    background: #faf8f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.sig-text { font-family: 'Georgia', serif; font-size: 22px; font-style: italic; color: #1a1a1a; }
+.sig-date { font-size: 11px; color: #888; }
+
+/* ── Doc note ── */
+.doc-note { margin-top: 20px; padding: 14px; background: #f5f8f6; border-radius: 8px; }
+.doc-list { margin: 6px 0 0 16px; padding: 0; color: #555; font-size: 13px; line-height: 1.7; }
+
+/* ── Step actions ── */
+.step-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; padding-top: 16px; border-top: 1px solid #f0f4f0; }
+
+/* ── Buttons ── */
+.btn-primary, .btn-submit, .btn-ghost {
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s, background 0.15s;
+}
+.btn-primary { background: #14974f; color: #fff; }
+.btn-primary:hover { background: #0d7a40; }
+.btn-submit { background: #0070d2; color: #fff; }
+.btn-submit:hover { background: #005fb2; }
+.btn-ghost { background: transparent; color: #14974f; border: 1px solid #14974f; }
+.btn-ghost:hover { background: #f0f7f2; }
+.btn-primary:disabled, .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Check icon (submitted) ── */
+.check-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: #e6f7ed;
+    color: #14974f;
+    font-size: 28px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+}
+
+/* ── Summary box ── */
+.summary-box {
+    margin-top: 20px;
+    border: 1px solid #c8e6d0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.summary-row {
+    display: flex; gap: 12px; padding: 10px 14px;
+    border-bottom: 1px solid #e6f0e8;
+    font-size: 13px;
+}
+.summary-row:last-child { border-bottom: none; }
+.summary-label { font-weight: 600; color: #2d6a4f; min-width: 120px; }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .span-2 { grid-column: 1; }
+    .topbar { padding: 10px 12px; }
+    .app { padding: 16px 10px 48px; }
+    .card { padding: 18px; }
+}
+
+/* ── OTP ── */
+.otp-display {
+    background: #f0f9f4;
+    border: 1px solid #b7e0c5;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.otp-label { font-size: 12px; color: #2d6a4f; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.otp-value { font-size: 26px; font-weight: 700; letter-spacing: 6px; color: #1b4332; font-variant-numeric: tabular-nums; }
+.otp-input { font-size: 20px; letter-spacing: 8px; text-align: center; font-variant-numeric: tabular-nums; }
+.btn-link {
+    display: block;
+    background: none;
+    border: none;
+    color: #2d6a4f;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 13px;
+    margin-top: 12px;
+    padding: 0;
+}
+
+/* ── Document Upload ── */
+.upload-section { margin-top: 24px; }
+.upload-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #e6f0e8;
+}
+.upload-row:last-child { border-bottom: none; }
+.upload-label-wrap { flex: 1; min-width: 0; }
+.upload-doc-name { font-weight: 500; display: block; }
+.upload-fname { font-size: 12px; color: #6b7280; display: block; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.upload-badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #f3f4f6;
+    color: #6b7280;
+    margin-top: 2px;
+}
+.upload-badge--done { background: #d1fae5; color: #065f46; }
+.btn-upload {
+    display: inline-block;
+    padding: 6px 14px;
+    border: 1px solid #2d6a4f;
+    border-radius: 6px;
+    color: #2d6a4f;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.btn-upload:hover { background: #f0f9f4; }
+.visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+}

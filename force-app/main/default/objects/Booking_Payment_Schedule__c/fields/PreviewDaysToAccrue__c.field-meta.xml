@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PreviewDaysToAccrue__c</fullName>
+    <externalId>false</externalId>
+    <formula>/* Number (0) – Preview_Days_To_Accrue__c (inclusive) */
+
+IF(
+  ISBLANK(Payment_Due_Date__c),
+  0,
+
+  /* Compute previewStart = later of (Due + Grace + 1) and (Last Accrued + 1) */
+  IF(
+    TODAY() &lt;
+      IF(
+        ISBLANK(Last_Accrued_on__c),
+        Payment_Due_Date__c + Grace_Period_Days__c + 1,
+        IF(
+          (Last_Accrued_on__c + 1) &gt;
+          (Payment_Due_Date__c + Grace_Period_Days__c + 1),
+          Last_Accrued_on__c + 1,
+          Payment_Due_Date__c + Grace_Period_Days__c + 1
+        )
+      ),
+    0,
+    TODAY() -
+      IF(
+        ISBLANK(Last_Accrued_on__c),
+        Payment_Due_Date__c + Grace_Period_Days__c + 1,
+        IF(
+          (Last_Accrued_on__c + 1) &gt;
+          (Payment_Due_Date__c + Grace_Period_Days__c + 1),
+          Last_Accrued_on__c + 1,
+          Payment_Due_Date__c + Grace_Period_Days__c + 1
+        )
+      )
+    + 1  /* inclusive of the start day */
+  )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Preview Days To Accrue</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

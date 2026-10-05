@@ -1,0 +1,347 @@
+<template>
+    <div class="desk-container">
+        <!-- TOP LUXURY HEADER -->
+        <header class="desk-header wd-glass">
+            <div class="header-brand">
+                <div class="brand-badge">
+                    <lightning-icon icon-name="custom:custom53" size="medium" class="brand-icon"></lightning-icon>
+                </div>
+                <div class="brand-text">
+                    <div class="desk-kicker">NIKOO HOMES EXPERIENCE CENTER</div>
+                    <h1 class="desk-title">GRE Welcome Desk &amp; Walk-in Reception</h1>
+                    <p class="desk-caption">Front-desk visitor check-in, instant phone deduplication &amp; family re-visit logging</p>
+                </div>
+            </div>
+
+            <!-- LIVE STATS & CLOCK -->
+            <div class="header-meta">
+                <div class="clock-chip">
+                    <span class="clock-time">{currentTime}</span>
+                    <span class="clock-date">{currentDate}</span>
+                </div>
+                <div class="stats-group">
+                    <div class="stat-pill">
+                        <span class="stat-num">{sessionCheckinCount}</span>
+                        <span class="stat-lbl">Today's Check-ins</span>
+                    </div>
+                    <div class="stat-pill repeat-pill">
+                        <span class="stat-num">{sessionRepeatCount}</span>
+                        <span class="stat-lbl">Family Re-visits</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN DESK BODY -->
+        <main class="desk-main">
+            <!-- 1. SUCCESS CONFIRMATION MODAL / CARD -->
+            <template if:true={isSuccess}>
+                <div class="success-card wd-glass">
+                    <div class="success-badge-icon">
+                        <lightning-icon icon-name="action:approval" size="large"></lightning-icon>
+                    </div>
+                    <h2 class="success-title">Guest Checked-In Successfully!</h2>
+                    <p class="success-subtitle">{lastResult.message}</p>
+
+                    <div class="success-details-grid">
+                        <div class="detail-box">
+                            <span class="detail-label">Site Visit Reference</span>
+                            <span class="detail-val highlight">{lastResult.siteVisitName}</span>
+                        </div>
+                        <div class="detail-box">
+                            <span class="detail-label">Primary Lead</span>
+                            <span class="detail-val">{lastResult.leadName}</span>
+                        </div>
+                        <div class="detail-box">
+                            <span class="detail-label">Visit Type</span>
+                            <template if:true={lastResult.isRepeatVisit}>
+                                <span class="tag-pill tag-repeat">Returning Lead (Visit #{lastResult.totalVisitsOnLead})</span>
+                            </template>
+                            <template if:false={lastResult.isRepeatVisit}>
+                                <span class="tag-pill tag-new">First-Time Walk-in</span>
+                            </template>
+                        </div>
+                        <div class="detail-box">
+                            <span class="detail-label">Qualification Gate</span>
+                            <span class="tag-pill tag-verified">Physical Presence Verified</span>
+                        </div>
+                    </div>
+
+                    <div class="success-actions">
+                        <button class="wd-btn wd-btn-primary" onclick={navigateToSiteVisit}>
+                            <lightning-icon icon-name="standard:event" size="x-small" class="btn-icon"></lightning-icon>
+                            Open Site Visit Record
+                        </button>
+                        <button class="wd-btn wd-btn-secondary" onclick={navigateToLead}>
+                            <lightning-icon icon-name="standard:lead" size="x-small" class="btn-icon"></lightning-icon>
+                            View Lead 360
+                        </button>
+                        <button class="wd-btn wd-btn-accent" onclick={handleNextGuest}>
+                            <lightning-icon icon-name="utility:forward" size="x-small" class="btn-icon"></lightning-icon>
+                            Next Arriving Guest
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- 2. INTAKE DESK FORM -->
+            <template if:false={isSuccess}>
+                <div class="form-wrapper">
+                    <!-- SECTION A: PRIMARY PHONE & DEDUPLICATION -->
+                    <div class="desk-card desk-card-step-1 wd-glass">
+                        <div class="card-head">
+                            <div class="card-head-title">
+                                <span class="step-num">1</span>
+                                <div>
+                                    <h3>Visitor Phone &amp; Identity Verification</h3>
+                                    <p>Enter 10-digit mobile number for instant deduplication &amp; family visit recognition</p>
+                                </div>
+                            </div>
+                            <div class="desk-indicator">
+                                <template if:true={isSearching}>
+                                    <lightning-spinner size="small" variant="brand" alternative-text="Searching registry..."></lightning-spinner>
+                                </template>
+                                <span class="indicator-text">{deskStatusText}</span>
+                            </div>
+                        </div>
+
+                        <!-- PHONE INPUT ROW -->
+                        <div class="phone-input-row">
+                            <div class="phone-box">
+                                <span class="country-prefix">+91</span>
+                                <input 
+                                    type="tel" 
+                                    maxlength="14"
+                                    placeholder="Enter 10-digit Mobile Number (e.g. 98765 43210)" 
+                                    value={phone} 
+                                    oninput={handlePhoneChange} 
+                                    class="luxury-phone-input"
+                                    autofocus
+                                />
+                            </div>
+                        </div>
+
+                        <!-- DYNAMIC STATE 1: EXISTING LEAD / RETURNING GUEST FOUND -->
+                        <template if:true={isExistingLead}>
+                            <div class="lead-found-banner">
+                                <div class="lead-found-header">
+                                    <div class="lead-found-id">
+                                        <lightning-icon icon-name="utility:user" size="small" class="icon-match"></lightning-icon>
+                                        <div>
+                                            <span class="found-kicker">EXISTING LEAD IDENTIFIED</span>
+                                            <h4 class="found-name">{existingLead.fullName}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="lead-found-badges">
+                                        <span class="tag-pill tag-status">{existingLead.status}</span>
+                                        <span class="tag-pill tag-project">{existingLead.projectName}</span>
+                                        <button class="history-toggle-btn" onclick={toggleHistory}>
+                                            <lightning-icon icon-name="utility:clock" size="x-small"></lightning-icon>
+                                            {priorVisitCount} Prior Visit(s)
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- PRIOR VISITS TIMELINE (EXPANDABLE) -->
+                                <template if:true={showVisitHistory}>
+                                    <div class="history-drawer">
+                                        <h5 class="history-title">Prior Site Visits on Record:</h5>
+                                        <div class="history-list">
+                                            <template for:each={priorVisits} for:item="v">
+                                                <div key={v.id} class="history-item">
+                                                    <div class="history-item-top">
+                                                        <span class="history-name">{v.name}</span>
+                                                        <span class="history-date">
+                                                            <lightning-formatted-date-time 
+                                                                value={v.visitDateTime} 
+                                                                year="numeric" month="short" day="numeric" hour="2-digit" minute="2-digit">
+                                                            </lightning-formatted-date-time>
+                                                        </span>
+                                                        <span class="tag-pill tag-status">{v.status}</span>
+                                                    </div>
+                                                    <div class="history-item-body">
+                                                        <span><strong>Project:</strong> {v.projectName}</span>
+                                                        <template if:true={v.unitName}>
+                                                            <span> • <strong>Unit:</strong> {v.unitName}</span>
+                                                        </template>
+                                                        <template if:true={v.salesExecutiveName}>
+                                                            <span> • <strong>Executive:</strong> {v.salesExecutiveName}</span>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- FAMILY / SPOUSE VISITOR HANDLING -->
+                                <div class="family-visit-box">
+                                    <div class="family-box-header">
+                                        <lightning-icon icon-name="utility:groups" size="x-small"></lightning-icon>
+                                        <span>Multi-Visitor / Family Visit Handling</span>
+                                    </div>
+                                    <div class="form-grid-2">
+                                        <lightning-input 
+                                            label="Visiting Guest / Family Member Name" 
+                                            value={visitorName} 
+                                            onchange={handleVisitorName}
+                                            field-level-help="Defaults to primary applicant. Enter spouse or relative name if visiting today (e.g. Priya Sharma - Spouse)."
+                                        ></lightning-input>
+                                        <div class="toggle-control-box">
+                                            <lightning-input 
+                                                type="toggle" 
+                                                label="Visiting with Family / Spouse?" 
+                                                checked={isFamilyChecked} 
+                                                onchange={handleFamilyToggle}
+                                                message-toggle-active="Yes" 
+                                                message-toggle-inactive="No"
+                                            ></lightning-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- DYNAMIC STATE 2: NEW GUEST FIRST-TIME REGISTRATION -->
+                        <template if:false={isExistingLead}>
+                            <template if:true={hasSearched}>
+                                <div class="new-guest-banner">
+                                    <lightning-icon icon-name="utility:new" size="x-small" class="new-icon"></lightning-icon>
+                                    <span>No previous record found for this number. Creating a fresh Lead &amp; First Site Visit.</span>
+                                </div>
+                            </template>
+                            <div class="form-grid-3">
+                                <lightning-input 
+                                    label="First Name" 
+                                    value={firstName} 
+                                    onchange={handleFirstName}
+                                    placeholder="Guest's First Name"
+                                ></lightning-input>
+                                <lightning-input 
+                                    label="Last Name *" 
+                                    value={lastName} 
+                                    onchange={handleLastName}
+                                    required
+                                    placeholder="Guest's Last Name"
+                                ></lightning-input>
+                                <lightning-input 
+                                    type="email" 
+                                    label="Email Address" 
+                                    value={email} 
+                                    onchange={handleEmail}
+                                    placeholder="e.g. guest@example.com"
+                                ></lightning-input>
+                            </div>
+                        </template>
+
+                        <!-- SOURCING ATTRIBUTION -->
+                        <div class="sourcing-box">
+                            <div class="sourcing-toggle-row">
+                                <lightning-input 
+                                    type="toggle" 
+                                    label="Accompanied by Channel Partner / Broker?" 
+                                    checked={isChannelPartner} 
+                                    onchange={handlePartnerToggle}
+                                    message-toggle-active="Broker Attached" 
+                                    message-toggle-inactive="Direct Walk-in"
+                                ></lightning-input>
+                            </div>
+                            <template if:true={isChannelPartner}>
+                                <div class="partner-select-row">
+                                    <lightning-combobox
+                                        name="channelPartner"
+                                        label="Select Approved Channel Partner Account *"
+                                        placeholder="Search active CP broker..."
+                                        options={channelPartnerOptions}
+                                        value={channelPartnerId}
+                                        onchange={handlePartnerChange}
+                                        required
+                                    ></lightning-combobox>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- SECTION B: VISIT SPECIFICATIONS & ASSIGNMENT -->
+                    <div class="desk-card desk-card-step-2 wd-glass">
+                        <div class="card-head">
+                            <div class="card-head-title">
+                                <span class="step-num">2</span>
+                                <div>
+                                    <h3>Project Interest &amp; Experience Walkthrough</h3>
+                                    <p>Select customer preferences and assign an available Closing Manager</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-grid-3">
+                            <lightning-combobox
+                                name="project"
+                                label="Project of Interest *"
+                                placeholder="Select Nikoo Project"
+                                options={projectOptions}
+                                value={projectId}
+                                onchange={handleProjectChange}
+                                required
+                            ></lightning-combobox>
+
+                            <lightning-combobox
+                                name="configuration"
+                                label="Unit Preference / Configuration"
+                                options={configOptions}
+                                value={configuration}
+                                onchange={handleConfigChange}
+                            ></lightning-combobox>
+
+                            <lightning-combobox
+                                name="unit"
+                                label="Specific Sample Unit / Flat (Optional)"
+                                placeholder="Select unit to tour..."
+                                options={unitOptions}
+                                value={unitId}
+                                onchange={handleUnitChange}
+                            ></lightning-combobox>
+                        </div>
+
+                        <div class="form-grid-2" style="margin-top: 1rem;">
+                            <lightning-combobox
+                                name="closingManager"
+                                label="Assigned Closing / Sales Manager"
+                                placeholder="Select Sales Executive greeting guest..."
+                                options={salesManagerOptions}
+                                value={closingManagerId}
+                                onchange={handleManagerChange}
+                            ></lightning-combobox>
+
+                            <lightning-textarea
+                                label="Reception Remarks / Guest Objectives"
+                                placeholder="E.g. Spouse visiting to review kitchen layout; budget range 1.8 Cr; urgent handover required."
+                                value={notes}
+                                onchange={handleNotesChange}
+                            ></lightning-textarea>
+                        </div>
+                    </div>
+
+                    <!-- FOOTER ACTIONS -->
+                    <div class="desk-actions wd-glass">
+                        <button class="wd-btn wd-btn-ghost" onclick={resetDesk} disabled={isSubmitting}>
+                            <lightning-icon icon-name="utility:refresh" size="x-small" class="btn-icon"></lightning-icon>
+                            Clear / Reset Form
+                        </button>
+
+                        <button class="wd-btn wd-btn-primary checkin-btn" onclick={handleCheckin} disabled={isSubmitting}>
+                            <template if:true={isSubmitting}>
+                                <lightning-spinner size="x-small" variant="inverse" class="btn-spinner"></lightning-spinner>
+                                <span>Checking In Guest...</span>
+                            </template>
+                            <template if:false={isSubmitting}>
+                                <lightning-icon icon-name="utility:check" size="small" class="btn-icon"></lightning-icon>
+                                <span>Check-in Guest &amp; Open Site Visit</span>
+                            </template>
+                        </button>
+                    </div>
+                </div>
+            </template>
+        </main>
+    </div>
+</template>

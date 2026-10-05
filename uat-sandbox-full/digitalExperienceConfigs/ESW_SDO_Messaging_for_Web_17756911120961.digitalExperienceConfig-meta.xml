@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DigitalExperienceConfig xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>ESW_SDO_Messaging_for_Web_1775691112096</label>
+    <site>
+        <urlPathPrefix>ESWSDOMessagingforWeb1775691112096</urlPathPrefix>
+    </site>
+    <space>site/ESW_SDO_Messaging_for_Web_17756911120961</space>
+</DigitalExperienceConfig>

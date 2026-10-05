@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Month_Number__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Enter how many months after the Booking Date this payment is due.
+Example: 1 = due 1 month later (e.g., 1st Jan → 1st Feb).
+Use 0 if the payment is due on the Booking Date itself.</inlineHelpText>
+    <label>Month Number</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,646 @@
+<template>
+    <lightning-card title="Customer Financial Ledger & Collections Hub" icon-name="custom:custom41" class="ledger-main-card">
+        <!-- TOP ACTIONS BAR -->
+        <div slot="actions">
+            <lightning-button-group>
+                <lightning-button 
+                    label="Refresh Ledger" 
+                    icon-name="utility:refresh" 
+                    onclick={handleRefreshLedger}>
+                </lightning-button>
+                <template if:true={hasBooking}>
+                    <lightning-button 
+                        label="Recalculate & Reconcile" 
+                        icon-name="utility:sync" 
+                        onclick={handleRecalculateLedger}
+                        title="Reconcile confirmed receipts, overdue days, and 18% p.a. simple interest">
+                    </lightning-button>
+                    <lightning-button 
+                        label="Record Payment" 
+                        icon-name="utility:money" 
+                        variant="brand" 
+                        onclick={handleOpenQuickPayModal}
+                        class="btn-glow-primary">
+                    </lightning-button>
+                </template>
+            </lightning-button-group>
+        </div>
+
+        <div class="slds-p-around_medium">
+            <!-- SPINNER -->
+            <template if:true={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <lightning-spinner alternative-text="Loading Ledger Data" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:false={isLoading}>
+                <!-- NO BOOKING FOUND STATE -->
+                <template if:false={hasBooking}>
+                    <div class="slds-illustration slds-illustration_small slds-p-around_large slds-text-align_center" style="background:#ffffff; border-radius:12px; border:1px solid #e2e8f0;">
+                        <lightning-icon icon-name="custom:custom41" size="large" class="slds-m-bottom_medium"></lightning-icon>
+                        <h3 class="slds-text-heading_medium slds-m-bottom_x-small" style="font-weight:700; color:#1e293b;">No Active Unit Booking Found</h3>
+                        <p class="slds-text-body_regular slds-m-bottom_medium" style="color:#64748b; max-width: 540px; margin: 0 auto;">
+                            This customer account currently does not have an active booked flat or unit.
+                            Once an inventory unit is booked from a Quote or Opportunity, the live financial ledger, installment milestone tracker, and collections receipts will appear here automatically.
+                        </p>
+                    </div>
+                </template>
+
+                <template if:true={hasBooking}>
+                    <!-- MULTI-UNIT / BOOKING SELECTOR (IF MULTIPLE BOOKINGS EXIST) -->
+                    <template if:true={hasMultipleBookings}>
+                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-around_small slds-m-bottom_medium" style="background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <div class="slds-grid slds-grid_vertical-align-center">
+                                <lightning-icon icon-name="utility:home" size="small" class="slds-m-right_small"></lightning-icon>
+                                <span style="font-weight: 600; color: #1e293b; font-size: 13px;">Customer Purchased Units:</span>
+                            </div>
+                            <div style="min-width: 320px;">
+                                <lightning-combobox
+                                    name="bookingSelector"
+                                    label="Select Active Unit"
+                                    variant="label-hidden"
+                                    value={selectedBookingId}
+                                    options={bookingOptions}
+                                    onchange={handleBookingChange}>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- FINANCIAL SUMMARY KPI CARDS -->
+                    <div class="kpi-grid slds-m-bottom_medium">
+                        <div class="kpi-card kpi-agreement">
+                            <div class="kpi-title">Agreement Value</div>
+                            <div class="kpi-value text-navy">₹{formattedAgreementValue}</div>
+                            <div class="kpi-sub">{summary.unitName} ({summary.configuration})</div>
+                        </div>
+
+                    <div class="kpi-card kpi-token">
+                        <div class="kpi-title">Token Advance</div>
+                        <div class="kpi-value text-success">₹{formattedTokenAmount}</div>
+                        <div class="kpi-sub">Initial Deposit Paid ✔</div>
+                    </div>
+
+                    <div class="kpi-card kpi-demanded">
+                        <div class="kpi-title">Total Demanded</div>
+                        <div class="kpi-value text-blue">₹{formattedTotalDemanded}</div>
+                        <div class="kpi-sub">Via Milestone Demand Notes</div>
+                    </div>
+
+                    <div class="kpi-card kpi-collected">
+                        <div class="kpi-title">Total Received</div>
+                        <div class="kpi-value text-emerald">₹{formattedTotalReceived}</div>
+                        <div class="kpi-sub">Reconciled Collections</div>
+                    </div>
+
+                    <div class="kpi-card kpi-outstanding">
+                        <div class="kpi-title">Principal Due</div>
+                        <div class="kpi-value text-danger">₹{formattedOutstandingPrincipal}</div>
+                        <div class="kpi-sub">Unpaid Installments</div>
+                    </div>
+
+                    <div class="kpi-card kpi-interest">
+                        <div class="kpi-title">Overdue Interest</div>
+                        <div class="kpi-value text-amber">₹{formattedOverdueInterest}</div>
+                        <div class="kpi-sub">18% p.a. Simple Interest</div>
+                    </div>
+
+                    <div class="kpi-card kpi-net-due">
+                        <div class="kpi-title">NET DUE TODAY</div>
+                        <div class="kpi-value text-gold">₹{formattedNetPayableToday}</div>
+                        <div class="kpi-sub">Principal + Overdue Interest</div>
+                    </div>
+                </div>
+
+                <!-- TABS CONTAINER -->
+                <lightning-tabset variant="scoped" active-tab-value="installments">
+                    <!-- TAB 1: MILESTONE INSTALLMENTS & DEMAND NOTES -->
+                    <lightning-tab label="Installments & Demand Notes" value="installments" icon-name="utility:table">
+                        <div class="tab-content slds-p-top_small">
+                            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                <div>
+                                    <h4 class="font-bold section-heading">Construction Payment Milestone Schedule</h4>
+                                    <p class="slds-text-body_small text-muted">Overdue interest calculated automatically at 18% p.a. as per developer agreement terms.</p>
+                                </div>
+                                <span class="badge-pill-soft">{installmentsCount} Milestones Registered</span>
+                            </div>
+
+                            <!-- INSTALLMENTS TABLE -->
+                            <div class="table-responsive-wrapper">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered custom-ledger-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset table-header-row">
+                                            <th scope="col"><span class="slds-truncate">Milestone Name</span></th>
+                                            <th scope="col"><span class="slds-truncate">%</span></th>
+                                            <th scope="col"><span class="slds-truncate">Due Date</span></th>
+                                            <th scope="col"><span class="slds-truncate">Base Amount</span></th>
+                                            <th scope="col"><span class="slds-truncate">Paid Amount</span></th>
+                                            <th scope="col"><span class="slds-truncate">Balance Due</span></th>
+                                            <th scope="col"><span class="slds-truncate">Overdue Interest (18%)</span></th>
+                                            <th scope="col"><span class="slds-truncate">Demand Note & SAP Invoice</span></th>
+                                            <th scope="col"><span class="slds-truncate">Reminder Stage</span></th>
+                                            <th scope="col"><span class="slds-truncate">Status</span></th>
+                                            <th scope="col" class="slds-text-align_right"><span class="slds-truncate">Actions</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={installmentsList} for:item="inst">
+                                            <tr key={inst.id} class="table-body-row">
+                                                <td class="font-bold text-navy">
+                                                    <span>{inst.milestoneName}</span>
+                                                    <div class="slds-text-body_small text-muted">{inst.name}</div>
+                                                </td>
+                                                <td>{inst.percentage}%</td>
+                                                <td>{inst.formattedDueDate}</td>
+                                                <td>
+                                                    <div class="font-bold">₹{inst.formattedAmount}</div>
+                                                    <template if:true={inst.isTdsApplicable}>
+                                                        <div class="slds-text-body_small text-muted" title="1% TDS deductible by Buyer under Section 194-IA for properties >= 50L">
+                                                            <span class="text-accent font-semibold">TDS (1%):</span> -₹{inst.formattedTdsAmount}
+                                                            <div class="text-emerald">Net: ₹{inst.formattedNetPayable}</div>
+                                                        </div>
+                                                    </template>
+                                                </td>
+                                                <td class="text-success font-semibold">₹{inst.formattedPaidAmount}</td>
+                                                <td class="text-danger font-semibold">₹{inst.formattedOutstandingAmount}</td>
+                                                <td>
+                                                    <template if:true={inst.hasInterest}>
+                                                        <span class="text-amber font-bold">₹{inst.formattedOverdueInterest}</span>
+                                                        <div class="slds-text-body_small text-muted">({inst.daysOverdue} days overdue)</div>
+                                                    </template>
+                                                    <template if:false={inst.hasInterest}>
+                                                        <span class="text-muted">₹0</span>
+                                                    </template>
+                                                </td>
+                                                <td>
+                                                    <template if:true={inst.hasDemandNote}>
+                                                        <div class="slds-m-bottom_xx-small">
+                                                            <span class="dn-badge" onclick={handleViewDemandNote} data-id={inst.id}>{inst.demandNoteNumber}</span>
+                                                        </div>
+                                                        <template if:true={inst.hasSapInvoice}>
+                                                            <div class="slds-m-bottom_xx-small">
+                                                                <span class="sap-invoice-badge" title="Official SAP SD/RE-FX Tax Invoice">{inst.sapInvoiceNumber}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="sap-block-released">SAP Block Released</span>
+                                                            </div>
+                                                        </template>
+                                                        <template if:false={inst.hasSapInvoice}>
+                                                            <span class="sap-blocked">SAP Bill Blocked</span>
+                                                        </template>
+                                                    </template>
+                                                    <template if:false={inst.hasDemandNote}>
+                                                        <lightning-button 
+                                                            variant="neutral" 
+                                                            label="Issue Demand" 
+                                                            icon-name="utility:file" 
+                                                            size="x-small" 
+                                                            title="Generate Demand Note and release SAP billing block" 
+                                                            onclick={handleIssueDemandNote} 
+                                                            data-id={inst.id}
+                                                            class="btn-xs">
+                                                        </lightning-button>
+                                                    </template>
+                                                </td>
+                                                <td>
+                                                    <div class="slds-m-bottom_xx-small">
+                                                        <span class={inst.reminderBadgeClass}>{inst.demandReminderLevel}</span>
+                                                    </div>
+                                                    <template if:true={inst.canSendReminder}>
+                                                        <lightning-button-menu alternative-text="Send Reminder" icon-size="x-small" menu-alignment="right">
+                                                            <lightning-menu-item value="1" label="Send 15-Day Gentle Reminder" prefix-icon-name="utility:email" onclick={handleSendReminderMenu} data-id={inst.id} data-level="1"></lightning-menu-item>
+                                                            <lightning-menu-item value="2" label="Send 30-Day Overdue (18% Notice)" prefix-icon-name="utility:warning" onclick={handleSendReminderMenu} data-id={inst.id} data-level="2"></lightning-menu-item>
+                                                            <lightning-menu-item value="3" label="Send 45-Day Final Notice" prefix-icon-name="utility:error" onclick={handleSendReminderMenu} data-id={inst.id} data-level="3"></lightning-menu-item>
+                                                        </lightning-button-menu>
+                                                    </template>
+                                                </td>
+                                                <td>
+                                                    <span class={inst.statusBadgeClass}>{inst.status}</span>
+                                                    <template if:true={inst.hasWaiverActivity}>
+                                                        <div class="slds-m-top_xx-small">
+                                                            <span class={inst.waiverBadgeClass}>Waiver: {inst.waiverStatus}</span>
+                                                        </div>
+                                                    </template>
+                                                </td>
+                                                <td class="slds-text-align_right">
+                                                    <div class="slds-grid slds-grid_align-end">
+                                                        <template if:true={inst.canRequestWaiver}>
+                                                            <lightning-button 
+                                                                variant="neutral" 
+                                                                label="Waiver" 
+                                                                icon-name="utility:moneybag" 
+                                                                size="x-small" 
+                                                                onclick={handleOpenWaiverModal} 
+                                                                data-id={inst.id}
+                                                                class="slds-m-right_xx-small btn-xs">
+                                                            </lightning-button>
+                                                        </template>
+                                                        <template if:false={inst.isPaid}>
+                                                            <lightning-button 
+                                                                variant="brand-outline" 
+                                                                label="Pay" 
+                                                                icon-name="utility:check" 
+                                                                size="x-small" 
+                                                                onclick={handleRowPay} 
+                                                                data-id={inst.id}
+                                                                class="btn-xs">
+                                                            </lightning-button>
+                                                        </template>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </lightning-tab>
+
+                    <!-- TAB 2: PAYMENT RECEIPTS LEDGER -->
+                    <lightning-tab label="Receipts & Reconciliation" value="receipts" icon-name="utility:moneybag">
+                        <div class="tab-content slds-p-top_small">
+                            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                <div>
+                                    <h4 class="font-bold section-heading">Official Payment Collections Ledger</h4>
+                                    <p class="slds-text-body_small text-muted">All collections with UTR transaction references, payment instruments, and 2-step dual approval (SAP Clearing & Finance Posting).</p>
+                                </div>
+                                <lightning-button 
+                                    variant="brand" 
+                                    label="Log Payment Receipt" 
+                                    icon-name="utility:add" 
+                                    size="small" 
+                                    onclick={handleOpenQuickPayModal}>
+                                </lightning-button>
+                            </div>
+
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered custom-ledger-table">
+                                <thead>
+                                    <tr class="slds-line-height_reset table-header-row">
+                                        <th scope="col"><span class="slds-truncate">Receipt #</span></th>
+                                        <th scope="col"><span class="slds-truncate">Receipt Date</span></th>
+                                        <th scope="col"><span class="slds-truncate">Milestone Tag</span></th>
+                                        <th scope="col"><span class="slds-truncate">Payment Mode</span></th>
+                                        <th scope="col"><span class="slds-truncate">Instrument & Bank</span></th>
+                                        <th scope="col"><span class="slds-truncate">Amount</span></th>
+                                        <th scope="col"><span class="slds-truncate">Status & Reconciliation</span></th>
+                                        <th scope="col" class="slds-text-align_right"><span class="slds-truncate">Dual Approval Actions</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={receiptsList} for:item="r">
+                                        <tr key={r.id} class="table-body-row">
+                                            <td class="font-bold text-navy">{r.name}</td>
+                                            <td>{r.formattedReceiptDate}</td>
+                                            <td>{r.installmentName}</td>
+                                            <td>
+                                                <span class="payment-mode-pill">{r.paymentMode}</span>
+                                            </td>
+                                            <td>
+                                                <div class="font-mono text-accent font-semibold">{r.instrumentNumber}</div>
+                                                <div class="slds-text-body_small text-muted">{r.bankName} (Inst: {r.formattedInstrumentDate})</div>
+                                            </td>
+                                            <td class="text-emerald font-bold">₹{r.formattedAmount}</td>
+                                            <td>
+                                                <span class={r.statusBadgeClass}>{r.status}</span>
+                                                <template if:true={r.sapClearingDoc}>
+                                                    <div class="slds-text-body_small font-mono text-accent">SAP Doc: {r.sapClearingDoc}</div>
+                                                </template>
+                                                <template if:true={r.sapReconciledDate}>
+                                                    <div class="slds-text-body_small text-muted">Cleared: {r.formattedSapReconciledDate} by {r.financeApprover}</div>
+                                                </template>
+                                            </td>
+                                            <td class="slds-text-align_right">
+                                                <template if:true={r.isPendingReconciliation}>
+                                                    <div class="slds-grid slds-grid_align-end">
+                                                        <lightning-button 
+                                                            variant="brand" 
+                                                            label="SAP Clear" 
+                                                            icon-name="utility:sync" 
+                                                            size="x-small" 
+                                                            title="Step 1: SAP Persona verifies bank statement credit"
+                                                            onclick={handleSapClearReceipt} 
+                                                            data-id={r.id} 
+                                                            class="btn-xs">
+                                                        </lightning-button>
+                                                    </div>
+                                                </template>
+                                                <template if:true={r.isSapCleared}>
+                                                    <div class="slds-grid slds-grid_align-end">
+                                                        <lightning-button 
+                                                            variant="destructive-text" 
+                                                            label="Reject" 
+                                                            size="x-small" 
+                                                            onclick={handleRejectReceipt} 
+                                                            data-id={r.id} 
+                                                            class="slds-m-right_xx-small btn-xs">
+                                                        </lightning-button>
+                                                        <lightning-button 
+                                                            variant="success" 
+                                                            label="Post to Ledger" 
+                                                            icon-name="utility:check" 
+                                                            size="x-small" 
+                                                            title="Step 2: Finance Head confirms & posts to Ledger"
+                                                            onclick={handleFinancePostReceipt} 
+                                                            data-id={r.id} 
+                                                            class="btn-xs">
+                                                        </lightning-button>
+                                                    </div>
+                                                </template>
+                                                <template if:true={r.isConfirmed}>
+                                                    <span class="text-success font-semibold slds-text-body_small">Cleared & Posted ✔</span>
+                                                </template>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </lightning-tab>
+
+                    <!-- TAB 3: INTEREST WAIVER & APPROVAL AUDIT (FINANCE PERSONA VIEW) -->
+                    <lightning-tab label="Interest Waivers & Approvals" value="waivers" icon-name="utility:approval">
+                        <div class="tab-content slds-p-top_small">
+                            <div class="finance-header-banner slds-p-around_medium slds-m-bottom_medium">
+                                <div class="slds-grid slds-grid_vertical-align-center">
+                                    <lightning-icon icon-name="custom:custom68" size="medium" class="slds-m-right_medium"></lightning-icon>
+                                    <div>
+                                        <h4 class="font-bold text-navy">Finance Executive: Overdue Interest Governance</h4>
+                                        <p class="slds-text-body_small text-muted">
+                                            Review, approve, or reject interest concessions submitted by Sales/CRM. Approved waivers deduct from 
+                                            customer receivables and are locked in the SAP accounting audit log.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <template if:true={hasWaiverRequests}>
+                                <div class="waiver-cards-container">
+                                    <template for:each={waiverInstallmentsList} for:item="w">
+                                        <div key={w.id} class="waiver-review-card slds-p-around_medium slds-m-bottom_small">
+                                            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                                <div>
+                                                    <span class="font-bold text-navy slds-text-title_caps">{w.milestoneName}</span>
+                                                    <div class="slds-text-body_small text-muted">{w.name} • {w.daysOverdue} Days Overdue</div>
+                                                </div>
+                                                <div>
+                                                    <span class={w.waiverBadgeClass}>{w.waiverStatus}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-grid slds-gutters slds-m-top_small">
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <span class="text-muted slds-text-body_small">Accrued 18% Interest:</span>
+                                                    <div class="font-bold text-danger">₹{w.formattedOverdueInterest}</div>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <span class="text-muted slds-text-body_small">Requested Waiver Amount:</span>
+                                                    <div class="font-bold text-success">₹{w.formattedWaivedAmount}</div>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <span class="text-muted slds-text-body_small">Request Date:</span>
+                                                    <div>{w.formattedWaiverDate}</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="reason-quote slds-p-around_small slds-m-top_small">
+                                                <strong>Justification:</strong> "{w.waiverReason}"
+                                            </div>
+
+                                            <!-- APPROVE / REJECT ACTIONS (VISIBLE WHEN PENDING) -->
+                                            <template if:true={w.isPendingReview}>
+                                                <div class="slds-grid slds-grid_align-end slds-m-top_medium">
+                                                    <lightning-button 
+                                                        variant="destructive-text" 
+                                                        label="Reject Waiver" 
+                                                        icon-name="utility:close" 
+                                                        onclick={handleRejectWaiver} 
+                                                        data-id={w.id}
+                                                        class="slds-m-right_x-small">
+                                                    </lightning-button>
+                                                    <lightning-button 
+                                                        variant="brand" 
+                                                        label="Approve Interest Waiver" 
+                                                        icon-name="utility:check" 
+                                                        onclick={handleApproveWaiver} 
+                                                        data-id={w.id}
+                                                        class="btn-approve-glow">
+                                                    </lightning-button>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+
+                            <template if:false={hasWaiverRequests}>
+                                <div class="slds-align_absolute-center slds-p-around_large text-muted">
+                                    <span>No interest waiver requests pending or submitted for this booking.</span>
+                                </div>
+                            </template>
+                        </div>
+                    </lightning-tab>
+                </lightning-tabset>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+
+    <!-- MODAL 1: REQUEST INTEREST WAIVER -->
+    <template if:true={isWaiverModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header modal-blue-header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseWaiverModal}>
+                        <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium font-bold text-white">Request Overdue Interest Waiver</h2>
+                    <p class="modal-sub text-white-dim">Milestone: <strong>{selectedInstallmentName}</strong></p>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_large">
+                    <div class="interest-warning-box slds-p-around_medium slds-m-bottom_medium">
+                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                            <div>
+                                <span class="text-muted slds-text-body_small">Accrued Overdue Simple Interest (18% p.a.):</span>
+                                <div class="font-bold text-danger text-large">₹{selectedInstallmentInterest}</div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-muted slds-text-body_small">Days Overdue:</span>
+                                <div class="font-bold text-navy">{selectedInstallmentDaysOverdue} Days</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-m-bottom_medium">
+                        <lightning-input 
+                            type="number" 
+                            formatter="currency" 
+                            step="0.01" 
+                            name="waiverAmount" 
+                            label="Waiver Amount to Concede (₹) *" 
+                            value={waiverAmountInput} 
+                            onchange={handleWaiverAmountChange} 
+                            required>
+                        </lightning-input>
+                        <div class="slds-m-top_xx-small">
+                            <lightning-button 
+                                variant="base" 
+                                label="Waive Full 100% Interest" 
+                                onclick={handleSetFullWaiver} 
+                                class="btn-full-waive">
+                            </lightning-button>
+                        </div>
+                    </div>
+
+                    <div class="slds-m-bottom_medium">
+                        <label class="slds-form-element__label font-bold">Standard Reason Chips</label>
+                        <div class="reason-chips">
+                            <span class="chip-pill" onclick={handleSelectReasonChip} data-reason="Bank home loan disbursement delayed by 15 days">+ Bank Loan Delay</span>
+                            <span class="chip-pill" onclick={handleSelectReasonChip} data-reason="One-time customer goodwill waiver approved by Sales Director">+ Goodwill Waiver</span>
+                            <span class="chip-pill" onclick={handleSelectReasonChip} data-reason="Construction milestone site inspection reconciliation">+ Inspection Delay</span>
+                            <span class="chip-pill" onclick={handleSelectReasonChip} data-reason="Cheque transit clearance delay">+ Cheque In Transit</span>
+                        </div>
+                    </div>
+
+                    <div class="slds-m-bottom_small">
+                        <lightning-textarea 
+                            label="Detailed Business Justification *" 
+                            value={waiverReasonInput} 
+                            onchange={handleWaiverReasonChange} 
+                            placeholder="Provide commercial justification for Finance Head audit..."
+                            rows="3" 
+                            required>
+                        </lightning-textarea>
+                    </div>
+                </div>
+
+                <footer class="slds-modal__footer slds-grid slds-grid_align-spread">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCloseWaiverModal}></lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label="Submit to Finance Approver" 
+                        icon-name="utility:send" 
+                        onclick={handleSubmitWaiverRequest} 
+                        disabled={isSubmitting}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- MODAL 2: LOG QUICK PAYMENT RECEIPT -->
+    <template if:true={isQuickPayModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header modal-green-header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseQuickPayModal}>
+                        <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium font-bold text-white">Record Payment Collection Receipt</h2>
+                    <p class="modal-sub text-white-dim">Customer: <strong>{summary.customerName}</strong> ({summary.bookingName})</p>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_large">
+                    <!-- SAP CLEARING NOTICE BANNER -->
+                    <div class="slds-notify slds-notify_alert slds-alert_warning slds-m-bottom_medium" role="alert" style="border-radius: 8px;">
+                        <lightning-icon icon-name="utility:info" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        <div style="font-size: 12px; line-height: 1.4;">
+                            <strong>Enterprise SAP Clearing Flow:</strong> Customer payments received outside the system (Bank transfer / Cheque / DD) are logged in <strong>Pending Reconciliation</strong> status until Finance verifies with SAP banking clearance.
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-combobox 
+                                name="installmentSelect" 
+                                label="Target Installment *" 
+                                value={selectedPayInstallmentId} 
+                                options={installmentOptions} 
+                                onchange={handlePayInstallmentChange} 
+                                required>
+                            </lightning-combobox>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input 
+                                type="number" 
+                                formatter="currency" 
+                                step="0.01" 
+                                label="Collected Amount (₹) *" 
+                                value={paymentAmountInput} 
+                                onchange={handlePaymentAmountChange} 
+                                required>
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-combobox 
+                                name="payMode" 
+                                label="Payment Mode *" 
+                                value={paymentModeInput} 
+                                options={paymentModeOptions} 
+                                onchange={handlePayModeChange} 
+                                required>
+                            </lightning-combobox>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input 
+                                type="text" 
+                                label="Instrument # / Cheque / UTR *" 
+                                value={paymentUtrInput} 
+                                onchange={handlePaymentUtrChange} 
+                                placeholder="e.g. CHQ-582910 or HDFC-N19847192" 
+                                required>
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                            <lightning-input 
+                                type="text" 
+                                label="Remitting Bank Name *" 
+                                value={bankNameInput} 
+                                onchange={handleBankNameChange} 
+                                placeholder="e.g. State Bank of India, HDFC" 
+                                required>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                            <lightning-input 
+                                type="date" 
+                                label="Instrument Date" 
+                                value={instrumentDateInput} 
+                                onchange={handleInstrumentDateChange}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                            <lightning-input 
+                                type="date" 
+                                label="Receipt Date" 
+                                value={paymentDateInput} 
+                                onchange={handlePaymentDateChange}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="slds-modal__footer slds-grid slds-grid_align-spread">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCloseQuickPayModal}></lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label="Log Receipt (Pending Reconciliation)" 
+                        icon-name="utility:check" 
+                        onclick={handleSubmitPaymentReceipt} 
+                        disabled={isSubmitting}
+                        class="btn-confirm-pay">
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

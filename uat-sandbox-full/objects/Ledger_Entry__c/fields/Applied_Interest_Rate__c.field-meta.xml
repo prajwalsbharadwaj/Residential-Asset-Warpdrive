@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Applied_Interest_Rate__c</fullName>
+    <description>Interest rate applied when posting the entry.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Annualized interest percentage captured at the time this ledger entry was created.</inlineHelpText>
+    <label>Applied Interest Rate (%)</label>
+    <precision>7</precision>
+    <required>false</required>
+    <scale>4</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

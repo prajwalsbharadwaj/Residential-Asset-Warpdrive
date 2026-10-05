@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mode_Of_Payment_Validation</fullName>
+    <active>true</active>
+    <description>Mode of payment should not be null while marking payment status as paid.</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Payment_Status__c, &quot;Paid&quot;),
+    ISBLANK(TEXT(Mode_Of_Payment__c))
+)</errorConditionFormula>
+    <errorDisplayField>Mode_Of_Payment__c</errorDisplayField>
+    <errorMessage>Mode of Payment is required when Payment Status is marked as Paid.</errorMessage>
+</ValidationRule>

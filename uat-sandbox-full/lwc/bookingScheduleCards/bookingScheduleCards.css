@@ -1,0 +1,48 @@
+.bsiv-header {
+  background: #f3f6f9;
+  border-bottom: 1px solid #d8dde6;
+}
+
+.bsiv-meta {
+  font-size: 0.75rem;
+  color: #54698d;
+}
+
+.bsiv-card {
+  background: #ffffff;
+}
+
+/* Value emphasis */
+.bsiv-value { font-weight: 600; }
+.bsiv-strong { font-weight: 700; }
+.bsiv-danger { color: #c23934; }   /* SLDS red */
+.bsiv-good { color: #2e844a; }     /* SLDS green */
+
+/* Status badge */
+.bsiv-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 700;
+}
+.bsiv-badge--success { background: #e3fcef; color: #2e844a; }
+.bsiv-badge--warn    { background: #fff1e3; color: #b85d00; }
+.bsiv-badge--danger  { background: #fdecea; color: #c23934; }
+.bsiv-badge--info {
+  background: #eaf5ff;   /* light brand blue */
+  color: #0176d3;        /* SLDS brand text blue */
+}
+
+/* Make horizontal labels collapse to stacked on narrow screens */
+@media (max-width: 640px) {
+  .slds-form-element_horizontal .slds-form-element__label {
+    width: auto;
+    float: none;
+    margin-bottom: 0.125rem;
+  }
+  .slds-form-element_horizontal .slds-form-element__control {
+    margin-left: 0;
+  }
+}

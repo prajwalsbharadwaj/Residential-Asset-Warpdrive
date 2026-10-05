@@ -1,0 +1,37 @@
+<template>
+    <lightning-quick-action-panel header="External Auditor Link">
+        <template lwc:if={isLoading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading link..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+        <template lwc:else>
+            <div class="slds-p-around_small">
+                <template lwc:if={externalInspectionUrl}>
+                    <p class="slds-m-bottom_small slds-text-body_regular">
+                        Share this secure URL with third-party technical auditors to perform inspection without requiring a Salesforce license:
+                    </p>
+                    <div class="slds-box slds-box_xx-small slds-theme_shade slds-m-bottom_medium slds-truncate">
+                        <code class="slds-text-body_small">{fullUrl}</code>
+                    </div>
+                    <div class="slds-grid slds-grid_align-center slds-gutters_small">
+                        <div class="slds-col">
+                            <lightning-button variant="brand" label="Copy Link" icon-name="utility:copy" onclick={handleCopyLink}></lightning-button>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button variant="neutral" label="Open Auditor Portal" icon-name="utility:new_window" onclick={handleOpenLink}></lightning-button>
+                        </div>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <div class="slds-notify slds-notify_alert slds-theme_info" role="alert">
+                        <h2>No active inspection round with an auditor token exists on this Handover yet.</h2>
+                    </div>
+                </template>
+            </div>
+        </template>
+        <div slot="footer">
+            <lightning-button variant="neutral" label="Close" onclick={handleClose}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Missed_Follow_up__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Used to keep track of the task whose follow-up was missed</description>
+    <externalId>false</externalId>
+    <label>Missed Follow-up</label>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,129 @@
+<template>
+    <div class="cti-container slds-card">
+        <!-- Top Status Bar -->
+        <div class="cti-header">
+            <div class="provider-badge">
+                <span class="pulsing-dot"></span>
+                <span class="provider-name">MCUBE CLOUD TELEPHONY</span>
+            </div>
+            <div class="trunk-info">GATEWAY: ACTIVE (HTTP/SIP)</div>
+        </div>
+
+        <!-- Main Body -->
+        <div class="cti-body">
+            <!-- State 1: IDLE -->
+            <template if:true={isIdle}>
+                <div class="idle-state">
+                    <div class="contact-preview">
+                        <div class="avatar-ring">
+                            <span class="avatar-icon">👤</span>
+                        </div>
+                        <div class="contact-name">{contactName}</div>
+                        <div class="contact-phone">{contactPhone}</div>
+                        <div class="contact-meta">{contactMeta}</div>
+                    </div>
+                    <div class="action-row">
+                        <button class="btn-dial" onclick={startCall}>
+                            <span class="btn-icon">📞</span>
+                            <span class="btn-text">Click-to-Dial</span>
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- State 2: RINGING / DIALING -->
+            <template if:true={isRinging}>
+                <div class="ringing-state">
+                    <div class="radar-container">
+                        <div class="radar-pulse ring-1"></div>
+                        <div class="radar-pulse ring-2"></div>
+                        <div class="radar-pulse ring-3"></div>
+                        <div class="phone-center">
+                            <span class="call-spin-icon">📡</span>
+                        </div>
+                    </div>
+                    <div class="call-status-label">Dialing Customer...</div>
+                    <div class="contact-phone-large">{contactPhone}</div>
+                    <div class="ringing-subtext">Waiting for customer answer</div>
+                    <button class="btn-hangup-small" onclick={cancelCall}>Cancel</button>
+                </div>
+            </template>
+
+            <!-- State 3: CONNECTED -->
+            <template if:true={isConnected}>
+                <div class="connected-state">
+                    <div class="timer-badge">
+                        <span class="live-dot"></span>
+                        <span class="timer-display">{callDurationFormatted}</span>
+                    </div>
+
+                    <div class="active-contact-title">{contactName}</div>
+                    <div class="active-phone-sub">{contactPhone}</div>
+
+                    <!-- Audio Equalizer Waveform -->
+                    <div class="waveform-container">
+                        <div class="wave-bar bar-1"></div>
+                        <div class="wave-bar bar-2"></div>
+                        <div class="wave-bar bar-3"></div>
+                        <div class="wave-bar bar-4"></div>
+                        <div class="wave-bar bar-5"></div>
+                        <div class="wave-bar bar-6"></div>
+                        <div class="wave-bar bar-7"></div>
+                        <div class="wave-bar bar-8"></div>
+                    </div>
+                    <div class="call-quality">HD Voice • Encrypted (AES-256)</div>
+
+                    <!-- In-Call Actions -->
+                    <div class="in-call-controls">
+                        <button class={muteButtonClass} onclick={toggleMute}>
+                            <span>{muteLabel}</span>
+                        </button>
+                        <button class={holdButtonClass} onclick={toggleHold}>
+                            <span>{holdLabel}</span>
+                        </button>
+                        <button class="btn-hangup" onclick={endCall}>
+                            <span>🔴 End Call</span>
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- State 4: DISPOSITION & LOGGING -->
+            <template if:true={isDisposition}>
+                <div class="disposition-state">
+                    <div class="disposition-header">
+                        <span class="badge-completed">Call Finished ({callDurationFormatted})</span>
+                        <div class="disposition-title">Select Call Disposition</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="input-label">Call Outcome</label>
+                        <select class="styled-select" onchange={handleDispositionChange}>
+                            <option value="SV Scheduled" selected>Site Visit Scheduled (Qualified)</option>
+                            <option value="Follow-up Required">Follow-up Required</option>
+                            <option value="Interested - Sent Brochure">Interested - Sent Brochure</option>
+                            <option value="Not Reachable / Busy">Not Reachable / Busy</option>
+                            <option value="Budget / Location Mismatch">Budget / Location Mismatch</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="input-label">Executive Call Notes</label>
+                        <textarea class="styled-textarea" rows="3" onchange={handleNotesChange} value={callNotes}></textarea>
+                    </div>
+
+                    <div class="action-row">
+                        <button class="btn-save-log" onclick={saveCallLog}>
+                            <template if:true={isSaving}>
+                                <span class="spinner-inline"></span> Saving...
+                            </template>
+                            <template if:false={isSaving}>
+                                💾 Save Log & Update Status
+                            </template>
+                        </button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

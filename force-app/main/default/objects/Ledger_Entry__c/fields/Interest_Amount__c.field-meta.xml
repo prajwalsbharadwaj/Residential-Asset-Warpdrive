@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interest_Amount__c</fullName>
+    <description>Portion of the posting that impacts interest balances.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Positive values add interest owed; negative values reverse previously accrued interest.</inlineHelpText>
+    <label>Interest Amount</label>
+    <precision>16</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

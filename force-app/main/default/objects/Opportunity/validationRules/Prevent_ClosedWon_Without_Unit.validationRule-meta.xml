@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_ClosedWon_Without_Unit</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(StageName, &quot;Closed Won&quot;),
+    ISBLANK(Interested_Unit__c),
+    OR(
+        RecordType.DeveloperName = &quot;Residential_Sales_Opportunity&quot;,
+        RecordType.DeveloperName = &quot;Residential_Leasing_Opportunity&quot;
+    )
+)</errorConditionFormula>
+    <errorMessage>Unit must be selected before marking the Opportunity as Closed Won.</errorMessage>
+</ValidationRule>

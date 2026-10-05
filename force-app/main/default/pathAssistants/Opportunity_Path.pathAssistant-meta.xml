@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Opportunity</entityName>
+    <fieldName>StageName</fieldName>
+    <masterLabel>Opportunity Sales Path</masterLabel>
+    <pathAssistantSteps>
+        <picklistValueName>Unit Selection</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <picklistValueName>Quotation Shared</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <picklistValueName>Negotiation &amp; Review</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <picklistValueName>Quotation Agreed</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <picklistValueName>Welcome Letter Sent</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <picklistValueName>Closed Won</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>Residential_Sales</recordTypeName>
+</PathAssistant>

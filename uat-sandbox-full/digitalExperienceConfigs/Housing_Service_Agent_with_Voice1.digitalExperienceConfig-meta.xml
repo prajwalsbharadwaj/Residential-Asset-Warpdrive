@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DigitalExperienceConfig xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Housing Service Agent with Voice</label>
+    <site>
+        <urlPathPrefix>support</urlPathPrefix>
+    </site>
+    <space>site/Housing_Service_Agent_with_Voice1</space>
+</DigitalExperienceConfig>

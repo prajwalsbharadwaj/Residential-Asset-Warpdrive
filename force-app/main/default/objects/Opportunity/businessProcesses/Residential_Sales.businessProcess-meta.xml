@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BusinessProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Residential_Sales</fullName>
+    <description>Sales process for residential real estate deal progression</description>
+    <isActive>true</isActive>
+    <values>
+        <fullName>Unit Selection</fullName>
+        <default>false</default>
+    </values>
+    <values>
+        <fullName>Quotation Shared</fullName>
+        <default>false</default>
+    </values>
+    <values>
+        <fullName>Negotiation &amp; Review</fullName>
+        <default>false</default>
+    </values>
+    <values>
+        <fullName>Quotation Agreed</fullName>
+        <default>false</default>
+    </values>
+    <values>
+        <fullName>Closed Won</fullName>
+        <default>false</default>
+    </values>
+    <values>
+        <fullName>Closed Lost</fullName>
+        <default>false</default>
+    </values>
+</BusinessProcess>

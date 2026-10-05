@@ -1,0 +1,909 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Site_Visit_Email</name>
+        <label>Send Site Visit Email</label>
+        <locationX>50</locationX>
+        <locationY>971</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Updating_status_of_site_visit</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddressesArray</name>
+            <value>
+                <elementReference>emailRecipientList</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Your Site Visit Has Been Scheduled!</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>NewSiteVisitLeadEmailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Site_Visit_Email_OPP</name>
+        <label>Send Site Visit Email (OPP)</label>
+        <locationX>1018</locationX>
+        <locationY>971</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Updating_status_of_site_visit</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddressesArray</name>
+            <value>
+                <elementReference>emailRecipientList</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Your Site Visit Has Been Scheduled!</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>OpportunityNewSiteVisitEmailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Site_Visit_Rescheduled_Email</name>
+        <label>Send Site Visit Rescheduled Email</label>
+        <locationX>314</locationX>
+        <locationY>971</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Updating_status_of_site_visit</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddressesArray</name>
+            <value>
+                <elementReference>emailRecipientList</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Updated Schedule for Your Site Visit</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>RescheduledSiteVisitEmailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Site_Visit_Rescheduled_Email_OPP</name>
+        <label>Send Site Visit Rescheduled Email (OPP)</label>
+        <locationX>1282</locationX>
+        <locationY>971</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Updating_status_of_site_visit</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddressesArray</name>
+            <value>
+                <elementReference>emailRecipientList</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Updated Schedule for Your Site Visit</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>OpportunityRescheduledSiteVisitEmailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+    </actionCalls>
+    <apiVersion>63.0</apiVersion>
+    <assignments>
+        <name>Update_Reschedule_Status</name>
+        <label>Update Reschedule Status</label>
+        <locationX>314</locationX>
+        <locationY>863</locationY>
+        <assignmentItems>
+            <assignToReference>Sitevisitrecordvariable.Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Rescheduled</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Sitevisitrecordvariable.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>emailRecipientList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>get_Lead_object.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>emailRecipientList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>$Record.Owner:User.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Send_Site_Visit_Rescheduled_Email</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Update_Reschedule_Status_Of_Site_Visit_On_Opp</name>
+        <label>Update Reschedule Status Of Site Visit On Opp</label>
+        <locationX>1282</locationX>
+        <locationY>863</locationY>
+        <assignmentItems>
+            <assignToReference>Sitevisitrecordvariable.Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Rescheduled</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Sitevisitrecordvariable.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>emailRecipientList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Opportunity_and_Account.Account.PersonEmail</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>emailRecipientList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>$Record.Owner:User.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Send_Site_Visit_Rescheduled_Email_OPP</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Update_Status</name>
+        <label>Update Status</label>
+        <locationX>50</locationX>
+        <locationY>863</locationY>
+        <assignmentItems>
+            <assignToReference>Sitevisitrecordvariable.Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Scheduled</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Sitevisitrecordvariable.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>emailRecipientList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>$Record.Owner:User.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>emailRecipientList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>get_Lead_object.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Send_Site_Visit_Email</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Update_Status_Of_Site_Visit_On_Opp</name>
+        <label>Update Status Of Site Visit On Opp</label>
+        <locationX>1018</locationX>
+        <locationY>863</locationY>
+        <assignmentItems>
+            <assignToReference>Sitevisitrecordvariable.Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Scheduled</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Sitevisitrecordvariable.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>emailRecipientList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>$Record.Owner:User.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>emailRecipientList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Opportunity_and_Account.Account.PersonEmail</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Send_Site_Visit_Email_OPP</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_for_Site_Visit_Record_Type</name>
+        <label>Check for Site Visit Record Type</label>
+        <locationX>1689</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Non Residential Record Type</defaultConnectorLabel>
+        <rules>
+            <name>Residential_Record_Type</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Residential_Sales_Site_Visit</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Site_Visit_Name</targetReference>
+            </connector>
+            <label>Residential Record Type</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_New_or_Rescheduled</name>
+        <label>Is New or Rescheduled</label>
+        <locationX>446</locationX>
+        <locationY>755</locationY>
+        <defaultConnector>
+            <targetReference>Updating_status_of_site_visit</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_New</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Lead__r.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Status</targetReference>
+            </connector>
+            <label>Is New</label>
+        </rules>
+        <rules>
+            <name>Rescheduled_Visit</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Visit_DateTime__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Lead__r.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Reschedule_Status</targetReference>
+            </connector>
+            <label>Rescheduled Visit</label>
+        </rules>
+        <rules>
+            <name>site_visit_is_completed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Completed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.Manager.ManagerId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Follow_Up_Task</targetReference>
+            </connector>
+            <label>site visit is completed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_New_or_Rescheduled_Site_Visit_Opportunity</name>
+        <label>Is New or Rescheduled Site Visit (Opportunity)</label>
+        <locationX>1414</locationX>
+        <locationY>755</locationY>
+        <defaultConnector>
+            <targetReference>Updating_status_of_site_visit</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_New_Site_Visit</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Opportunity__r.Account.PersonEmail</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Status_Of_Site_Visit_On_Opp</targetReference>
+            </connector>
+            <label>Is New Site Visit</label>
+        </rules>
+        <rules>
+            <name>Rescheduled_Site_Visit</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Visit_DateTime__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Opportunity__r.Account.PersonEmail</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Reschedule_Status_Of_Site_Visit_On_Opp</targetReference>
+            </connector>
+            <label>Rescheduled Site Visit</label>
+        </rules>
+        <rules>
+            <name>site_visit_is_completed_on_Opportunity</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Completed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.Manager.ManagerId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Follow_Up_Task_Site_visit_Opp</targetReference>
+            </connector>
+            <label>site visit is completed on Opportunity</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_this_a_Lead_or_Opportunity_Visit</name>
+        <label>Is this a Lead or Opportunity Visit?</label>
+        <locationX>1216</locationX>
+        <locationY>539</locationY>
+        <defaultConnector>
+            <targetReference>Updating_status_of_site_visit</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Lead_Visit</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Lead__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>get_Lead_object</targetReference>
+            </connector>
+            <label>Lead Visit</label>
+        </rules>
+        <rules>
+            <name>Opportunity_Visit</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Opportunity__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Opportunity_and_Account</targetReference>
+            </connector>
+            <label>Opportunity Visit</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>Subject</name>
+        <dataType>String</dataType>
+        <expression>&quot;Follow-up: Capture Site Visit Feedback – Lead: &quot; &amp; {!$Record.Lead__r.LastName}</expression>
+    </formulas>
+    <interviewLabel>Site Visit - Site Visit Scheduled Email Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RES_Site Visit - Site Visit Scheduled Email Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Follow_Up_Task</name>
+        <label>Create Follow-Up Task</label>
+        <locationX>578</locationX>
+        <locationY>863</locationY>
+        <connector>
+            <targetReference>Updating_status_of_site_visit</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.Owner:User.Manager.ManagerId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>Normal</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Not Started</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>Subject</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Follow_Up_Task_Site_visit_Opp</name>
+        <label>Create Follow-Up Task Site visit (Opp)</label>
+        <locationX>1546</locationX>
+        <locationY>863</locationY>
+        <connector>
+            <targetReference>Updating_status_of_site_visit</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.Owner:User.Manager.ManagerId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>Normal</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Not Started</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>Subject</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>get_Lead_object</name>
+        <label>get Lead object</label>
+        <locationX>446</locationX>
+        <locationY>647</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_New_or_Rescheduled</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Lead__r.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Opportunity_and_Account</name>
+        <label>Get Opportunity and Account</label>
+        <locationX>1414</locationX>
+        <locationY>647</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_New_or_Rescheduled_Site_Visit_Opportunity</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Opportunity__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Opportunity</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Site_Visit_Name</name>
+        <label>Update Site Visit Name</label>
+        <locationX>1216</locationX>
+        <locationY>431</locationY>
+        <connector>
+            <targetReference>Is_this_a_Lead_or_Opportunity_Visit</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>SiteVisitName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Updating_status_of_site_visit</name>
+        <label>Updating status of site visit</label>
+        <locationX>1216</locationX>
+        <locationY>1247</locationY>
+        <inputReference>Sitevisitrecordvariable</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>1563</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_for_Site_Visit_Record_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>RecordTypeDeveloperName__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Residential_Sales_Site_Visit</stringValue>
+            </value>
+        </filters>
+        <object>Site_Visit__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>NewSiteVisitLeadEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;html&gt;
+  &lt;body style=&quot;font-family: Arial, sans-serif; font-size: 15px; color: #333;&quot;&gt;
+    &lt;table style=&quot;width: 100%; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; background-color: #f9f9f9;&quot;&gt;
+      &lt;tr&gt;
+        &lt;td&gt;
+          &lt;h2 style=&quot;color: #2a9d8f;&quot;&gt;Hello {!get_Lead_object.Name},&lt;/h2&gt;
+
+          &lt;p&gt;Your site visit is scheduled for &lt;strong&gt;{!$Record.Visit_DateTime__c}&lt;/strong&gt; at the property &lt;strong&gt;{!$Record.Project__r.Name}&lt;/strong&gt;.&lt;/p&gt;
+
+          &lt;p&gt;&lt;strong&gt;Property Address:&lt;/strong&gt;&lt;br /&gt;
+          {!$Record.Project__r.Address__c}&lt;/p&gt;
+
+          &lt;p&gt;Our team will meet you there and guide you through the location.&lt;/p&gt;
+
+          &lt;p style=&quot;margin-top: 30px;&quot;&gt;Thanks,&lt;br /&gt;
+          &lt;strong&gt;The Sales Team&lt;/strong&gt;&lt;/p&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>OpportunityNewSiteVisitEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;html&gt;
+  &lt;body style=&quot;font-family: Arial, sans-serif; font-size: 15px; color: #333;&quot;&gt;
+    &lt;table style=&quot;width: 100%; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; background-color: #f9f9f9;&quot;&gt;
+      &lt;tr&gt;
+        &lt;td&gt;
+          &lt;h2 style=&quot;color: #2a9d8f;&quot;&gt;Hello {!Get_Opportunity_and_Account.Account.FirstName} {!Get_Opportunity_and_Account.Account.LastName},&lt;/h2&gt;
+
+          &lt;p&gt;Your site visit is scheduled for &lt;strong&gt;{!$Record.Visit_DateTime__c}&lt;/strong&gt; at the property &lt;strong&gt;{!$Record.Project__r.Name}&lt;/strong&gt;.&lt;/p&gt;
+
+          &lt;p&gt;&lt;strong&gt;Property Address:&lt;/strong&gt;&lt;br /&gt;
+          {!$Record.Project__r.Address__c}&lt;/p&gt;
+
+          &lt;p&gt;Our team will meet you there and guide you through the location.&lt;/p&gt;
+
+          &lt;p style=&quot;margin-top: 30px;&quot;&gt;Thanks,&lt;br /&gt;
+          &lt;strong&gt;The Sales Team&lt;/strong&gt;&lt;/p&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>OpportunityRescheduledSiteVisitEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;html&gt;
+  &lt;body style=&quot;font-family: Arial, sans-serif; font-size: 15px; color: #333;&quot;&gt;
+    &lt;table style=&quot;width: 100%; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; background-color: #f9f9f9;&quot;&gt;
+      &lt;tr&gt;
+        &lt;td&gt;
+          &lt;h2 style=&quot;color: #e76f51;&quot;&gt;Hello {!Get_Opportunity_and_Account.Account.FirstName} {!Get_Opportunity_and_Account.Account.LastName},&lt;/h2&gt;
+
+          &lt;p&gt;Your site visit has been &lt;strong&gt;rescheduled&lt;/strong&gt; to &lt;strong&gt;{!$Record.Visit_DateTime__c}&lt;/strong&gt; at the property &lt;strong&gt;{!$Record.Project__r.Name}&lt;/strong&gt;.&lt;/p&gt;
+
+          &lt;p&gt;Our team will be there to welcome you and provide a guided tour of the location.&lt;/p&gt;
+
+          &lt;p&gt;&lt;strong&gt;Property Address:&lt;/strong&gt;&lt;br /&gt;
+          {!$Record.Project__r.Address__c}&lt;/p&gt;
+
+          &lt;p&gt;Please let us know if you have any questions or need to make further changes.&lt;/p&gt;
+
+          &lt;p style=&quot;margin-top: 30px;&quot;&gt;Thank you,&lt;br /&gt;
+          &lt;strong&gt;The Sales Team&lt;/strong&gt;&lt;/p&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>RescheduledSiteVisitEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;html&gt;
+  &lt;body style=&quot;font-family: Arial, sans-serif; font-size: 15px; color: #333;&quot;&gt;
+    &lt;table style=&quot;width: 100%; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; background-color: #f9f9f9;&quot;&gt;
+      &lt;tr&gt;
+        &lt;td&gt;
+          &lt;h2 style=&quot;color: #e76f51;&quot;&gt;Hello {!get_Lead_object.Name},&lt;/h2&gt;
+
+          &lt;p&gt;Your site visit has been &lt;strong&gt;rescheduled&lt;/strong&gt; to &lt;strong&gt;{!$Record.Visit_DateTime__c}&lt;/strong&gt; at the property &lt;strong&gt;{!$Record.Project__r.Name}&lt;/strong&gt;.&lt;/p&gt;
+
+          &lt;p&gt;Our team will be there to welcome you and provide a guided tour of the location.&lt;/p&gt;
+
+          &lt;p&gt;&lt;strong&gt;Property Address:&lt;/strong&gt;&lt;br /&gt;
+          {!$Record.Project__r.Address__c}&lt;/p&gt;
+
+          &lt;p&gt;Please let us know if you have any questions or need to make further changes.&lt;/p&gt;
+
+          &lt;p style=&quot;margin-top: 30px;&quot;&gt;Thank you,&lt;br /&gt;
+          &lt;strong&gt;The Sales Team&lt;/strong&gt;&lt;/p&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>SiteVisitName</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Site Visit : {!$Record.Lead__r.LastName} : {!$Record.Visit_DateTime__c}</text>
+    </textTemplates>
+    <variables>
+        <name>emailRecipientList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Sitevisitrecordvariable</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Site_Visit__c</objectType>
+    </variables>
+</Flow>

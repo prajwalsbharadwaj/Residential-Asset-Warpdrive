@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Resale</fullName>
+    <active>true</active>
+    <description>Post-sale resale and secondary market assistance request</description>
+    <label>Resale</label>
+    <picklistValues>
+        <picklist>Buyer_Source__c</picklist>
+        <values>
+            <fullName>Channel Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Direct</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Portal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Furnishing__c</picklist>
+        <values>
+            <fullName>Fully Furnished</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Semi-Furnished</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unfurnished</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Handling_Option__c</picklist>
+        <values>
+            <fullName>Channel Partner %2F Broker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In-house Rental Desk</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Listing_Status__c</picklist>
+        <values>
+            <fullName>Active</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Leased</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paused</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Maintenance_Responsibility__c</picklist>
+        <values>
+            <fullName>Owner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shared</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tenant</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Pet_Preference__c</picklist>
+        <values>
+            <fullName>Allowed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Allowed</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Registration_Transfer_Status__c</picklist>
+        <values>
+            <fullName>Documents In Verification</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ownership Transferred</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Slot Scheduled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Verification Complete</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Rejection_Reason__c</picklist>
+        <values>
+            <fullName>Legal %2F Documentation Issue</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Owner Changed Mind</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Price Unrealistic</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Renewal_Decision__c</picklist>
+        <values>
+            <fullName>Re-rent to New Tenant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Renew Current Tenant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Stop Renting</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Request_Source__c</picklist>
+        <values>
+            <fullName>Channel Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Portal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Direct</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Handover</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rental Desk</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Stage__c</picklist>
+        <values>
+            <fullName>Active Lease</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Allotment %2F Welcome</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deal Closure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deal Finalisation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documentation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documentation %2F Ownership Transfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documents</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Follow-up</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Full Payment %26 Receipt</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KYC %26 Full Payment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KYC %26 Token</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lead Allocation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Listing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Listing %26 Buyer Sourcing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Property Listing %26 Buyer Sourcing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Renewal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site Visit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tenant %26 Lease</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Validation</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Active Lease</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deal Closure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Documents</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Follow-up</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lead Allocation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Listing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Renewal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Site Visit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tenant %26 Lease</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Validation</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Tenant_Preference__c</picklist>
+        <values>
+            <fullName>Any</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bachelors</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Family</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

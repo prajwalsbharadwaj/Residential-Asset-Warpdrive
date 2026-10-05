@@ -1,0 +1,295 @@
+<template>
+    <div class="kyc-hub-card slds-card">
+        <!-- TOP BRANDING & BOOKING METADATA HEADER -->
+        <div class="hub-header">
+            <div class="header-left">
+                <div class="tag-row slds-grid slds-grid_vertical-align-center">
+                    <span class="hub-tag">BOOKING APPLICATION FORM</span>
+                    <span class="ref-pill slds-m-left_x-small">REF: {bookingReferenceId}</span>
+                </div>
+                <div class="hub-title">{bookingName} • {applicantName}</div>
+                <div class="hub-subtitle">
+                    Unit: <strong>{unitName}</strong> ({unitConfig}) • Agreement Consideration: <strong>₹{agreementValue}</strong>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="token-box">
+                    <div class="token-lbl">TOKEN ADVANCE PAID</div>
+                    <div class="token-val text-emerald">₹{tokenAmount}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB NAVIGATION PILLS -->
+        <div class="tab-nav-bar">
+            <button class={applicantPillClass} onclick={handleTabSelect} data-tab="applicant">
+                <span>👤 1. Primary Applicant &amp; KYC</span>
+            </button>
+            <button class={coApplicantPillClass} onclick={handleTabSelect} data-tab="coapplicant">
+                <span>👥 2. Co-Applicant &amp; Nominee</span>
+            </button>
+            <button class={addressPillClass} onclick={handleTabSelect} data-tab="address">
+                <span>📍 3. Residential Address</span>
+            </button>
+            <button class={esignPillClass} onclick={handleTabSelect} data-tab="esign">
+                <span>✍️ 4. E-Signature &amp; Execution</span>
+            </button>
+        </div>
+
+        <!-- MAIN BODY CONTENT -->
+        <div class="hub-body slds-p-around_medium">
+            <!-- TAB 1: PRIMARY APPLICANT & GOVERNMENT KYC -->
+            <template if:true={isApplicantTab}>
+                <div class="tab-pane">
+                    <!-- GOVT GATEWAY VERIFICATION SUMMARY BOX -->
+                    <div class="gateway-box slds-m-bottom_medium">
+                        <div class="slds-grid slds-gutters slds-wrap">
+                            <!-- DigiLocker Aadhaar -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_x-small">
+                                <div class="verify-card">
+                                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                        <div class="slds-grid slds-grid_vertical-align-center">
+                                            <div class="verify-icon-box">🛡️</div>
+                                            <div class="slds-m-left_small">
+                                                <div class="verify-title">DigiLocker Aadhaar e-KYC</div>
+                                                <div class="verify-sub">Aadhaar: {applicantAadhaar}</div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <template if:true={isAadhaarVerified}>
+                                                <span class="badge-verified">✓ UIDAI VERIFIED</span>
+                                            </template>
+                                            <template if:false={isAadhaarVerified}>
+                                                <button class="btn-verify-action" onclick={handleOpenDigiLockerModal}>
+                                                    Verify OTP
+                                                </button>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <template if:true={isAadhaarVerified}>
+                                        <div class="cert-row text-muted">Cert ID: {aadhaarCertId} • Instant Verification</div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- NSDL PAN Tax Check -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_x-small">
+                                <div class="verify-card">
+                                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                        <div class="slds-grid slds-grid_vertical-align-center">
+                                            <div class="verify-icon-box">📑</div>
+                                            <div class="slds-m-left_small">
+                                                <div class="verify-title">Income Tax Dept PAN Check</div>
+                                                <div class="verify-sub">PAN: {applicantPan}</div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <template if:true={isPanVerified}>
+                                                <span class="badge-verified">✓ NSDL VALIDATED</span>
+                                            </template>
+                                            <template if:false={isPanVerified}>
+                                                <button class="btn-verify-action" onclick={handleVerifyPan}>
+                                                    Check PAN
+                                                </button>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <template if:true={isPanVerified}>
+                                        <div class="cert-row text-muted">Ref: {panCertId} • Status: Active &amp; Operative</div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Applicant Form Fields -->
+                    <div class="form-grid slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input label="Primary Applicant Legal Name *" value={applicantName} data-field="applicantName" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input label="Contact Phone Number *" value={applicantPhone} data-field="applicantPhone" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input label="Email Address *" value={applicantEmail} data-field="applicantEmail" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input type="date" label="Date of Birth" value={applicantDob} data-field="applicantDob" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input label="Occupation / Industry" value={applicantOccupation} data-field="applicantOccupation" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input label="Financial Applicant Priority" value="100% Primary Owner" disabled></lightning-input>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- TAB 2: CO-APPLICANT & NOMINEE -->
+            <template if:true={isCoApplicantTab}>
+                <div class="tab-pane">
+                    <div class="sub-section-title">👥 Joint Co-Applicant Details</div>
+                    <div class="form-grid slds-grid slds-gutters slds-wrap slds-m-bottom_medium">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input label="Co-Applicant Legal Name" value={coApplicantName} data-field="coApplicantName" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input label="Relationship to Primary Applicant" value={coApplicantRel} data-field="coApplicantRel" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input label="Co-Applicant Contact Phone" value={coApplicantPhone} data-field="coApplicantPhone" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-bottom_small">
+                            <lightning-input label="Co-Applicant PAN Number" value={coApplicantPan} data-field="coApplicantPan" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="sub-section-title">📜 Nominee Details</div>
+                    <div class="form-grid slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                            <lightning-input label="Nominee Legal Name" value={nomineeName} data-field="nomineeName" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                            <lightning-input label="Relationship to Applicant" value={nomineeRel} data-field="nomineeRel" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                            <lightning-input label="Nominee Age / Share" value="12 Yrs • 100% Share" disabled></lightning-input>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- TAB 3: RESIDENTIAL ADDRESS -->
+            <template if:true={isAddressTab}>
+                <div class="tab-pane">
+                    <div class="sub-section-title">📍 Permanent Residential Address</div>
+                    <div class="form-grid slds-grid slds-gutters slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-m-bottom_small">
+                            <lightning-input label="Street Address / House No. *" value={addressStreet} data-field="addressStreet" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                            <lightning-input label="City *" value={addressCity} data-field="addressCity" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                            <lightning-input label="State / Province *" value={addressState} data-field="addressState" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                            <lightning-input label="Postal PIN Code *" value={addressZip} data-field="addressZip" onchange={handleApplicantFieldChange}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- TAB 4: E-SIGNATURE & FORMAL EXECUTION -->
+            <template if:true={isEsignTab}>
+                <div class="tab-pane">
+                    <!-- Unit & Commercial Review Card -->
+                    <div class="exec-summary-box slds-m-bottom_medium">
+                        <div class="exec-title slds-m-bottom_x-small">Commercial Purchase Summary</div>
+                        <div class="slds-grid slds-gutters slds-wrap">
+                            <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                <div class="exec-label">Booked Inventory</div>
+                                <div class="exec-val">{unitName} ({unitConfig})</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                <div class="exec-label">Booking Reference ID</div>
+                                <div class="exec-val text-blue">{bookingReferenceId}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                <div class="exec-label">Agreement Value</div>
+                                <div class="exec-val text-navy">₹ {agreementValue}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                <div class="exec-label">Token Advance Status</div>
+                                <div class="exec-val text-emerald">₹ {tokenAmount} (PAID ✔)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms Acceptance -->
+                    <div class="terms-box slds-m-bottom_medium">
+                        <p class="terms-text">
+                            I/We hereby apply for allotment of the residential apartment as detailed above. I/We confirm that all information provided is accurate and verifiable against Government of India UIDAI / NSDL databases. I/We agree to adhere to the Construction Linked Payment schedule and rules governed under RERA.
+                        </p>
+                    </div>
+
+                    <!-- Digital Signature Stamp -->
+                    <template if:true={isFormSigned}>
+                        <div class="signed-card slds-align_absolute-center slds-p-around_medium">
+                            <div class="slds-text-align_center">
+                                <div class="seal-icon">✓ DIGITALLY SIGNED &amp; SEALED</div>
+                                <div class="sign-name font-bold text-navy">{applicantName}</div>
+                                <div class="sign-meta text-muted">Aadhaar e-Sign Cert: {signCertId} • {signTimestamp}</div>
+                                <div class="sign-status-tag">RERA Compliant Digital Audit Trail Stamped</div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:false={isFormSigned}>
+                        <div class="sign-action-bar slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                            <div>
+                                <span class="text-muted font-semibold">Authorized Signatory: </span>
+                                <strong>{applicantName}</strong> ({applicantPhone})
+                            </div>
+                            <button class="btn-esign" onclick={handleSignBookingForm} disabled={isSigning}>
+                                <template if:true={isSigning}>
+                                    <span class="spinner-small"></span> Applying Aadhaar e-Sign...
+                                </template>
+                                <template if:false={isSigning}>
+                                    <span>✍️ Apply DigiO / Aadhaar e-Signature</span>
+                                </template>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+
+        <!-- DIGILOCKER OTP MODAL -->
+        <template if:true={isDigiLockerModalOpen}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header modal-govt-header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseDigiLockerModal}>
+                            <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                        </button>
+                        <h2 class="slds-text-heading_medium font-bold text-white">Government of India • DigiLocker Gateway</h2>
+                        <p class="modal-sub text-white-dim">UIDAI Aadhaar OTP e-KYC Verification</p>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_large">
+                        <div class="slds-text-align_center slds-m-bottom_medium">
+                            <div class="govt-emblem">🇮🇳</div>
+                            <div class="otp-notice font-bold text-navy slds-m-top_x-small">
+                                A 6-digit verification code has been dispatched to {applicantPhone}.
+                            </div>
+                            <p class="text-muted slds-text-body_small">Please enter the code to complete instantaneous paperless KYC verification.</p>
+                        </div>
+                        <div class="slds-align_absolute-center slds-m-bottom_medium" style="max-width: 280px;">
+                            <lightning-input 
+                                type="text" 
+                                label="Enter 6-Digit OTP *" 
+                                value={digiLockerOtp} 
+                                onchange={handleOtpChange} 
+                                placeholder="e.g. 198241"
+                                class="otp-input-center">
+                            </lightning-input>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer slds-grid slds-grid_align-spread">
+                        <lightning-button variant="neutral" label="Cancel" onclick={handleCloseDigiLockerModal}></lightning-button>
+                        <button class="btn-verify-otp" onclick={handleVerifyDigiLockerOtp} disabled={isVerifyingOtp}>
+                            <template if:true={isVerifyingOtp}>
+                                <span class="spinner-small"></span> Verifying UIDAI...
+                            </template>
+                            <template if:false={isVerifyingOtp}>
+                                <span>Verify &amp; Authenticate</span>
+                            </template>
+                        </button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unit_Floor_Belongs_To_Tower</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( NOT( ISBLANK( Floor__c ) ) ,
+				  NOT( ISBLANK( Tower__c )) ,
+					 Floor__r.Tower__c  &lt;&gt;  Tower__c,
+				   RecordType.DeveloperName = &quot;Residential_Unit&quot;
+				)</errorConditionFormula>
+    <errorDisplayField>Floor__c</errorDisplayField>
+    <errorMessage>The selected Floor must belong to the Tower you have chosen for this Unit.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,103 @@
+<template>
+  <div class="slds-card">
+
+    <lightning-spinner lwc:if={isLoading} size="small"></lightning-spinner>
+    <!-- Header: title + refresh -->
+    <div class="slds-grid slds-grid_align-spread slds-p-horizontal_small slds-p-vertical_x-small bsiv-header">
+      <div>
+        <div class="slds-text-heading_small">Booking Snapshot</div>
+        <template if:true={asOfDisplay}>
+          <div class="bsiv-meta">As of: {asOfDisplay}</div>
+        </template>
+      </div>
+      <div>
+        <lightning-button-icon
+          icon-name="utility:refresh"
+          variant="border-filled"
+          alternative-text="Refresh"
+          title="Refresh"
+          onclick={handleRefresh}>
+        </lightning-button-icon>
+      </div>
+    </div>
+
+    <!-- ACCORDION (Totals + Schedules) -->
+    <lightning-accordion allow-multiple-sections-open active-section-name={openSectionsName}>
+      <!-- Booking Totals -->
+      <lightning-accordion-section name="__totals__" label="Booking Totals">
+        <div class="slds-form slds-form_readonly">
+          <lightning-layout multiple-rows>
+            <template for:each={totalsRows} for:item="row">
+              <lightning-layout-item
+                key={row.key}
+                size="12"
+                small-device-size="12"
+                medium-device-size="6"
+                large-device-size="6"
+                class="slds-p-bottom_small">
+                <div class="slds-form-element">
+                  <label class="slds-form-element__label">
+                    {row.label}
+                  </label>
+                  <div class="slds-form-element__control">
+                    <div class={row.valueClass}>{row.value}</div>
+                  </div>
+                </div>
+              </lightning-layout-item>
+            </template>
+          </lightning-layout>
+
+          <div class="slds-text-color_weak slds-m-top_x-small">
+            Schedules: {summary.scheduleCount} • Next Due: {summary.nextDueFmt}
+          </div>
+        </div>
+      </lightning-accordion-section>
+
+      <!-- Per-schedule sections -->
+      <template if:true={cards.length}>
+        <template for:each={cards} for:item="c">
+          <lightning-accordion-section key={c.id} name={c.id} label={c.header}>
+            <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_small">
+              <span class={c.badgeClass}>{c.badgeText}</span>
+            </div>
+
+            <div class="slds-form slds-form_readonly">
+              <lightning-layout multiple-rows>
+                <template for:each={c.rows} for:item="row">
+                  <lightning-layout-item
+                    key={row.key}
+                    size="12"
+                    small-device-size="12"
+                    medium-device-size="6"
+                    large-device-size="6"
+                    class="slds-p-bottom_small">
+                    <div class="slds-form-element">
+                      <label class="slds-form-element__label">{row.label}
+                        <template if:true={row.helpText}>
+                           <lightning-helptext content={row.helpText}></lightning-helptext>
+                        </template>
+                      </label>
+                      <div class="slds-form-element__control">
+                        <div class={row.valueClass}>{row.value}</div>
+                      </div>
+                    </div>
+                  </lightning-layout-item>
+                </template>
+              </lightning-layout>
+
+            </div>
+          </lightning-accordion-section>
+        </template>
+      </template>
+
+      <!-- Empty state -->
+      <template if:false={cards.length}>
+        <lightning-accordion-section name="__empty__" label="Schedules">
+          <div class="slds-p-around_small slds-text-color_weak">
+            No schedules to display.
+          </div>
+        </lightning-accordion-section>
+      </template>
+    </lightning-accordion>
+  </div>
+</template>
