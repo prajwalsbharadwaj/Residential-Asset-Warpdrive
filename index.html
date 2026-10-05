@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WD Elite Residences | Channel Partner 360 Portal</title>
+    <meta name="description" content="Exclusive B2B Channel Partner 360 Portal for WD Elite Residences. Track tagged client pipeline, verified site visits, bookings, unit allocations, and real-time commissions.">
+
+    <!-- Fonts: Playfair Display (Editorial Serif), Cinzel (Luxury), Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="brand-link" id="brand-home">
+                <div class="brand-box">WD</div>
+                <div class="brand-titles">
+                    <span class="brand-name">WD Elite</span>
+                    <span class="brand-sub">PARTNER NETWORK</span>
+                </div>
+            </a>
+
+            <nav class="nav-menu">
+                <a href="#broker360-section" class="nav-link active">Partner 360</a>
+                <a href="#saleskits-section" class="nav-link">Marketing &amp; Sales Kits</a>
+            </nav>
+
+            <div class="nav-actions">
+                <div class="partner-badge-pill" id="partner-pill" title="Click to simulate Broker OTP Login / Switch Account">
+                    <span class="dot-live"></span>
+                    <span id="partner-nav-name">Amit Raj (Apex Realty)</span>
+                    <span class="tag-rera">RERA Verified</span>
+                </div>
+                <button class="btn-primary" id="btn-nav-register-client">
+                    + Onboard Client
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN PORTAL CONTENT -->
+    <main>
+
+        <!-- 1. CHANNEL PARTNER 360 EXECUTIVE DASHBOARD (PRIMARY CENTERPIECE) -->
+        <section class="broker360-section" id="broker360-section" style="padding-top: 2.5rem;">
+            <div class="section-container">
+                <div class="section-header-row">
+                    <div>
+                        <div class="section-eyebrow">B2B CHANNEL PARTNER COMMAND CENTER</div>
+                        <h1 class="section-heading">Channel Partner 360</h1>
+                        <p class="section-sub">
+                            Real-time telemetry across your referred client pipeline, sourcing attribution, verified OTP site visits, and commission disbursements.
+                        </p>
+                    </div>
+
+                    <div class="partner-meta-card">
+                        <div class="meta-row">
+                            <span class="meta-label">Partner Account:</span>
+                            <strong class="meta-val text-gold" id="profile-name">Amit Raj (Apex Realty Partners)</strong>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">RERA Registration:</span>
+                            <span class="meta-val font-mono" id="profile-rera">PRM/KA/RERA/1251/309/PR/200123</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label">Commission Slab:</span>
+                            <span class="badge-slab" id="profile-slab">2.5% on Agreement Value</span>
+                            <span class="badge-tier" id="profile-tier">Platinum Tier</span>
+                        </div>
+                        <div class="meta-row" style="padding-top:0.4rem; border-top:1px dashed #E0D7C9; margin-top:0.25rem;">
+                            <span class="meta-label">Sourcing Manager:</span>
+                            <span class="meta-val" style="color:var(--text-white); font-weight:600;">Rajesh Nair (VP Sourcing)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4-METRIC KPI RIBBON -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-label">Active Referred Clients</span>
+                            <span class="kpi-icon">👥</span>
+                        </div>
+                        <div class="kpi-value" id="kpi-inquiries">18</div>
+                        <div class="kpi-footer">Attributed to your CP ID with full visibility</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-label">OTP Site Visits Verified</span>
+                            <span class="kpi-icon">🏢</span>
+                        </div>
+                        <div class="kpi-value text-emerald" id="kpi-visits">12</div>
+                        <div class="kpi-footer">Mandatory GRE Welcome Desk Qualified ✔</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-label">Units Booked &amp; Allocated</span>
+                            <span class="kpi-icon">🔑</span>
+                        </div>
+                        <div class="kpi-value text-accent" id="kpi-units">4</div>
+                        <div class="kpi-footer">Allotment issued in Salesforce CRM</div>
+                    </div>
+
+                    <div class="kpi-card card-gold">
+                        <div class="kpi-header">
+                            <span class="kpi-label">Total Brokerage Earned</span>
+                            <span class="kpi-icon">💰</span>
+                        </div>
+                        <div class="kpi-value font-bold text-gold" id="kpi-commission">₹ 16,12,500</div>
+                        <div class="kpi-footer" id="kpi-pending">₹ 6,45,000 in milestone disbursement</div>
+                    </div>
+                </div>
+
+                <!-- DIRECT VS CP SEGREGATION CALLOUT -->
+                <div class="segregation-alert">
+                    <div class="alert-icon">✨</div>
+                    <div class="alert-text">
+                        <strong>Sourcing Attribution Active:</strong> In accordance with developer policy, all inquiries do not come through channel partners. Direct walk-ins and digital marketing leads are strictly filtered out; only prospective clients onboarded under your Channel Partner code are displayed below with full commission assurance.
+                    </div>
+                    <button class="btn-primary-sm" id="btn-quick-register-top" style="margin-left:auto; white-space:nowrap;">
+                        + Onboard Client
+                    </button>
+                </div>
+
+                <!-- DASHBOARD TABS -->
+                <div class="dashboard-tabs">
+                    <button class="tab-btn active" data-tab="inquiries-tab">
+                        📋 Client Pipeline &amp; Attribution (<span id="inquiry-count">18</span>)
+                    </button>
+                    <button class="tab-btn" data-tab="bookings-tab">
+                        🔑 Tagged Bookings &amp; Unit Allotments (<span id="booking-count">4</span>)
+                    </button>
+                    <button class="tab-btn" data-tab="commission-tab">
+                        📈 Commission Ledger &amp; TDS u/s 194H
+                    </button>
+                </div>
+
+                <!-- TAB 1: CLIENT PIPELINE & EXCLUSIVITY -->
+                <div class="tab-pane active" id="inquiries-tab">
+                    <div class="table-card">
+                        <div class="table-toolbar">
+                            <input type="text" id="inquiry-search" placeholder="Search tagged client by name or phone..." class="input-search">
+                            <button class="btn-primary-sm" id="btn-quick-register">+ Tag Client</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Prospective Client</th>
+                                        <th>Phone / Contact</th>
+                                        <th>Project Interested</th>
+                                        <th>Configuration</th>
+                                        <th>Tagged Unit</th>
+                                        <th>Budget</th>
+                                        <th>Site Visit Status</th>
+                                        <th>Pipeline Stage</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inquiries-tbody">
+                                    <!-- Injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: TAGGED BOOKINGS & UNIT ALLOCATION -->
+                <div class="tab-pane" id="bookings-tab">
+                    <div class="table-card">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Booking Ref #</th>
+                                        <th>Project</th>
+                                        <th>Tagged Unit</th>
+                                        <th>Tower / Floor</th>
+                                        <th>Agreement Value</th>
+                                        <th>Commission %</th>
+                                        <th>Brokerage Earned</th>
+                                        <th>Booking Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bookings-tbody">
+                                    <!-- Injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: COMMISSION LEDGER & MILESTONES -->
+                <div class="tab-pane" id="commission-tab">
+                    <div class="ledger-layout">
+                        <div class="ledger-summary-card">
+                            <h3 class="card-title">Commission Release Milestone Schedule</h3>
+                            <p class="card-desc">Standard developer payment SLA for Platinum Channel Partners:</p>
+                            
+                            <div class="milestone-steps">
+                                <div class="milestone-step step-done">
+                                    <div class="m-circle">1</div>
+                                    <div class="m-body">
+                                        <strong>Stage 1: Booking Token &amp; KYC (25%)</strong>
+                                        <p>Released within 14 days of token deposit and signed application form.</p>
+                                    </div>
+                                </div>
+                                <div class="milestone-step step-done">
+                                    <div class="m-circle">2</div>
+                                    <div class="m-body">
+                                        <strong>Stage 2: Agreement Registration (50%)</strong>
+                                        <p>Released upon execution of Sale Agreement and receipt of 10% payment.</p>
+                                    </div>
+                                </div>
+                                <div class="milestone-step step-pending">
+                                    <div class="m-circle">3</div>
+                                    <div class="m-body">
+                                        <strong>Stage 3: Foundation Slab Milestone (25%)</strong>
+                                        <p>Released upon casting of ground floor slab or 20% milestone collection.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ledger-payout-card">
+                            <h3 class="card-title">Earnings Breakdown (YTD)</h3>
+                            <div class="earnings-row">
+                                <span>Gross Invoiced Brokerage:</span>
+                                <strong>₹ 16,12,500</strong>
+                            </div>
+                            <div class="earnings-row">
+                                <span>TDS Deducted (5% u/s 194H):</span>
+                                <span class="text-danger">- ₹ 80,625</span>
+                            </div>
+                            <div class="earnings-row">
+                                <span>Net Disbursed to Bank:</span>
+                                <span class="text-emerald font-bold">₹ 8,86,875</span>
+                            </div>
+                            <div class="earnings-row total-row">
+                                <span>Pending Approval / Release:</span>
+                                <span class="text-gold font-bold">₹ 6,45,000</span>
+                            </div>
+                            <button class="btn-ghost-full" onclick="alert('Downloading GST Statement of Accounts (SOA) & Commission Invoices (PDF)...')">
+                                📥 Download SOA &amp; GST Ledger (PDF)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 2. B2B MARKETING & SALES KITS (UNIT-BASED SELLING POINTS & BROCHURES) -->
+        <section class="pitchkit-section" id="saleskits-section">
+            <div class="pitchkit-header">
+                <span class="hero-tag">B2B SALES COLLATERALS</span>
+                <h2 class="section-heading">Project Brochures &amp; Unit Selling Points</h2>
+                <p class="section-sub">
+                    Official RERA project brochures, unit-wise architectural selling points, verified carpet areas, and 1-click WhatsApp client teasers.
+                </p>
+            </div>
+
+            <div class="pitchkit-grid">
+                <!-- Card 1: Nikoo Homes Phase 2 -->
+                <div class="pitchkit-card">
+                    <div class="pitchkit-card-head">
+                        <div class="pitchkit-badge-row">
+                            <span class="badge-tier">Bengaluru North</span>
+                            <span class="rera-pill font-mono">RERA: PRM/KA/RERA/1251/472</span>
+                        </div>
+                        <h3 class="pitchkit-title">Nikoo Homes — Phase 2 Township</h3>
+                        <p class="pitchkit-loc">Thanisandra Main Road · 15 Mins to Manyata Tech Park</p>
+                    </div>
+
+                    <!-- Township USPs -->
+                    <div class="township-highlights">
+                        <span class="usp-pill">126-Acre Smart City</span>
+                        <span class="usp-pill">Direct Metro Skywalk</span>
+                        <span class="usp-pill">5.2% Rental Yield</span>
+                        <span class="usp-pill">40k sq.ft Club</span>
+                    </div>
+
+                    <!-- Unit-Wise Selling Points Grid -->
+                    <div class="unit-usp-box">
+                        <div class="unit-usp-head">Unit-Wise Configurations &amp; Features:</div>
+                        <div class="unit-usp-list">
+                            <div class="unit-usp-row">
+                                <div class="unit-type-tag">2 BHK + Family</div>
+                                <div class="unit-spec-detail">
+                                    <strong>1,180 sq.ft</strong> · Dual balcony cross-ventilation, dedicated WFH workstation alcove, compact luxury starting ₹ 1.28 Cr.
+                                </div>
+                            </div>
+                            <div class="unit-usp-row">
+                                <div class="unit-type-tag">3 BHK Canopy</div>
+                                <div class="unit-spec-detail">
+                                    <strong>1,640 sq.ft</strong> · Double-height sky deck with garden planter, corner orientation with 270° park vista, starting ₹ 1.65 Cr.
+                                </div>
+                            </div>
+                            <div class="unit-usp-row">
+                                <div class="unit-type-tag">4 BHK Classic</div>
+                                <div class="unit-spec-detail">
+                                    <strong>2,150 sq.ft</strong> · Private elevator foyer, separate maid room with detached utility entrance, 3 master suites, starting ₹ 2.10 Cr.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pitchkit-actions">
+                        <button class="btn-saleskit-primary" onclick="window.openProjectBrochure('Nikoo Homes')">
+                            📄 Official Sales Brochure &amp; PDF
+                        </button>
+                        <button class="btn-saleskit-secondary" onclick="window.shareWhatsAppPitch('Nikoo Homes')">
+                            📱 WhatsApp Teaser
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 2: Varthur Vista -->
+                <div class="pitchkit-card">
+                    <div class="pitchkit-card-head">
+                        <div class="pitchkit-badge-row">
+                            <span class="badge-tier">Bengaluru East</span>
+                            <span class="rera-pill font-mono">RERA: PRM/KA/RERA/1251/310</span>
+                        </div>
+                        <h3 class="pitchkit-title">Varthur Vista — Whitefield Woods</h3>
+                        <p class="pitchkit-loc">Varthur Main Road · 10 Mins to ITPL &amp; Outer Ring Road</p>
+                    </div>
+
+                    <!-- Township USPs -->
+                    <div class="township-highlights">
+                        <span class="usp-pill">80% Landscaped Greens</span>
+                        <span class="usp-pill">Forest-Fringed Pool</span>
+                        <span class="usp-pill">10 Mins to IT Hubs</span>
+                        <span class="usp-pill">Fast-Track RERA</span>
+                    </div>
+
+                    <!-- Unit-Wise Selling Points Grid -->
+                    <div class="unit-usp-box">
+                        <div class="unit-usp-head">Unit-Wise Configurations &amp; Features:</div>
+                        <div class="unit-usp-list">
+                            <div class="unit-usp-row">
+                                <div class="unit-type-tag">2 BHK Luxury</div>
+                                <div class="unit-spec-detail">
+                                    <strong>1,150 sq.ft</strong> · 100% Vastu-compliant east facing, acoustic double-glazed windows, modular kitchen layout, from ₹ 1.15 Cr.
+                                </div>
+                            </div>
+                            <div class="unit-usp-row">
+                                <div class="unit-type-tag">3 BHK Garden View</div>
+                                <div class="unit-spec-detail">
+                                    <strong>1,640 sq.ft</strong> · Master bedroom opening onto timber-finish sun deck, Italian marble flooring in living &amp; dining, from ₹ 1.85 Cr.
+                                </div>
+                            </div>
+                            <div class="unit-usp-row">
+                                <div class="unit-type-tag">4 BHK Royal</div>
+                                <div class="unit-spec-detail">
+                                    <strong>2,150 sq.ft</strong> · 3-side open elevation, walk-in closets, family lounge + formal drawing room, 2 stilt parkings, from ₹ 2.45 Cr.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pitchkit-actions">
+                        <button class="btn-saleskit-primary" onclick="window.openProjectBrochure('Varthur Vista')">
+                            📄 Official Sales Brochure &amp; PDF
+                        </button>
+                        <button class="btn-saleskit-secondary" onclick="window.shareWhatsAppPitch('Varthur Vista')">
+                            📱 WhatsApp Teaser
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 3: Saket Square -->
+                <div class="pitchkit-card">
+                    <div class="pitchkit-card-head">
+                        <div class="pitchkit-badge-row">
+                            <span class="badge-tier">Gurugram Luxury</span>
+                            <span class="rera-pill font-mono">HARERA/GGM/612/344</span>
+                        </div>
+                        <h3 class="pitchkit-title">Saket Square — Signature Duplexes</h3>
+                        <p class="pitchkit-loc">Golf Course Extension Road · Sector 65 Gurugram</p>
+                    </div>
+
+                    <!-- Township USPs -->
+                    <div class="township-highlights">
+                        <span class="usp-pill">Ultra-Low Density</span>
+                        <span class="usp-pill">Private Plunge Pools</span>
+                        <span class="usp-pill">3.0% Partner Slab</span>
+                        <span class="usp-pill">Concierge Service</span>
+                    </div>
+
+                    <!-- Unit-Wise Selling Points Grid -->
+                    <div class="unit-usp-box">
+                        <div class="unit-usp-head">Unit-Wise Configurations &amp; Features:</div>
+                        <div class="unit-usp-list">
+                            <div class="unit-usp-row">
+                                <div class="unit-type-tag">3 BHK Signature</div>
+                                <div class="unit-spec-detail">
+                                    <strong>1,950 sq.ft</strong> · 11.5-ft clear ceiling height, panoramic golf course views, automated climate control, from ₹ 2.65 Cr.
+                                </div>
+                            </div>
+                            <div class="unit-usp-row">
+                                <div class="unit-type-tag">4 BHK Duplex Villa</div>
+                                <div class="unit-spec-detail">
+                                    <strong>2,450 sq.ft</strong> · Double-height grand salon, private plunge pool on open deck, private high-speed elevator, from ₹ 3.85 Cr.
+                                </div>
+                            </div>
+                            <div class="unit-usp-row">
+                                <div class="unit-type-tag">4 BHK Presidential</div>
+                                <div class="unit-spec-detail">
+                                    <strong>3,315 sq.ft</strong> · 360° skyline views, private terrace barbecue pavilion, 3 dedicated basement parkings, from ₹ 4.95 Cr.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pitchkit-actions">
+                        <button class="btn-saleskit-primary" onclick="window.openProjectBrochure('Saket Square')">
+                            📄 Official Sales Brochure &amp; PDF
+                        </button>
+                        <button class="btn-saleskit-secondary" onclick="window.shareWhatsAppPitch('Saket Square')">
+                            📱 WhatsApp Teaser
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER (Warm Theme) -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-brand-col">
+                    <div class="brand-link">
+                        <div class="brand-box">WD</div>
+                        <div class="brand-titles">
+                            <span class="brand-name">WD Elite</span>
+                            <span class="brand-sub">PARTNER NETWORK</span>
+                        </div>
+                    </div>
+                    <p class="footer-brand-desc">
+                        A WarpDrive Tech Works development. Luxury residential communities in Bengaluru, Hyderabad and Gurugram.
+                    </p>
+                </div>
+
+                <div class="footer-cities-col">
+                    <div class="city-col">
+                        <h4>BENGALURU</h4>
+                        <ul>
+                            <li>Nikoo Homes (Thanisandra)</li>
+                            <li>Varthur Vista (Whitefield)</li>
+                            <li>Yelahanka Yard</li>
+                        </ul>
+                    </div>
+
+                    <div class="city-col">
+                        <h4>HYDERABAD</h4>
+                        <ul>
+                            <li>Banjara Beam</li>
+                            <li>Miyapur Manor</li>
+                        </ul>
+                    </div>
+
+                    <div class="city-col">
+                        <h4>GURUGRAM</h4>
+                        <ul>
+                            <li>Saket Square (Golf Course Ext.)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 WD Elite Residences — Channel Partner Network. All rights reserved.</p>
+                <p class="footer-legal">RERA compliance registered. Brokerage disbursed strictly upon verified OTP site visits and executed sale agreements.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL: REGISTER PROSPECTIVE CLIENT -->
+    <div class="modal-backdrop" id="register-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-tag">Customer Onboarding &amp; Attribution</span>
+                    <h3 class="modal-title">Onboard Prospective Client</h3>
+                </div>
+                <button class="modal-close" id="btn-close-register-modal">&times;</button>
+            </div>
+
+            <form id="register-client-form" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first-name">First Name *</label>
+                        <input type="text" id="first-name" placeholder="e.g. Suresh" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last-name">Last Name *</label>
+                        <input type="text" id="last-name" placeholder="e.g. Kumar" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone-number">Mobile Phone (WhatsApp) *</label>
+                        <input type="tel" id="phone-number" placeholder="e.g. 9845012345" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email-address">Email Address</label>
+                        <input type="email" id="email-address" placeholder="e.g. suresh.k@example.com">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="select-project">Project of Interest *</label>
+                        <select id="select-project" required>
+                            <option value="">Select Project...</option>
+                            <option value="Nikoo Homes">Nikoo Homes (Bengaluru - ₹ 1.45 Cr+)</option>
+                            <option value="Varthur Vista">Varthur Vista (Bengaluru - ₹ 2.10 Cr+)</option>
+                            <option value="Saket Square">Saket Square (Gurugram - ₹ 3.85 Cr+)</option>
+                            <option value="Banjara Beam">Banjara Beam (Hyderabad - ₹ 4.20 Cr+)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="select-config">Unit Configuration</label>
+                        <select id="select-config">
+                            <option value="2 BHK">2 BHK Luxury</option>
+                            <option value="3 BHK" selected>3 BHK Premium Balcony</option>
+                            <option value="4 BHK Penthouse">4 BHK Penthouse</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="client-notes">Client Requirements &amp; Budget Preference</label>
+                    <textarea id="client-notes" rows="2" placeholder="e.g. Looking for north-facing balcony, site visit planned for Saturday..."></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" id="btn-cancel-register">Cancel</button>
+                    <button type="submit" class="btn-primary" id="btn-submit-register">
+                        Onboard &amp; Tag Client
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: BROKER OTP LOGIN & ACCESS DEMO -->
+    <div class="modal-backdrop" id="otp-login-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div>
+                    <span class="modal-tag">Broker Portal Authentication</span>
+                    <h3 class="modal-title">Channel Partner Access</h3>
+                </div>
+                <button class="modal-close" id="btn-close-otp-modal">&times;</button>
+            </div>
+
+            <div class="modal-form">
+                <p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:0.5rem;">
+                    Channel partners access the portal passwordlessly via registered Mobile Number and 6-digit SMS OTP (Zero Salesforce CRM user license cost).
+                </p>
+
+                <div class="form-group">
+                    <label for="broker-login-phone">Registered Mobile Number *</label>
+                    <input type="tel" id="broker-login-phone" value="+91 98450 11223" placeholder="+91 98450 XXXXX">
+                </div>
+
+                <div class="form-group" id="otp-entry-group" style="display:none;">
+                    <label for="broker-login-otp">Enter 6-Digit SMS / WhatsApp OTP *</label>
+                    <input type="text" id="broker-login-otp" value="742891" maxlength="6" style="letter-spacing:0.3em; font-family:var(--font-mono); font-weight:700;">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" id="btn-cancel-otp">Cancel</button>
+                    <button type="button" class="btn-primary" id="btn-request-otp">Send Verification OTP</button>
+                    <button type="button" class="btn-primary" id="btn-verify-otp" style="display:none;">Verify &amp; Enter Portal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 1: CLIENT JOURNEY & SUMMARY (FORMERLY DOSSIER 360) -->
+    <div class="modal-backdrop" id="transaction-dossier-modal">
+        <div class="modal-card modal-dossier-card">
+            <!-- Compact Sticky Modal Header -->
+            <div class="dossier-modal-header">
+                <div class="dossier-header-top">
+                    <div class="dossier-header-identity">
+                        <div class="dossier-meta-lead">
+                            <span class="modal-tag" id="dossier-tag">CLIENT JOURNEY &amp; SUMMARY</span>
+                            <span class="dossier-dot-sep">•</span>
+                            <span class="dossier-ref-pill font-mono" id="dossier-ref-badge">#REF</span>
+                            <span class="dossier-dot-sep">•</span>
+                            <span class="badge-status badge-verified" id="dossier-status-badge">Status</span>
+                        </div>
+                        <div class="dossier-title-row">
+                            <h2 class="modal-title" id="dossier-title">Client Deal Details</h2>
+                            <div class="dossier-inline-stats" id="dossier-inline-stats">
+                                <!-- Populated dynamically: Project + Unit + Agr Value + CP Commission -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dossier-header-actions">
+                        <button type="button" class="btn-dossier-back" id="btn-back-dossier-top" title="Return to Pipeline">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            Back to Pipeline
+                        </button>
+                        <button type="button" class="modal-close" id="btn-close-dossier-modal" title="Close (Esc)" aria-label="Close modal">&times;</button>
+                    </div>
+                </div>
+
+                <!-- Sleek Micro-Stepper Rail -->
+                <div class="dossier-stepper-container" id="dossier-stepper">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- Scrollable Summary Body -->
+            <div class="dossier-modal-body" id="dossier-content-area">
+                <!-- Dynamically populated via JS -->
+            </div>
+
+            <!-- Sticky Modal Footer -->
+            <div class="dossier-modal-footer">
+                <button type="button" class="btn-ghost" id="btn-close-dossier-bottom">← Back to Pipeline</button>
+                <button type="button" class="btn-primary" id="btn-download-dossier" onclick="alert('Downloading Certified Client Journey &amp; Financial Summary (PDF)...')">
+                    📄 Download Certified Summary (PDF)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: UNIT DETAILS & PROVISIONAL COST SHEET (SAP PRICING) -->
+    <div class="modal-backdrop" id="unit-cost-modal">
+        <div class="modal-card modal-unit-card">
+            <div class="unit-modal-header">
+                <div class="unit-header-top">
+                    <div class="unit-header-identity">
+                        <div class="dossier-meta-lead">
+                            <span class="modal-tag" id="unit-modal-tag">PROVISIONAL COST SHEET</span>
+                            <span class="dossier-dot-sep">•</span>
+                            <span class="dossier-ref-pill font-mono" id="unit-modal-code">RR-EW100</span>
+                            <span class="dossier-dot-sep">•</span>
+                            <span class="badge-status badge-verified" id="unit-modal-status">Allocated</span>
+                        </div>
+                        <div class="dossier-title-row">
+                            <div>
+                                <h2 class="modal-title" id="unit-modal-title">Nikoo Homes · Tower 2 · Floor 10</h2>
+                                <div class="unit-subtitle" id="unit-modal-config">3 BHK Luxury Garden Penthouse · East Facing</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dossier-header-actions">
+                        <button type="button" class="modal-close" id="btn-close-unit-modal" title="Close (Esc)" aria-label="Close modal">&times;</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="unit-modal-body">
+                <!-- Dual Column Layout: Visual Gallery & Specs + SAP Cost Sheet -->
+                <div class="unit-grid-layout">
+                    <!-- Left: Gallery & Specs -->
+                    <div class="unit-col-visuals">
+                        <div class="unit-image-wrapper">
+                            <img src="assets/luxury_interior.jpg" alt="Unit Architecture Render" id="unit-preview-img" class="unit-hero-img">
+                            <div class="image-pill-toggle">
+                                <button type="button" class="img-pill active" id="btn-img-interior">Residence Interior</button>
+                                <button type="button" class="img-pill" id="btn-img-facade">Tower Elevation</button>
+                                <button type="button" class="img-pill" id="btn-img-plan">Floor Plan Layout</button>
+                            </div>
+                        </div>
+
+                        <div class="unit-specs-panel">
+                            <h3 class="panel-section-title">Architectural Specifications</h3>
+                            <div class="specs-grid">
+                                <div class="spec-item">
+                                    <span class="spec-lbl">RERA Carpet Area</span>
+                                    <strong class="spec-val" id="unit-carpet-area">1,450 sq.ft</strong>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-lbl">Super Built-Up</span>
+                                    <strong class="spec-val" id="unit-sbu-area">1,885 sq.ft</strong>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-lbl">Facing / Vastu</span>
+                                    <strong class="spec-val" id="unit-facing">East Facing (100% Vastu)</strong>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-lbl">Allocated Parking</span>
+                                    <strong class="spec-val" id="unit-parking">1 Covered (B1-42)</strong>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-lbl">Possession Target</span>
+                                    <strong class="spec-val" id="unit-possession">Ready / Dec 2026</strong>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-lbl">SAP Status</span>
+                                    <strong class="spec-val text-emerald">Synced with SAP RE-FX ✔</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Itemized Provisional Cost Sheet -->
+                    <div class="unit-col-costing">
+                        <div class="costing-card">
+                            <div class="costing-head">
+                                <div>
+                                    <h3 class="panel-section-title" style="margin-bottom:0.2rem;">Provisional Cost Sheet</h3>
+                                    <p class="costing-sub">Governed by Booking Condition Charges &amp; SAP Sales Order pricing</p>
+                                </div>
+                                <span class="badge-slab font-mono" id="unit-rate-badge">₹ 8,500 / sq.ft</span>
+                            </div>
+
+                            <table class="cost-table">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="charge-name">Base Unit Cost</div>
+                                            <div class="charge-desc">Basic rate × RERA carpet area</div>
+                                        </td>
+                                        <td class="charge-val" id="cost-basic">₹ 1,23,25,000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="charge-name">Floor Rise Charges (ZFRS)</div>
+                                            <div class="charge-desc" id="cost-floor-desc">Floor 10 × ₹ 50/sq.ft</div>
+                                        </td>
+                                        <td class="charge-val" id="cost-floor-rise">₹ 7,25,000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="charge-name">Preferential Location Charges (ZPLC)</div>
+                                            <div class="charge-desc">Club &amp; Lake Facing premium</div>
+                                        </td>
+                                        <td class="charge-val" id="cost-plc">₹ 6,16,250</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="charge-name">Covered Car Parking (ZPRK)</div>
+                                            <div class="charge-desc">1 Dedicated basement parking slot</div>
+                                        </td>
+                                        <td class="charge-val" id="cost-parking">₹ 4,00,000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="charge-name">Clubhouse &amp; Amenities (ZCLM)</div>
+                                            <div class="charge-desc">Lifetime resident clubhouse membership</div>
+                                        </td>
+                                        <td class="charge-val" id="cost-clubhouse">₹ 5,00,000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="charge-name">Infrastructure &amp; Utilities (ZINF)</div>
+                                            <div class="charge-desc">BESCOM, BWSSB water &amp; gas connection</div>
+                                        </td>
+                                        <td class="charge-val" id="cost-infra">₹ 4,50,000</td>
+                                    </tr>
+                                    <tr class="row-subtotal">
+                                        <td>
+                                            <strong>Agreement Value (Excl. Statutory Taxes)</strong>
+                                        </td>
+                                        <td class="charge-val text-gold font-bold" id="cost-agreement-val">₹ 1,50,16,250</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="charge-name">GST on Under-Construction (5%)</div>
+                                            <div class="charge-desc">Statutory indirect tax under RERA guidelines</div>
+                                        </td>
+                                        <td class="charge-val" id="cost-gst">₹ 7,50,813</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="charge-name">Stamp Duty &amp; Registration Estimate (5.6%)</div>
+                                            <div class="charge-desc">Payable at sub-registrar upon conveyance</div>
+                                        </td>
+                                        <td class="charge-val" id="cost-stamp">₹ 8,40,910</td>
+                                    </tr>
+                                    <tr class="row-total">
+                                        <td>
+                                            <strong>Gross Estimated Total Outflow</strong>
+                                            <div class="charge-desc">All-inclusive landed property cost</div>
+                                        </td>
+                                        <td class="charge-val text-emerald font-bold" id="cost-total-outflow">₹ 1,66,07,973</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="booking-token-callout">
+                                <div class="token-icon">💳</div>
+                                <div>
+                                    <div class="token-lbl">Booking Token Required for Allocation</div>
+                                    <strong class="token-amount text-gold" id="cost-token">₹ 3,00,000</strong>
+                                </div>
+                                <div class="token-note">Adjustable against 10% milestone deposit</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="unit-modal-footer">
+                <button type="button" class="btn-ghost" id="btn-close-unit-bottom">Close Window</button>
+                <button type="button" class="btn-primary" id="btn-download-costsheet" onclick="alert('Downloading Official Provisional Cost Sheet &amp; SAP Pricing Breakdown (PDF)...')">
+                    📄 Download Provisional Cost Sheet (PDF)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: PROJECT SALES BROCHURE & UNIT CATALOG (PDF EXPORTABLE) -->
+    <div class="modal-backdrop" id="brochure-modal">
+        <div class="modal-card modal-brochure-card">
+            <div class="brochure-modal-header no-print">
+                <div class="brochure-header-left">
+                    <span class="modal-tag" id="brochure-modal-tag">OFFICIAL PROJECT BROCHURE</span>
+                    <span class="dossier-dot-sep">•</span>
+                    <span class="dossier-ref-pill font-mono" id="brochure-modal-rera">PRM/KA/RERA/...</span>
+                </div>
+                <div class="brochure-header-actions">
+                    <button type="button" class="btn-saleskit-primary" onclick="window.printBrochure()">
+                        🖨️ Print / Save as PDF
+                    </button>
+                    <button type="button" class="modal-close" id="btn-close-brochure-modal" title="Close (Esc)">&times;</button>
+                </div>
+            </div>
+
+            <!-- Printable Brochure Content -->
+            <div class="brochure-modal-body" id="brochure-printable-area">
+                <!-- Cover Banner -->
+                <div class="brochure-cover">
+                    <div class="brochure-brand-row">
+                        <div class="brand-box">WD</div>
+                        <div>
+                            <span class="brand-name">WD Elite Residences</span>
+                            <div class="brochure-rera-sub" id="brochure-cover-rera">RERA Reg: PRM/KA/RERA/1251/472/PR/171015/000431</div>
+                        </div>
+                        <div class="brochure-badge-right">
+                            <span class="badge-tier">Platinum Developer Project</span>
+                        </div>
+                    </div>
+
+                    <div class="brochure-title-banner">
+                        <h1 class="brochure-project-title" id="brochure-project-name">Nikoo Homes</h1>
+                        <p class="brochure-location" id="brochure-project-location">Thanisandra Main Road · North Bengaluru</p>
+                    </div>
+
+                    <div class="brochure-hero-image-wrap">
+                        <img src="assets/luxury_facade.jpg" alt="Project Elevation" id="brochure-hero-img" class="brochure-hero-img">
+                        <div class="brochure-caption" id="brochure-caption">Architectural Elevation &amp; Integrated Smart Township</div>
+                    </div>
+                </div>
+
+                <!-- Section: Township Master Plan & Key Highlights -->
+                <div class="brochure-section">
+                    <h2 class="brochure-sec-title">Township Master Plan &amp; Location Highlights</h2>
+                    <p class="brochure-desc" id="brochure-overview-desc">
+                        A flagship 126-acre integrated smart township situated in the high-growth corridor of North Bengaluru. Offering direct arterial access to Manyata Embassy Business Park, Hebbal flyover, and the Kempegowda International Airport corridor.
+                    </p>
+
+                    <div class="brochure-amenities-grid" id="brochure-amenities-container">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+
+                <!-- Section: Unit-Wise Configurations & Pricing Matrix -->
+                <div class="brochure-section">
+                    <h2 class="brochure-sec-title">Unit Configurations &amp; Architectural Specifications</h2>
+                    <p class="brochure-desc">Verified RERA carpet areas and indicative commercial pricing directly from Salesforce CRM inventory:</p>
+
+                    <div class="table-responsive">
+                        <table class="brochure-unit-table">
+                            <thead>
+                                <tr>
+                                    <th>Unit Configuration</th>
+                                    <th>RERA Carpet Area</th>
+                                    <th>Super Built-Up</th>
+                                    <th>Facing &amp; View</th>
+                                    <th>Indicative Price</th>
+                                    <th>Parking Allocation</th>
+                                </tr>
+                            </thead>
+                            <tbody id="brochure-units-tbody">
+                                <!-- Populated dynamically via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Section: Unit-Level Distinctive Selling Points -->
+                <div class="brochure-section">
+                    <h2 class="brochure-sec-title">Unit-Level Distinctive Selling Points</h2>
+                    <div class="brochure-usp-grid" id="brochure-usp-container">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+
+                <!-- Section: Architectural Finishes & Construction Standards -->
+                <div class="brochure-section">
+                    <h2 class="brochure-sec-title">Luxury Specifications &amp; Finishes</h2>
+                    <div class="brochure-specs-grid">
+                        <div class="brochure-spec-card">
+                            <strong>Flooring &amp; Surfaces</strong>
+                            <p>Imported Italian marble in formal living &amp; dining; laminated wooden flooring in master bedrooms; anti-skid vitrified tiles in balconies.</p>
+                        </div>
+                        <div class="brochure-spec-card">
+                            <strong>Doors &amp; Fenestration</strong>
+                            <p>8-ft engineered hardwood entrance doors with Yale biometric digital locks; acoustic double-glazed UPVC sliding balcony doors.</p>
+                        </div>
+                        <div class="brochure-spec-card">
+                            <strong>Bathrooms &amp; CP Fittings</strong>
+                            <p>Premium Kohler / Grohe concealed diverters, wall-hung EWC with soft-close seat, and toughened glass shower enclosures.</p>
+                        </div>
+                        <div class="brochure-spec-card">
+                            <strong>Smart Automation &amp; Green Tech</strong>
+                            <p>Schneider home automation lighting package, central gas piping, EV charging points at all dedicated parking bays, and 100% DG backup.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Commercial Payment Schedule & Escrow Compliance -->
+                <div class="brochure-section">
+                    <h2 class="brochure-sec-title">RERA Escrow Account &amp; Milestone Payment Framework</h2>
+                    <div class="brochure-escrow-box">
+                        <div class="escrow-item">
+                            <span>Project Escrow Account:</span>
+                            <strong class="font-mono" id="brochure-escrow-account">HDFC Bank Limited · A/c No: 50200084920192</strong>
+                        </div>
+                        <div class="escrow-item">
+                            <span>IFSC Code:</span>
+                            <strong class="font-mono">HDFC0000240 (Escrow Branch, Bengaluru)</strong>
+                        </div>
+                        <div class="escrow-item">
+                            <span>Payment Schedule:</span>
+                            <span>10% on Booking Token &amp; Agreement · 85% Construction-Linked (CLP) · 5% on Handover &amp; Possession</span>
+                        </div>
+                        <div class="escrow-item">
+                            <span>Broker Attribution:</span>
+                            <span>Authorized Channel Partner Network under RERA Section 9 registration.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Brochure Printable Footer -->
+                <div class="brochure-footer-print">
+                    <div>
+                        <strong>WD Elite Partner Network</strong> · Official Project Sales Collateral
+                    </div>
+                    <div class="font-mono" id="brochure-footer-date">
+                        Issued October 2026 · Valid for authorized Channel Partner client circulation only
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="brochure-modal-footer no-print">
+                <button type="button" class="btn-ghost" id="btn-close-brochure-bottom">Close</button>
+                <button type="button" class="btn-saleskit-primary" onclick="window.printBrochure()">
+                    🖨️ Print / Save as PDF
+                </button>
+                <button type="button" class="btn-saleskit-secondary" id="btn-brochure-whatsapp">
+                    📱 Share on WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="api-client.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
