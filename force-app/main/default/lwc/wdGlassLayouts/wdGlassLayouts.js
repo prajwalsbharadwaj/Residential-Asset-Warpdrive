@@ -672,7 +672,7 @@ export const RECORD_CONFIG = {
         // Top cards, units owned and the sidebar come from wdGlassCustomer (bookings, dues, receipts, deals, visits).
         customer360: true,
         facts: ['PersonMobilePhone', 'PersonEmail', 'OwnerId'],
-        actions: ['Account.Retry_SAP_Sync', 'Account.runtime_appointmentbooking__Flow', 'Clone', 'Delete']
+        actions: ['Account.Launch_Broker_Portal', 'Account.Retry_SAP_Sync', 'Account.runtime_appointmentbooking__Flow', 'Clone', 'Delete']
     },
     Booking__c: {
         eyebrow: 'Booking',

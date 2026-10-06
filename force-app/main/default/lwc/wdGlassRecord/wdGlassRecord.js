@@ -77,6 +77,9 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
     }
 
     get highlightFields() {
+        if (this.isChannelPartner) {
+            return ['RERA_Number__c', 'CP_Approval_Status__c', 'Phone', 'OwnerId'];
+        }
         if (this.config.highlights) {
             return this.config.highlights;
         }
@@ -205,7 +208,43 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
         return !!(this.record && this.objectInfo);
     }
 
+    get recordTypeDeveloperName() {
+        const rtId = this.recordTypeId;
+        if (this.objectInfo?.recordTypeInfos?.[rtId]) {
+            return this.objectInfo.recordTypeInfos[rtId].developerName;
+        }
+        return this.record?.fields?.RecordType?.value?.fields?.DeveloperName?.value || '';
+    }
+
+    get recordTypeName() {
+        const rtId = this.recordTypeId;
+        return this.objectInfo?.recordTypeInfos?.[rtId]?.name || '';
+    }
+
+    get isChannelPartner() {
+        if (this.objectApiName !== 'Account') {
+            return false;
+        }
+        const devName = this.recordTypeDeveloperName;
+        const name = this.recordTypeName;
+        const typeVal = this.raw('Type');
+        return (
+            devName === 'Channel_Partner_Residential' ||
+            devName === 'SDO_Account_Partner' ||
+            devName === 'Channel_Partner' ||
+            devName === 'Partner' ||
+            name === 'Channel Partner (Residential)' ||
+            name === 'Partner' ||
+            name === 'Channel Partner' ||
+            typeVal === 'Channel Partner' ||
+            typeVal === 'Partner'
+        );
+    }
+
     get eyebrow() {
+        if (this.isChannelPartner) {
+            return 'Channel Partner';
+        }
         return this.config.eyebrow || this.objectInfo?.label || '';
     }
 
@@ -285,6 +324,9 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
 
     /** Accounts get the customer 360 (wdGlassCustomer) instead of generic highlights and related lists. */
     get isCustomer() {
+        if (this.isChannelPartner) {
+            return false;
+        }
         return !!this.config.customer360;
     }
 
@@ -453,13 +495,32 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
     get actionItems() {
         const byName = new Map(this.actions.map((a) => [a.apiName, a]));
         let ordered = this.actions;
-        if (this.config.actions) {
+        if (this.isChannelPartner) {
+            const partnerOrder = [
+                'Account.Launch_Broker_Portal',
+                'Account.Retry_SAP_Sync',
+                'Account.runtime_appointmentbooking__Flow',
+                'Clone',
+                'Delete'
+            ];
+            const first = partnerOrder.map((n) => byName.get(n)).filter(Boolean);
+            ordered = [...first, ...this.actions.filter((a) => !first.includes(a))];
+        } else if (this.config.actions) {
             ordered = this.config.actions.map((n) => byName.get(n)).filter(Boolean);
         } else if (this.config.primaryActions) {
             const first = this.config.primaryActions.map((n) => byName.get(n)).filter(Boolean);
             ordered = [...first, ...this.actions.filter((a) => !first.includes(a))];
         }
-        return ordered.map((a) => ({ key: a.apiName, apiName: a.apiName, label: a.label, type: a.type }));
+        return ordered.map((a) => {
+            const isPortal = a.apiName === 'Account.Launch_Broker_Portal' || a.apiName === 'Launch_Broker_Portal';
+            return {
+                key: a.apiName,
+                apiName: a.apiName,
+                label: a.label,
+                type: a.type,
+                btnClass: isPortal ? 'wd-btn wd-btn_primary' : 'wd-btn wd-btn_ghost'
+            };
+        });
     }
 
     get visibleActions() {
@@ -513,6 +574,10 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
             case 'Booking__c.View_Handover':
             case 'View_Handover':
                 this.handleViewHandover();
+                return;
+            case 'Account.Launch_Broker_Portal':
+            case 'Launch_Broker_Portal':
+                this.openQuickAction('Account.Launch_Broker_Portal');
                 return;
             default:
         }
