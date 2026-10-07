@@ -39,7 +39,7 @@ export default class LaunchBrokerPortalAction extends LightningElement {
     get portalUrl() {
         const cpId = this.recordId || '';
         const rera = this.partnerAccount ? encodeURIComponent(this.partnerAccount.reraNumber) : '';
-        return `https://partners.nikoohomes.com/?cpId=${cpId}&rera=${rera}`;
+        return `https://prajwalsbharadwaj.github.io/Residential-Asset-Warpdrive/?cpId=${cpId}&rera=${rera}`;
     }
 
     handleLaunchPortal() {
