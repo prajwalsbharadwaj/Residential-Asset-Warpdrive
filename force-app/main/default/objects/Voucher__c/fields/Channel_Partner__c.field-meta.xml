@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Channel_Partner__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Channel partner tagged on the lead; feeds the broker portal.</description>
+    <externalId>false</externalId>
+    <label>Channel Partner</label>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>EOI Vouchers (Partner)</relationshipLabel>
+    <relationshipName>EOI_Partner_Vouchers</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

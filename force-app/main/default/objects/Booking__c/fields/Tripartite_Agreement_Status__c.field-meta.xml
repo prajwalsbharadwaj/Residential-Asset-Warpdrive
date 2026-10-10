@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Tripartite_Agreement_Status__c</fullName>
+    <externalId>false</externalId>
     <inlineHelpText>Tracks the current status of the Tripartite Agreement for this Unit/Booking.</inlineHelpText>
     <label>Tripartite Agreement Status</label>
     <required>false</required>

@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Handover_Pack_Generated__c</fullName>
     <defaultValue>false</defaultValue>
+    <externalId>false</externalId>
     <label>Handover Pack Generated</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

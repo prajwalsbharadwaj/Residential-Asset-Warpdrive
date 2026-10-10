@@ -3,4 +3,19 @@
     <fullName>Residential_Tower</fullName>
     <active>true</active>
     <label>Residential_Tower</label>
+    <picklistValues>
+        <picklist>Chargeable_Area_Type__c</picklist>
+        <values>
+            <fullName>Carpet Area</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Saleable Area</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Super Built up Area</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
 </RecordType>

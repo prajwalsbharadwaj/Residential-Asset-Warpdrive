@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All</fullName>
+    <columns>NAME</columns>
+    <columns>Is_Active__c</columns>
+    <columns>UserId__c</columns>
+    <columns>CREATEDBY_USER</columns>
+    <columns>Assigned_Today__c</columns>
+    <columns>Max_Leads_Per_Day__c</columns>
+    <columns>Last_Assigned_Count__c</columns>
+    <columns>Is_On_Leave__c</columns>
+    <columns>Region__c</columns>
+    <columns>Weight__c</columns>
+    <columns>Notes__c</columns>
+    <filterScope>Everything</filterScope>
+    <label>All</label>
+</ListView>

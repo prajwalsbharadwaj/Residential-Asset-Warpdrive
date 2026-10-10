@@ -3,4 +3,196 @@
     <fullName>Residential_Unit</fullName>
     <active>true</active>
     <label>Residential Unit</label>
+    <picklistValues>
+        <picklist>BHK_Configuration__c</picklist>
+        <values>
+            <fullName>2 BHK %2B Family</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>3 BHK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>3 BHK Canopy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>3 BHK Classic</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>3 BHK Smart</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4 BHK Classic</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4 BHK Compact</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4 BHK Garden Classic</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4 BHK Smart</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>4%2E5 BHK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>5 BHK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>5%2E5 BHK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>6 BHK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>7 BHK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>8 BHK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Duplex</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Penthouse</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Funding_Method__c</picklist>
+        <values>
+            <fullName>Loan-Availed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self-Funded</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Possession_Readiness_Status__c</picklist>
+        <values>
+            <fullName>Handed Over</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Handover</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Ready</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SAP_Sync_Status__c</picklist>
+        <values>
+            <fullName>Error</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending update</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Success</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Available</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Blocked</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Booked</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Leased</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Management Hold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partner Share</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reserved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sold</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Tripartite_Agreement_Status__c</picklist>
+        <values>
+            <fullName>Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Unit_Group__c</picklist>
+        <values>
+            <fullName>Other Charges</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Residential Sales</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Unit_Type__c</picklist>
+        <values>
+            <fullName>Residential</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unit Other Charges</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
 </RecordType>

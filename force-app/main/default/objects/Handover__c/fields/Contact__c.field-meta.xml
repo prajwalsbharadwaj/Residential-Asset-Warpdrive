@@ -3,6 +3,7 @@
     <fullName>Contact__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Direct lookup to the primary customer Contact</description>
+    <externalId>false</externalId>
     <label>Customer Contact</label>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Handovers</relationshipLabel>

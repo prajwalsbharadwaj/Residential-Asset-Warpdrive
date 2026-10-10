@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Handover_Owner__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
+    <externalId>false</externalId>
     <label>Handover Owner</label>
     <referenceTo>User</referenceTo>
     <relationshipName>Handover_Handover_Owner</relationshipName>

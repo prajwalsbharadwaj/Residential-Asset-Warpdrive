@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Module__c</fullName>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Module</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Booking</fullName>
+                <default>false</default>
+                <label>Booking</label>
+            </value>
+            <value>
+                <fullName>Create Contract</fullName>
+                <default>false</default>
+                <label>Create Contract</label>
+            </value>
+            <value>
+                <fullName>Update Booking</fullName>
+                <default>false</default>
+                <label>Update Booking</label>
+            </value>
+            <value>
+                <fullName>Create Booking</fullName>
+                <default>false</default>
+                <label>Create Booking</label>
+            </value>
+            <value>
+                <fullName>Unit Status Update</fullName>
+                <default>false</default>
+                <label>Unit Status Update</label>
+            </value>
+            <value>
+                <fullName>Create Customer</fullName>
+                <default>false</default>
+                <label>Create Customer</label>
+            </value>
+            <value>
+                <fullName>Booking Cancellation</fullName>
+                <default>false</default>
+                <label>Booking Cancellation</label>
+            </value>
+            <value>
+                <fullName>Create Payment Receipt</fullName>
+                <default>false</default>
+                <label>Create Payment Receipt</label>
+            </value>
+            <value>
+                <fullName>Customer Update</fullName>
+                <default>false</default>
+                <label>Customer Update</label>
+            </value>
+            <value>
+                <fullName>Update Broker</fullName>
+                <default>false</default>
+                <label>Update Broker</label>
+            </value>
+            <value>
+                <fullName>Create Broker</fullName>
+                <default>false</default>
+                <label>Create Broker</label>
+            </value>
+            <value>
+                <fullName>Reverse Payment Receipt</fullName>
+                <default>false</default>
+                <label>Reverse Payment Receipt</label>
+            </value>
+            <value>
+                <fullName>Demand Invoice</fullName>
+                <default>false</default>
+                <label>Demand Invoice</label>
+            </value>
+            <value>
+                <fullName>Create Unit</fullName>
+                <default>false</default>
+                <label>Create Unit</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Is_Payment_Plan_Linked__c</fullName>
+    <externalId>false</externalId>
     <formula>NOT(ISBLANK(Payment_Plan_Id__c))</formula>
     <label>Is Payment Plan Linked ?</label>
     <trackHistory>false</trackHistory>

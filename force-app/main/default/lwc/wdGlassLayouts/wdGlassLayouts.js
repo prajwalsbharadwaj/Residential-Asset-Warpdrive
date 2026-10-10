@@ -665,7 +665,7 @@ export const RECORD_CONFIG = {
         highlights: ['Total_Amount__c', 'Interested_Unit__c', 'CloseDate', 'OwnerId'],
         facts: ['AccountId', 'Payment_Plan__c'],
         pathField: 'StageName',
-        actions: ['Opportunity.Generate_Sales_Offer', 'Opportunity.Site_Visit', 'Opportunity.Initiate_Ownership_Transfer', 'Opportunity.runtime_appointmentbooking__Flow', 'Submit', 'Clone', 'Delete']
+        actions: ['Opportunity.Generate_Sales_Offer', 'Opportunity.Site_Visit', 'Submit', 'Clone', 'Delete']
     },
     Account: {
         eyebrow: 'Customer',
@@ -680,7 +680,7 @@ export const RECORD_CONFIG = {
         facts: ['Account_Id__c', 'Project__c'],
         pathField: 'Status__c',
         // Shown first; the booking's remaining actions follow in the More menu.
-        primaryActions: ['Booking__c.View_Handover', 'Booking__c.Generate_Welcome_Letter', 'Booking__c.View_Payment_Ledger', 'Submit'],
+        primaryActions: ['Booking__c.View_Handover', 'Booking__c.Generate_Welcome_Letter', 'Booking__c.View_Payment_Ledger', 'Booking__c.Initiate_Ownership_Transfer', 'Submit'],
         alerts: [
             {
                 field: 'Is_Payment_Plan_Linked__c',

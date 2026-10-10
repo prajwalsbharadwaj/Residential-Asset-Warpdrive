@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Is_Token_Recieved__c</fullName>
     <defaultValue>false</defaultValue>
+    <externalId>false</externalId>
     <label>Is Token Recieved</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

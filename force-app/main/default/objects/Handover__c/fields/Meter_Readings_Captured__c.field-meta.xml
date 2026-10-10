@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Meter_Readings_Captured__c</fullName>
     <defaultValue>false</defaultValue>
+    <externalId>false</externalId>
     <label>Meter Readings Captured</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

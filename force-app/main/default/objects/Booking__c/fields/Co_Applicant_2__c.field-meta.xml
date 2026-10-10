@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Co_Applicant_2__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
+    <externalId>false</externalId>
     <label>Co Applicant 2</label>
     <referenceTo>Account</referenceTo>
     <relationshipLabel>Bookings (Co Applicant 2)</relationshipLabel>

@@ -64,6 +64,22 @@ public class ResLeadTriggerDispatcher extends TriggerDispatcherBase {
     }
 
     /**
+     * After insert: automatically run round-robin lead assignment for new incoming leads
+     */
+    public override void afterInsert(TriggerParameters tp) {
+        if (tp.newList == null || tp.newList.isEmpty()) return;
+        List<Id> assignableLeadIds = new List<Id>();
+        for (Lead ld : (List<Lead>) tp.newList) {
+            if (ld.IsConverted != true) {
+                assignableLeadIds.add(ld.Id);
+            }
+        }
+        if (!assignableLeadIds.isEmpty() && !System.isFuture() && !System.isBatch() && !System.isQueueable()) {
+            System.enqueueJob(new RoundRobinLeadQueueable(assignableLeadIds));
+        }
+    }
+
+    /**
      * After update: when a Lead is just converted, relink its Site Visits to the new Opportunity.
      */
     public override void afterUpdate(TriggerParameters tp) {
@@ -90,6 +106,12 @@ public class ResLeadTriggerDispatcher extends TriggerDispatcherBase {
 
         if (leadIdToOppId.isEmpty()) return;
 
+        repointSiteVisitsOnConversion(leadIdToOppId);
+    }
+
+    public static void repointSiteVisitsOnConversion(Map<Id, Id> leadIdToOppId) {
+        if (leadIdToOppId == null || leadIdToOppId.isEmpty()) return;
+
         // Single SOQL to fetch all Site Visits pointing to those Leads
         List<Site_Visit__c> visits = [
             SELECT Id, Lead__c, Opportunity__c
@@ -101,10 +123,10 @@ public class ResLeadTriggerDispatcher extends TriggerDispatcherBase {
 
         for (Site_Visit__c v : visits) {
             v.Opportunity__c = leadIdToOppId.get(v.Lead__c);
-            v.Lead__c       = null;
+            // Retain Lead__c so both Lead history and Opportunity owners have full visibility
         }
 
         // Partial success to avoid hard failure on occasional row locks/validation
-        Database.Update(visits, /*allOrNone*/ true);
+        Database.Update(visits, /*allOrNone*/ false);
     }
 }
