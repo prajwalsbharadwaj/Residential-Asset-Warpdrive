@@ -11,12 +11,17 @@ class Broker360ApiClient {
         this.sessionId = window.SFDC_ACCESS_TOKEN || '';
         this.isMockMode = !this.sessionId;
 
-        // Local State (Mirroring UAT org: Amit Raj - Channel Partner Account)
+        // Local State (Dynamically populated from Salesforce URL or fallback to demo account)
+        const urlParams = typeof window !== 'undefined' && window.location ? new URLSearchParams(window.location.search) : null;
+        const qCpId = urlParams ? urlParams.get('cpId') : null;
+        const qRera = urlParams ? urlParams.get('rera') : null;
+        const qName = urlParams ? urlParams.get('name') : null;
+
         this.mockData = {
             profile: {
-                accountId: '001aj00002ZgNpSAAV',
-                name: 'Amit Raj (Apex Realty Partners)',
-                reraNumber: 'PRM/KA/RERA/1251/309/PR/200123',
+                accountId: qCpId || '001aj00002ZgNpSAAV',
+                name: qName ? decodeURIComponent(qName) : 'Amit Raj (Apex Realty Partners)',
+                reraNumber: qRera ? decodeURIComponent(qRera) : 'PRM/KA/RERA/1251/309/PR/200123',
                 brokeragePercentage: 2.5,
                 tier: 'Platinum Tier',
                 status: 'Active Verified ✔',
