@@ -63,11 +63,11 @@
                     <div class="partner-meta-card">
                         <div class="meta-row">
                             <span class="meta-label">Partner Account:</span>
-                            <strong class="meta-val text-gold" id="profile-name">Amit Raj (Apex Realty Partners)</strong>
+                            <strong class="meta-val text-gold" id="profile-name">Meridian Partners (Bengaluru)</strong>
                         </div>
                         <div class="meta-row">
                             <span class="meta-label">RERA Registration:</span>
-                            <span class="meta-val font-mono" id="profile-rera">PRM/KA/RERA/1251/309/PR/200123</span>
+                            <span class="meta-val font-mono" id="profile-rera">PRM/KA/RERA/1251/CP8891</span>
                         </div>
                         <div class="meta-row">
                             <span class="meta-label">Commission Slab:</span>
@@ -315,11 +315,14 @@
                     </div>
 
                     <div class="pitchkit-actions">
-                        <button class="btn-saleskit-primary" onclick="window.openProjectBrochure('Nikoo Homes')">
-                            📄 Official Sales Brochure &amp; PDF
+                        <button class="btn-saleskit-primary" onclick="window.openUnitSelectionModal('Nikoo Homes')">
+                            🏢 Browse Available Units
+                        </button>
+                        <button class="btn-saleskit-secondary" onclick="window.openProjectBrochure('Nikoo Homes')">
+                            📄 Sales Brochure
                         </button>
                         <button class="btn-saleskit-secondary" onclick="window.shareWhatsAppPitch('Nikoo Homes')">
-                            📱 WhatsApp Teaser
+                            📱 WhatsApp
                         </button>
                     </div>
                 </div>
@@ -369,11 +372,14 @@
                     </div>
 
                     <div class="pitchkit-actions">
-                        <button class="btn-saleskit-primary" onclick="window.openProjectBrochure('Varthur Vista')">
-                            📄 Official Sales Brochure &amp; PDF
+                        <button class="btn-saleskit-primary" onclick="window.openUnitSelectionModal('Varthur Vista')">
+                            🏢 Browse Available Units
+                        </button>
+                        <button class="btn-saleskit-secondary" onclick="window.openProjectBrochure('Varthur Vista')">
+                            📄 Sales Brochure
                         </button>
                         <button class="btn-saleskit-secondary" onclick="window.shareWhatsAppPitch('Varthur Vista')">
-                            📱 WhatsApp Teaser
+                            📱 WhatsApp
                         </button>
                     </div>
                 </div>
@@ -423,11 +429,14 @@
                     </div>
 
                     <div class="pitchkit-actions">
-                        <button class="btn-saleskit-primary" onclick="window.openProjectBrochure('Saket Square')">
-                            📄 Official Sales Brochure &amp; PDF
+                        <button class="btn-saleskit-primary" onclick="window.openUnitSelectionModal('Saket Square')">
+                            🏢 Browse Available Units
+                        </button>
+                        <button class="btn-saleskit-secondary" onclick="window.openProjectBrochure('Saket Square')">
+                            📄 Sales Brochure
                         </button>
                         <button class="btn-saleskit-secondary" onclick="window.shareWhatsAppPitch('Saket Square')">
-                            📱 WhatsApp Teaser
+                            📱 WhatsApp
                         </button>
                     </div>
                 </div>
@@ -540,6 +549,14 @@
                             <option value="4 BHK Penthouse">4 BHK Penthouse</option>
                         </select>
                     </div>
+                </div>
+
+                <div class="form-group" id="tagged-unit-row" style="display:none; background:rgba(0,168,89,0.06); border:1px solid rgba(0,168,89,0.25); border-radius:var(--radius-sm); padding:0.75rem 1rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+                        <label for="tagged-unit-input" style="color:var(--primary); font-weight:700; margin:0;">🔒 Selected Unit Attribution (Live Inventory Lock)</label>
+                        <button type="button" class="btn-ghost" id="btn-clear-tagged-unit" style="padding:0.2rem 0.6rem; font-size:0.75rem; border-color:rgba(0,168,89,0.3); color:var(--primary);">Clear</button>
+                    </div>
+                    <input type="text" id="tagged-unit-input" readonly style="font-weight:700; font-family:var(--font-mono); color:var(--primary); background:#FFFFFF; border:1px solid rgba(0,168,89,0.3);">
                 </div>
 
                 <div class="form-group">
@@ -974,6 +991,57 @@
                 <button type="button" class="btn-saleskit-secondary" id="btn-brochure-whatsapp">
                     📱 Share on WhatsApp
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: INTERACTIVE UNIT SELECTION & INVENTORY DRAWER -->
+    <div class="modal-backdrop" id="unit-selection-modal">
+        <div class="modal-card modal-unit-selection-card">
+            <!-- Header -->
+            <div class="unit-sel-header">
+                <div class="unit-sel-title-group">
+                    <span class="modal-tag">LIVE INVENTORY &amp; ALLOTMENT</span>
+                    <h2 class="unit-sel-title" id="unit-sel-project-title">Project — Available Units</h2>
+                    <span class="badge-status badge-verified" id="unit-sel-city-badge">Bengaluru North</span>
+                </div>
+                <button type="button" class="modal-close" id="btn-close-unit-sel-modal">&times;</button>
+            </div>
+
+            <!-- Body -->
+            <div class="unit-sel-body">
+                <!-- Step 1: Tower Selector & Highlights Card -->
+                <div class="tower-strip">
+                    <div class="tower-select-wrap">
+                        <span class="tower-select-label">Select Tower:</span>
+                        <select id="unit-sel-tower-dropdown" class="tower-select">
+                            <!-- Populated dynamically via JS -->
+                        </select>
+                    </div>
+                    <div class="tower-highlight-badge">
+                        <span class="badge-status badge-verified" id="unit-sel-milestone-badge">Superstructure (85% Done)</span>
+                        <span class="tower-usp-tag" id="unit-sel-tower-usp">Lake-facing premium wing with dedicated Mitsubushi high-speed lifts and podium sky lounge.</span>
+                    </div>
+                </div>
+
+                <!-- Step 2: Configuration Filter & Availability Count -->
+                <div class="unit-filter-bar">
+                    <div class="unit-filter-pills" id="unit-filter-pills-container">
+                        <button type="button" class="unit-pill active" data-config="All">All Available</button>
+                        <button type="button" class="unit-pill" data-config="1 BHK">1 BHK</button>
+                        <button type="button" class="unit-pill" data-config="2 BHK">2 BHK</button>
+                        <button type="button" class="unit-pill" data-config="3 BHK">3 BHK</button>
+                        <button type="button" class="unit-pill" data-config="4 BHK">4 BHK Luxury</button>
+                    </div>
+                    <div class="unit-inventory-count" id="unit-inventory-count-text">
+                        Showing Available Units
+                    </div>
+                </div>
+
+                <!-- Step 3: Available Units Grid -->
+                <div class="unit-cards-grid" id="unit-cards-container">
+                    <!-- Populated dynamically via JS -->
+                </div>
             </div>
         </div>
     </div>

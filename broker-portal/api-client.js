@@ -19,14 +19,14 @@ class Broker360ApiClient {
 
         this.mockData = {
             profile: {
-                accountId: qCpId || '001aj00002ZgNpSAAV',
-                name: qName ? decodeURIComponent(qName) : 'Amit Raj (Apex Realty Partners)',
-                reraNumber: qRera ? decodeURIComponent(qRera) : 'PRM/KA/RERA/1251/309/PR/200123',
-                brokeragePercentage: 2.5,
-                tier: 'Platinum Tier',
+                accountId: qCpId || '001aj00002OH7mlAAD',
+                name: qName ? decodeURIComponent(qName) : 'Meridian Partners (Bengaluru)',
+                reraNumber: qRera ? decodeURIComponent(qRera) : 'PRM/KA/RERA/1251/CP8891',
+                brokeragePercentage: (qName && qName.includes('Deccan')) ? 3.0 : ((qName && qName.includes('CyberCity')) ? 2.75 : 2.5),
+                tier: (qName && qName.includes('Deccan')) ? 'Signature Tier' : 'Platinum Tier',
                 status: 'Active Verified ✔',
-                phone: '+91 98450 11223',
-                email: 'amit.raj@apexrealty.in'
+                phone: (qName && qName.includes('Deccan')) ? '+91 40 6622 4400' : ((qName && qName.includes('CyberCity')) ? '+91 124 459 8800' : '+91 80 4123 9901'),
+                email: 'partner@meridianrealty.in'
             },
             metrics: {
                 totalInquiries: 18,
@@ -594,6 +594,7 @@ class Broker360ApiClient {
             email: clientPayload.email || 'client@example.com',
             projectName: clientPayload.projectName,
             configuration: clientPayload.configuration || '3 BHK',
+            unitNumber: clientPayload.unitNumber || '',
             budget: clientPayload.budget || '₹ 1.8 Cr',
             siteVisitStatus: 'Visit Requested (SMS OTP Pending)',
             hasSiteVisit: false,

@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                     <div class="project-actions">
                         <button class="btn-card-action" onclick="window.openClientModalForProject('${p.name}')">+ Tag Client</button>
+                        <button class="btn-card-action btn-browse-units" onclick="window.openUnitSelectionModal('${p.name}')">🏢 Browse Units</button>
                         <button class="btn-card-action" onclick="window.openProjectBrochure('${p.name}')">Brochure</button>
                     </div>
                 </div>
@@ -308,6 +309,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             submitBtn.disabled = true;
 
             const notesEl = document.getElementById('client-notes') || document.getElementById('buyer-notes');
+            const taggedUnitInput = document.getElementById('tagged-unit-input');
+            const taggedUnitRow = document.getElementById('tagged-unit-row');
+            const taggedUnit = (taggedUnitInput && taggedUnitInput.value) ? taggedUnitInput.value : '';
+
             const payload = {
                 brokerAccountId: api.mockData.profile.accountId,
                 firstName: document.getElementById('first-name').value.trim(),
@@ -316,6 +321,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 email: document.getElementById('email-address').value.trim(),
                 projectName: document.getElementById('select-project').value,
                 configuration: document.getElementById('select-config').value,
+                unitNumber: taggedUnit,
                 budget: '₹ 1.8 Cr+',
                 notes: notesEl ? notesEl.value.trim() : ''
             };
@@ -327,6 +333,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (result.success) {
                 alert(`✔ Success!\n\n${result.message}`);
                 registerForm.reset();
+                if (taggedUnitInput) taggedUnitInput.value = '';
+                if (taggedUnitRow) taggedUnitRow.style.display = 'none';
                 closeModal();
                 // Refresh views
                 loadPortalData();
@@ -954,6 +962,283 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (brochureModal) brochureModal.classList.add('open');
+    };
+
+    // ==========================================================================
+    // INTERACTIVE UNIT SELECTION & INVENTORY DRAWER CONTROLLER
+    // ==========================================================================
+    const unitSelModal = document.getElementById('unit-selection-modal');
+    const btnCloseUnitSelModal = document.getElementById('btn-close-unit-sel-modal');
+    const unitSelTowerDropdown = document.getElementById('unit-sel-tower-dropdown');
+    const unitSelProjectTitle = document.getElementById('unit-sel-project-title');
+    const unitSelCityBadge = document.getElementById('unit-sel-city-badge');
+    const unitSelMilestoneBadge = document.getElementById('unit-sel-milestone-badge');
+    const unitSelTowerUsp = document.getElementById('unit-sel-tower-usp');
+    const unitFilterPills = document.querySelectorAll('#unit-filter-pills-container .unit-pill');
+    const unitInventoryCountText = document.getElementById('unit-inventory-count-text');
+    const unitCardsContainer = document.getElementById('unit-cards-container');
+    const btnClearTaggedUnit = document.getElementById('btn-clear-tagged-unit');
+
+    if (btnCloseUnitSelModal) {
+        btnCloseUnitSelModal.addEventListener('click', () => {
+            if (unitSelModal) unitSelModal.classList.remove('open');
+        });
+    }
+
+    if (btnClearTaggedUnit) {
+        btnClearTaggedUnit.addEventListener('click', () => {
+            const taggedUnitInput = document.getElementById('tagged-unit-input');
+            const taggedUnitRow = document.getElementById('tagged-unit-row');
+            if (taggedUnitInput) taggedUnitInput.value = '';
+            if (taggedUnitRow) taggedUnitRow.style.display = 'none';
+        });
+    }
+
+    // Comprehensive Project Inventory Database (modeled after residentialCostSheet and Salesforce org)
+    const projectInventoryDB = {
+        'Nikoo Homes': {
+            city: 'Bengaluru North',
+            towers: [
+                {
+                    id: 'tower-ne',
+                    name: 'North East Wing (Lake Facing)',
+                    milestone: 'Superstructure (85% Done)',
+                    usp: 'Lake-facing premium wing with dedicated Mitsubushi high-speed lifts and podium sky lounge.',
+                    units: [
+                        { code: 'RR-EW101', config: '2 BHK', floor: 4, facing: 'Garden & Courtyard', sba: 1180, rate: 4950, amount: '₹ 58.41 L', status: 'Available' },
+                        { code: 'RR-EW102', config: '3 BHK', floor: 10, facing: 'Lake View & Sunrise', sba: 1420, rate: 5200, amount: '₹ 73.84 L', status: 'Available' },
+                        { code: 'RR-EW103', config: '3 BHK', floor: 14, facing: 'Club & Pool Facing', sba: 1420, rate: 5300, amount: '₹ 75.26 L', status: 'Available' },
+                        { code: 'RR-EW105', config: '4 BHK Luxury', floor: 22, facing: '360° Skyline View', sba: 2150, rate: 5800, amount: '₹ 1.24 Cr', status: 'Available' }
+                    ]
+                },
+                {
+                    id: 'tower-e',
+                    name: 'East Wing (Boulevard Enclave)',
+                    milestone: 'Finishing & MEP (95% Done)',
+                    usp: 'Ready for possession Q1 2027 with imported Italian marble in formal living areas.',
+                    units: [
+                        { code: 'RR-EW201', config: '1 BHK', floor: 3, facing: 'Internal Garden', sba: 620, rate: 4800, amount: '₹ 29.76 L', status: 'Available' },
+                        { code: 'RR-EW204', config: '2 BHK', floor: 8, facing: 'Boulevard Promenade', sba: 1180, rate: 5100, amount: '₹ 60.18 L', status: 'Available' },
+                        { code: 'RR-EW208', config: '3 BHK', floor: 15, facing: 'Panoramic Greenery', sba: 1640, rate: 5450, amount: '₹ 89.38 L', status: 'Available' }
+                    ]
+                },
+                {
+                    id: 'tower-n',
+                    name: 'North Wing (Tech Park Corridor)',
+                    milestone: '14th Floor Slab Casted',
+                    usp: 'Direct skywalk connectivity to Manyata Tech Park arterial spine.',
+                    units: [
+                        { code: 'RR-NW301', config: '2 BHK', floor: 6, facing: 'Skyline East', sba: 1050, rate: 5050, amount: '₹ 53.02 L', status: 'Available' },
+                        { code: 'RR-NW305', config: '3 BHK', floor: 12, facing: 'Boulevard Central', sba: 1420, rate: 5250, amount: '₹ 74.55 L', status: 'Available' },
+                        { code: 'RR-NW309', config: '4 BHK Luxury', floor: 18, facing: 'Terrace Golf Facing', sba: 1950, rate: 5600, amount: '₹ 1.09 Cr', status: 'Available' }
+                    ]
+                }
+            ]
+        },
+        'Varthur Vista': {
+            city: 'Bengaluru East',
+            towers: [
+                {
+                    id: 'tower-1',
+                    name: 'Tower 1 (Canopy Block)',
+                    milestone: 'Plastering & Internal Works (80%)',
+                    usp: 'Direct scenic vistas overlooking Varthur Lake bird sanctuary and nature trail.',
+                    units: [
+                        { code: 'VV-T1U101', config: '3 BHK', floor: 5, facing: 'Lake View', sba: 1640, rate: 6400, amount: '₹ 1.04 Cr', status: 'Available' },
+                        { code: 'VV-T1U103', config: '2 BHK', floor: 8, facing: 'Canopy Garden', sba: 1150, rate: 6100, amount: '₹ 70.15 L', status: 'Available' },
+                        { code: 'VV-T1U104', config: '3 BHK', floor: 12, facing: 'Resort Pool Deck', sba: 1640, rate: 6600, amount: '₹ 1.08 Cr', status: 'Available' },
+                        { code: 'VV-T1U105', config: '4 BHK Luxury', floor: 18, facing: 'Club & Lake Facing', sba: 2150, rate: 7100, amount: '₹ 1.52 Cr', status: 'Available' }
+                    ]
+                },
+                {
+                    id: 'tower-2',
+                    name: 'Tower 2 (Orchid Wing)',
+                    milestone: 'Structure Complete (100%)',
+                    usp: 'Low-density boutique wing with private elevator lobby and EV charging bays.',
+                    units: [
+                        { code: 'VV-T2U201', config: '2 BHK', floor: 4, facing: 'Orchid Courtyard', sba: 1150, rate: 6200, amount: '₹ 71.30 L', status: 'Available' },
+                        { code: 'VV-T2U206', config: '3 BHK', floor: 9, facing: 'Sunrise East', sba: 1640, rate: 6500, amount: '₹ 1.06 Cr', status: 'Available' }
+                    ]
+                }
+            ]
+        },
+        'Saket Square': {
+            city: 'Gurugram Luxury',
+            towers: [
+                {
+                    id: 'skyline-1',
+                    name: 'Skyline 1 (Golf Pavilion)',
+                    milestone: 'Internal MEP & Glazing (75%)',
+                    usp: 'Exclusive signature suites overlooking Golf Course Extension Road with 11.5ft clear ceilings.',
+                    units: [
+                        { code: 'SS-SK1-700', config: '3 BHK', floor: 7, facing: 'Golf Course Green', sba: 1950, rate: 11500, amount: '₹ 2.24 Cr', status: 'Available' },
+                        { code: 'SS-SK1-702', config: '4 BHK Luxury', floor: 14, facing: 'Panoramic Golf Views', sba: 2450, rate: 12800, amount: '₹ 3.13 Cr', status: 'Available' },
+                        { code: 'SS-SK1-705', config: '4 BHK Luxury', floor: 20, facing: '360° Presidential Deck', sba: 3315, rate: 14200, amount: '₹ 4.70 Cr', status: 'Available' }
+                    ]
+                },
+                {
+                    id: 'skyline-2',
+                    name: 'Skyline 2 (Duplex Block)',
+                    milestone: '18th Floor Slab Casted',
+                    usp: 'Private plunge pools and double-height grand salons with private express elevator.',
+                    units: [
+                        { code: 'SS-SK2-801', config: '3 BHK', floor: 8, facing: 'Aravalli Ridge', sba: 1950, rate: 11800, amount: '₹ 2.30 Cr', status: 'Available' },
+                        { code: 'SS-SK2-804', config: '4 BHK Luxury', floor: 16, facing: 'Golf Course Skyline', sba: 2450, rate: 13100, amount: '₹ 3.20 Cr', status: 'Available' }
+                    ]
+                }
+            ]
+        },
+        'Banjara Beam': {
+            city: 'Hyderabad Elite',
+            towers: [
+                {
+                    id: 'tower-a',
+                    name: 'Tower A (Royal Crest)',
+                    milestone: 'Superstructure Completed',
+                    usp: 'Bespoke hillock crest residences with panoramic vistas across Jubilee and Banjara Hills.',
+                    units: [
+                        { code: 'BB-TA101', config: '3 BHK', floor: 6, facing: 'City Skyline', sba: 1850, rate: 8200, amount: '₹ 1.51 Cr', status: 'Available' },
+                        { code: 'BB-TA104', config: '4 BHK Luxury', floor: 16, facing: 'Hillock Panoramic View', sba: 2850, rate: 9500, amount: '₹ 2.70 Cr', status: 'Available' }
+                    ]
+                }
+            ]
+        }
+    };
+
+    let activeSelProject = 'Nikoo Homes';
+    let activeSelTowerIdx = 0;
+    let activeSelConfig = 'All';
+
+    window.openUnitSelectionModal = function(projectName) {
+        const resolvedName = Object.keys(projectInventoryDB).find(k => k.toLowerCase() === (projectName || '').toLowerCase()) || 'Nikoo Homes';
+        activeSelProject = resolvedName;
+        activeSelTowerIdx = 0;
+        activeSelConfig = 'All';
+
+        const pData = projectInventoryDB[activeSelProject];
+        if (!pData) return;
+
+        if (unitSelProjectTitle) unitSelProjectTitle.textContent = `${activeSelProject} — Available Inventory`;
+        if (unitSelCityBadge) unitSelCityBadge.textContent = pData.city;
+
+        // Populate Tower Dropdown
+        if (unitSelTowerDropdown) {
+            unitSelTowerDropdown.innerHTML = pData.towers.map((t, idx) => `
+                <option value="${idx}">${t.name}</option>
+            `).join('');
+
+            unitSelTowerDropdown.value = 0;
+            unitSelTowerDropdown.onchange = (e) => {
+                activeSelTowerIdx = parseInt(e.target.value, 10) || 0;
+                renderSelectedTowerUnits();
+            };
+        }
+
+        // Reset Config filter pills
+        unitFilterPills.forEach(pill => {
+            pill.classList.remove('active');
+            if (pill.dataset.config === 'All') pill.classList.add('active');
+            pill.onclick = () => {
+                unitFilterPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                activeSelConfig = pill.dataset.config;
+                renderSelectedTowerUnits();
+            };
+        });
+
+        renderSelectedTowerUnits();
+
+        if (unitSelModal) unitSelModal.classList.add('open');
+    };
+
+    function renderSelectedTowerUnits() {
+        const pData = projectInventoryDB[activeSelProject];
+        if (!pData) return;
+        const tower = pData.towers[activeSelTowerIdx] || pData.towers[0];
+
+        if (unitSelMilestoneBadge) unitSelMilestoneBadge.textContent = tower.milestone;
+        if (unitSelTowerUsp) unitSelTowerUsp.textContent = tower.usp;
+
+        let units = tower.units || [];
+        if (activeSelConfig !== 'All') {
+            units = units.filter(u => u.config.includes(activeSelConfig));
+        }
+
+        if (unitInventoryCountText) {
+            unitInventoryCountText.textContent = `Showing ${units.length} Available Unit${units.length === 1 ? '' : 's'}`;
+        }
+
+        if (!unitCardsContainer) return;
+        if (units.length === 0) {
+            unitCardsContainer.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem; color: var(--text-muted); background: #FAF8F5; border-radius: var(--radius-md); border: 1px dashed var(--gold-border);">
+                    No units matching configuration <strong>${activeSelConfig}</strong> currently available in ${tower.name}.
+                </div>
+            `;
+            return;
+        }
+
+        unitCardsContainer.innerHTML = units.map(u => `
+            <div class="unit-inv-card">
+                <div class="unit-card-head">
+                    <span class="unit-code-badge">${u.code}</span>
+                    <span class="unit-bhk-tag">${u.config}</span>
+                </div>
+                <p class="unit-floor-facing">Floor ${u.floor} · ${u.facing}</p>
+                <div class="unit-metrics-row">
+                    <div class="unit-metric-item">
+                        <span class="metric-micro-label">LOCKED SBA</span>
+                        <span class="metric-micro-val">${u.sba.toLocaleString('en-IN')} sft</span>
+                    </div>
+                    <div class="unit-metric-item">
+                        <span class="metric-micro-label">RATE</span>
+                        <span class="metric-micro-val text-primary" style="color:var(--primary);">₹${u.rate}/sft</span>
+                    </div>
+                    <div class="unit-metric-item">
+                        <span class="metric-micro-label">EST. VALUE</span>
+                        <span class="metric-micro-val text-gold">${u.amount}</span>
+                    </div>
+                </div>
+                <div class="unit-card-ctas">
+                    <button type="button" class="btn-tag-unit" onclick="window.tagUnitForClient('${u.code}', '${activeSelProject}', '${u.config}', '${tower.name}', ${u.floor}, '${u.amount}', ${u.sba})">
+                        <span>Tag for Client ➔</span>
+                    </button>
+                    <button type="button" class="btn-unit-costsheet" onclick="window.openUnitModal('${u.code}', '${activeSelProject}')" title="View Architectural Specs & Itemized CLP Schedule">
+                        <span>Cost Sheet ↗</span>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // "Tag for Client" Action Handler: pre-populates and locks unit into client registration modal
+    window.tagUnitForClient = function(unitCode, projectName, config, towerName, floor, amount, sba) {
+        if (unitSelModal) unitSelModal.classList.remove('open');
+
+        // Pre-fill client onboarding modal
+        const selectProject = document.getElementById('select-project');
+        const selectConfig = document.getElementById('select-config');
+        const clientNotes = document.getElementById('client-notes') || document.getElementById('buyer-notes');
+        const taggedUnitRow = document.getElementById('tagged-unit-row');
+        const taggedUnitInput = document.getElementById('tagged-unit-input');
+
+        if (selectProject) selectProject.value = projectName;
+        if (selectConfig) {
+            if (config.includes('2')) selectConfig.value = '2 BHK';
+            else if (config.includes('3')) selectConfig.value = '3 BHK';
+            else if (config.includes('4')) selectConfig.value = '4 BHK Penthouse';
+        }
+
+        if (taggedUnitRow && taggedUnitInput) {
+            taggedUnitRow.style.display = 'block';
+            taggedUnitInput.value = `${unitCode} (${towerName} · Floor ${floor})`;
+        }
+
+        if (clientNotes) {
+            clientNotes.value = `Selected Unit: ${unitCode} (${config}, ${sba} sq.ft, Floor ${floor}). Est Agreement Value: ${amount}. Immediate client booking lock requested.`;
+        }
+
+        if (registerModal) registerModal.classList.add('open');
     };
 
     // Run initial load
