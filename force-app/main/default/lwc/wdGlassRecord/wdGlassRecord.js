@@ -511,6 +511,13 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
             const first = this.config.primaryActions.map((n) => byName.get(n)).filter(Boolean);
             ordered = [...first, ...this.actions.filter((a) => !first.includes(a))];
         }
+
+        // Strict enforcement: Only Channel Partner accounts can have Launch Broker Portal
+        if (!this.isChannelPartner) {
+            ordered = ordered.filter(
+                (a) => a.apiName !== 'Account.Launch_Broker_Portal' && a.apiName !== 'Launch_Broker_Portal'
+            );
+        }
         return ordered.map((a) => {
             const isPortal = a.apiName === 'Account.Launch_Broker_Portal' || a.apiName === 'Launch_Broker_Portal';
             return {

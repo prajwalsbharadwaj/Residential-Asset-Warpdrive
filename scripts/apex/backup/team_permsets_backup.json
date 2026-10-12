@@ -1,0 +1,59 @@
+{
+  "backupDate": "2026-10-12T22:45:00+05:30",
+  "description": "Backup of original permission set assignments prior to consolidation into Nikoo_Residential_Master_Access",
+  "assignments": {
+    "Prajwal Bharadwaj": {
+      "userId": "005Va00000MTjltIAD",
+      "username": "prajwal.bharadwajuat@warpdrivetech.in",
+      "permissionSets": [
+        "GRE_Front_Desk_Access",
+        "Handover_Administrator",
+        "Lead_Archive_Access"
+      ]
+    },
+    "Manvi Dixit": {
+      "userId": "005Va00000MUBphIAH",
+      "username": "manvi.dixituat@warpdrivetech.in",
+      "permissionSets": [
+        "Handover_Administrator"
+      ]
+    },
+    "Shubham Nayak": {
+      "userId": "005Va00000MYR9BIAX",
+      "username": "shubham.nayak.uat@warpdrivetech.in",
+      "permissionSets": [
+        "Handover_Administrator"
+      ]
+    },
+    "Somya Sharma": {
+      "userId": "005Va00000MY1bXIAT",
+      "username": "somya.sharmauat@warpdrivetech.in",
+      "permissionSets": [
+        "Handover_Administrator",
+        "ResaleAssistance_Access",
+        "Residential_Handover_Manager"
+      ]
+    },
+    "Swapna Badagowni": {
+      "userId": "005Va00000MtSjyIAF",
+      "username": "swapna@resi.uat",
+      "permissionSets": [
+        "GRE_Front_Desk_Access",
+        "Handover_Administrator",
+        "Lead_Archive_Access",
+        "ResaleAssistance_Access"
+      ]
+    },
+    "Namit Dasappanavar": {
+      "userId": "005aj00000VDBOnAAP",
+      "username": "real.resi@wd.demo.uat",
+      "permissionSets": [
+        "Handover_Administrator",
+        "Nikoo_Sales_Targets",
+        "ResaleAssistance_Access",
+        "WD_Customer_Documents",
+        "WD_Glass_UI"
+      ]
+    }
+  }
+}
