@@ -526,5 +526,13 @@
                 </aside>
             </div>
         </div>
+
+        <template lwc:if={showSiteVisitFeedbackModal}>
+            <c-site-visit-feedback-modal
+                record-id={recordId}
+                onclose={handleCloseFeedbackModal}
+                onsaved={handleFeedbackSaved}
+            ></c-site-visit-feedback-modal>
+        </template>
     </c-wd-glass-canvas>
 </template>

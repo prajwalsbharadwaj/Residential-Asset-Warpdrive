@@ -147,8 +147,18 @@ public without sharing class SiteVisitController {
     }
 
     @AuraEnabled(cacheable=true)
+    public static List<Floor__c> getFloors(Id towerId) {
+        return [SELECT Id, Name FROM Floor__c WHERE Tower__c = :towerId ORDER BY Name ASC];
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Unit__c> getUnitsForFloor(Id floorId) {
+        return [SELECT Id, Name, BHK_Configuration__c, Status__c, Base_Price__c FROM Unit__c WHERE Floor__c = :floorId ORDER BY Name ASC];
+    }
+
+    @AuraEnabled(cacheable=true)
     public static List<Unit__c> getUnits(Id towerId) {
-        return [SELECT Id, Name FROM Unit__c WHERE Tower__c = :towerId ORDER BY Name ASC];
+        return [SELECT Id, Name, Floor__c, Floor__r.Name, BHK_Configuration__c, Status__c FROM Unit__c WHERE Tower__c = :towerId OR Floor__r.Tower__c = :towerId ORDER BY Floor__r.Name, Name ASC];
     }
 
     @AuraEnabled
@@ -343,9 +353,10 @@ public without sharing class SiteVisitController {
             opt.floorName = u.Floor__r != null ? u.Floor__r.Name : '';
             opt.towerName = (u.Tower__r != null) ? u.Tower__r.Name : '';
             
-            String towerStr = String.isNotBlank(opt.towerName) ? opt.towerName + ' - ' : '';
+            String towerStr = String.isNotBlank(opt.towerName) ? opt.towerName + ' • ' : '';
+            String floorStr = String.isNotBlank(opt.floorName) ? opt.floorName + ' • ' : '';
             String configStr = String.isNotBlank(opt.configuration) ? ' (' + opt.configuration + ')' : '';
-            opt.displayName = towerStr + u.Name + configStr;
+            opt.displayName = towerStr + floorStr + u.Name + configStr;
             unitList.add(opt);
         }
 
@@ -421,9 +432,18 @@ public without sharing class SiteVisitController {
             sv.Project__c = projectId;
             if (unitId != null) {
                 sv.Unit__c = unitId;
-                List<Unit__c> uList = [SELECT Tower__c FROM Unit__c WHERE Id = :unitId LIMIT 1];
-                if (!uList.isEmpty() && uList[0].Tower__c != null) {
-                    sv.Building__c = uList[0].Tower__c;
+                List<Unit__c> uList = [
+                    SELECT Id, Property__c, Tower__c, Floor__r.Tower__c, Floor__r.Tower__r.Property__c
+                    FROM Unit__c
+                    WHERE Id = :unitId
+                    LIMIT 1
+                ];
+                if (!uList.isEmpty()) {
+                    Unit__c u = uList[0];
+                    sv.Building__c = (u.Tower__c != null) ? u.Tower__c : u.Floor__r.Tower__c;
+                    if (sv.Project__c == null) {
+                        sv.Project__c = (u.Property__c != null) ? u.Property__c : u.Floor__r.Tower__r.Property__c;
+                    }
                 }
             }
             sv.Status__c = 'Completed';
@@ -452,14 +472,22 @@ public without sharing class SiteVisitController {
             Site_Visit__c createdSv = [SELECT Id, Name FROM Site_Visit__c WHERE Id = :sv.Id LIMIT 1];
 
             Lead ld = [
-                SELECT Id, ProjectL__c, Status, Site_Visit_Scheduled__c
+                SELECT Id, ProjectL__c, Projects__c, Status, Site_Visit_Scheduled__c
                 FROM Lead
                 WHERE Id = :leadId
                 LIMIT 1
             ];
 
-            if (ld.ProjectL__c == null) {
-                ld.ProjectL__c = projectId;
+            if (projectId != null) {
+                if (ld.ProjectL__c == null) {
+                    ld.ProjectL__c = projectId;
+                }
+                if (String.isBlank(ld.Projects__c)) {
+                    List<Property__c> props = [SELECT Name FROM Property__c WHERE Id = :projectId LIMIT 1];
+                    if (!props.isEmpty() && isValidProjectPicklistValue(props[0].Name)) {
+                        ld.Projects__c = props[0].Name;
+                    }
+                }
             }
             ld.Status = 'Site Visit';
             ld.Site_Visit_Scheduled__c = true;
@@ -472,7 +500,9 @@ public without sharing class SiteVisitController {
             return result;
 
         } catch (Exception ex) {
-            throw new AuraHandledException('Error logging site visit: ' + ex.getMessage());
+            AuraHandledException ahe = new AuraHandledException('Error logging site visit: ' + ex.getMessage());
+            ahe.setMessage('Error logging site visit: ' + ex.getMessage());
+            throw ahe;
         }
     }
 
@@ -578,6 +608,13 @@ public without sharing class SiteVisitController {
         res.status = ld.Status;
         res.projectId = ld.ProjectL__c;
         res.projectName = ld.ProjectL__r != null ? ld.ProjectL__r.Name : ld.Projects__c;
+        if (res.projectId == null && String.isNotBlank(ld.Projects__c)) {
+            List<Property__c> matchedProp = [SELECT Id, Name FROM Property__c WHERE Name = :ld.Projects__c LIMIT 1];
+            if (!matchedProp.isEmpty()) {
+                res.projectId = matchedProp[0].Id;
+                res.projectName = matchedProp[0].Name;
+            }
+        }
         res.configuration = ld.Type_of_Units__c;
         res.channelPartnerId = ld.Approved_Channel_Partner__c;
         res.channelPartnerName = ld.Approved_Channel_Partner__r != null ? ld.Approved_Channel_Partner__r.Name : '';
@@ -638,10 +675,19 @@ public without sharing class SiteVisitController {
             Boolean isRepeat = false;
             String leadDisplayName = '';
 
+            // Resolve Project Name from Property__c
+            String projectName = '';
+            if (payload.projectId != null) {
+                List<Property__c> props = [SELECT Id, Name FROM Property__c WHERE Id = :payload.projectId LIMIT 1];
+                if (!props.isEmpty()) {
+                    projectName = props[0].Name;
+                }
+            }
+
             // 1. If leadId not explicitly passed, re-verify deduplication via phone to prevent duplicate leads
             if (targetLeadId == null) {
                 List<Lead> existing = [
-                    SELECT Id, Name, Status, ProjectL__c, Type_of_Units__c, Approved_Channel_Partner__c
+                    SELECT Id, Name, Status, ProjectL__c, Projects__c, Type_of_Units__c, Approved_Channel_Partner__c
                     FROM Lead
                     WHERE MobilePhone LIKE :('%' + cleanPhone)
                        OR Phone LIKE :('%' + cleanPhone)
@@ -664,6 +710,9 @@ public without sharing class SiteVisitController {
                 newLead.MobilePhone = cleanPhone;
                 newLead.Email = payload.email;
                 newLead.ProjectL__c = payload.projectId;
+                if (String.isNotBlank(projectName) && isValidProjectPicklistValue(projectName)) {
+                    newLead.Projects__c = projectName;
+                }
                 newLead.Type_of_Units__c = payload.configuration;
                 newLead.Status = 'Site Visit';
                 newLead.Site_Visit_Scheduled__c = true;
@@ -687,7 +736,7 @@ public without sharing class SiteVisitController {
                 // Existing Lead re-visit: update touchpoints without duplicating lead
                 isRepeat = true;
                 Lead existingLd = [
-                    SELECT Id, Name, Status, ProjectL__c, Type_of_Units__c, Approved_Channel_Partner__c, Site_Visit_Scheduled__c
+                    SELECT Id, Name, Status, ProjectL__c, Projects__c, Type_of_Units__c, Approved_Channel_Partner__c, Site_Visit_Scheduled__c
                     FROM Lead
                     WHERE Id = :targetLeadId
                     LIMIT 1
@@ -696,10 +745,13 @@ public without sharing class SiteVisitController {
                 existingLd.Status = 'Site Visit';
                 existingLd.Site_Visit_Scheduled__c = true;
 
-                if (existingLd.ProjectL__c == null && payload.projectId != null) {
+                if (payload.projectId != null) {
                     existingLd.ProjectL__c = payload.projectId;
+                    if (String.isNotBlank(projectName) && isValidProjectPicklistValue(projectName)) {
+                        existingLd.Projects__c = projectName;
+                    }
                 }
-                if (existingLd.Type_of_Units__c == null && String.isNotBlank(payload.configuration)) {
+                if (String.isNotBlank(payload.configuration)) {
                     existingLd.Type_of_Units__c = payload.configuration;
                 }
                 if (payload.isChannelPartner == true && payload.channelPartnerId != null && existingLd.Approved_Channel_Partner__c == null) {
@@ -719,9 +771,18 @@ public without sharing class SiteVisitController {
             sv.Project__c = payload.projectId;
             if (payload.unitId != null) {
                 sv.Unit__c = payload.unitId;
-                List<Unit__c> uList = [SELECT Tower__c FROM Unit__c WHERE Id = :payload.unitId LIMIT 1];
-                if (!uList.isEmpty() && uList[0].Tower__c != null) {
-                    sv.Building__c = uList[0].Tower__c;
+                List<Unit__c> uList = [
+                    SELECT Id, Property__c, Tower__c, Floor__r.Tower__c, Floor__r.Tower__r.Property__c
+                    FROM Unit__c
+                    WHERE Id = :payload.unitId
+                    LIMIT 1
+                ];
+                if (!uList.isEmpty()) {
+                    Unit__c u = uList[0];
+                    sv.Building__c = (u.Tower__c != null) ? u.Tower__c : u.Floor__r.Tower__c;
+                    if (sv.Project__c == null) {
+                        sv.Project__c = (u.Property__c != null) ? u.Property__c : u.Floor__r.Tower__r.Property__c;
+                    }
                 }
             }
 
@@ -765,7 +826,23 @@ public without sharing class SiteVisitController {
 
         } catch (Exception ex) {
             Database.rollback(sp);
-            throw new AuraHandledException('Error registering walk-in visit: ' + ex.getMessage());
+            AuraHandledException ahe = new AuraHandledException('Error registering walk-in visit: ' + ex.getMessage());
+            ahe.setMessage('Error registering walk-in visit: ' + ex.getMessage());
+            throw ahe;
         }
+    }
+
+    private static Set<String> validProjectsPicklist;
+    private static Boolean isValidProjectPicklistValue(String val) {
+        if (String.isBlank(val)) return false;
+        if (validProjectsPicklist == null) {
+            validProjectsPicklist = new Set<String>();
+            for (Schema.PicklistEntry ple : Schema.SObjectType.Lead.fields.Projects__c.getPicklistValues()) {
+                if (ple.isActive()) {
+                    validProjectsPicklist.add(ple.getValue());
+                }
+            }
+        }
+        return validProjectsPicklist.contains(val);
     }
 }

@@ -1,0 +1,224 @@
+<template>
+    <div class="modal-overlay" onclick={handleBackdropClick}>
+        <div class="modal-container" onclick={handleModalClick}>
+
+            <!-- SPINNER OVERLAY -->
+            <template lwc:if={isLoading}>
+                <div class="spinner-backdrop">
+                    <lightning-spinner alternative-text="Loading visit intelligence..." size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- 1. HEADER BAR -->
+            <div class="modal-header">
+                <div class="header-left">
+                    <span class="brand-badge">NIKOO HOMES</span>
+                    <h2 class="modal-title">Site Visit Feedback &amp; Intelligence</h2>
+                    <span class="status-pill">{siteVisitName} &bull; {status}</span>
+                </div>
+                <button class="close-btn" onclick={handleClose} title="Close (Esc)">&times;</button>
+            </div>
+
+            <!-- 2. CUSTOMER SNAPSHOT STRIP (Zero-Scroll Compact Strip) -->
+            <div class="customer-strip">
+                <div class="avatar-badge">{customerInitials}</div>
+                <div class="customer-details">
+                    <div class="cust-name">{customerName}</div>
+                    <div class="info-chip">
+                        <span>📱</span>
+                        <strong>{customerMobile}</strong>
+                    </div>
+                    <template lwc:if={customerEmail}>
+                        <div class="info-chip">
+                            <span>✉️</span>
+                            <span>{customerEmail}</span>
+                        </div>
+                    </template>
+                    <div class="info-chip">
+                        <span>🏢</span>
+                        <strong>{projectName}</strong>
+                    </div>
+                    <template lwc:if={unitName}>
+                        <div class="info-chip">
+                            <span>🚪</span>
+                            <strong>{unitHierarchyDisplay}</strong> ({configuration})
+                        </div>
+                    </template>
+                </div>
+                <div class="header-quick-toggles">
+                    <div class="toggle-group" title="Did customer visit with family?">
+                        <span class="toggle-label">Family:</span>
+                        <button class={familyYesClass} data-val="Yes" onclick={handleFamilyToggle}>Yes</button>
+                        <button class={familyNoClass} data-val="No" onclick={handleFamilyToggle}>No</button>
+                    </div>
+                    <div class="toggle-group" title="Did customer visit the show flat?">
+                        <span class="toggle-label">Show Flat:</span>
+                        <button class={showFlatYesClass} data-val="Yes" onclick={handleShowFlatToggle}>Yes</button>
+                        <button class={showFlatNoClass} data-val="No" onclick={handleShowFlatToggle}>No</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. PANORAMIC 2-COLUMN BODY (Zero-Scroll Layout) -->
+            <div class="modal-body">
+
+                <!-- LEFT COLUMN: VOICE OF CUSTOMER -->
+                <div class="card-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">⭐ Customer Experience Survey</span>
+                        <span class="panel-sub">Buyer Voice</span>
+                    </div>
+
+                    <!-- Overall Experience Rating -->
+                    <div class="form-section">
+                        <label class="field-label">Overall Experience</label>
+                        <div class="pill-group">
+                            <button class={expSuperiorClass} data-val="Superior" onclick={handleExperienceSelect}>★ Superior</button>
+                            <button class={expGoodClass} data-val="Good" onclick={handleExperienceSelect}>★ Good</button>
+                            <button class={expAverageClass} data-val="Average" onclick={handleExperienceSelect}>★ Average</button>
+                            <button class={expPoorClass} data-val="Poor" onclick={handleExperienceSelect}>★ Poor</button>
+                        </div>
+                    </div>
+
+                    <!-- Liked Most & Recommendation -->
+                    <div class="form-section">
+                        <label class="field-label">Liked Most &amp; Recommendation</label>
+                        <div class="pill-group">
+                            <button class={likedProductClass} data-val="Product" onclick={handleLikedProductSelect}>📐 Unit Layout</button>
+                            <button class={likedProjectClass} data-val="Project" onclick={handleLikedProductSelect}>🏢 Master Plan</button>
+                            <button class={recommendYesClass} data-val="Yes" onclick={handleRecommendSelect}>👍 Recommend</button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Sentiment & Objection Chips -->
+                    <div class="form-section">
+                        <label class="field-label">
+                            <span>Key Observations / Chips</span>
+                            <span style="font-size: 10px; color: #64748b;">(Click to tag)</span>
+                        </label>
+                        <div class="tags-wrap">
+                            <template for:each={tagOptions} for:item="t">
+                                <span key={t.label} class={t.cssClass} data-label={t.label} onclick={handleTagClick}>
+                                    {t.label}
+                                </span>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Customer Verbatim Remarks -->
+                    <div class="form-section" style="flex: 1;">
+                        <label class="field-label">Customer Feedback &amp; Requests</label>
+                        <textarea class="compact-textarea"
+                                  placeholder="Specific questions on payment plan, balcony view, custom modifications..."
+                                  value={customerComments}
+                                  oninput={handleCustomerCommentsInput}></textarea>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: EXECUTIVE & DEAL INTELLIGENCE -->
+                <div class="card-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">🔥 Executive Deal Assessment</span>
+                        <span class="panel-sub">Sales Intelligence</span>
+                    </div>
+
+                    <!-- Deal Temperature -->
+                    <div class="form-section">
+                        <label class="field-label">Lead Rating / Temperature</label>
+                        <div class="temp-grid">
+                            <div class={ratingColdClass} data-val="Cold" onclick={handleRatingSelect}>
+                                <div class="temp-title">❄️ Cold</div>
+                                <div class="temp-desc">Exploring / Casual</div>
+                            </div>
+                            <div class={ratingWarmClass} data-val="Warm" onclick={handleRatingSelect}>
+                                <div class="temp-title">⚡ Warm</div>
+                                <div class="temp-desc">Comparing Options</div>
+                            </div>
+                            <div class={ratingHotClass} data-val="Hot" onclick={handleRatingSelect}>
+                                <div class="temp-title">🔥 Hot</div>
+                                <div class="temp-desc">Token Ready</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ANIMATED COLOR SLIDER FOR INTEREST LEVEL -->
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <label class="field-label" style="margin: 0;">Interest Level Slider</label>
+                            <span class={interestBadgeClass}>
+                                {interestEmoji} {interestLevelLabel} &bull; {interestPercent}%
+                            </span>
+                        </div>
+                        <div class="slider-track-wrap">
+                            <input type="range"
+                                   min="0"
+                                   max="100"
+                                   step="1"
+                                   value={interestPercent}
+                                   class="interest-range-slider"
+                                   oninput={handleSliderInput}
+                                   style={sliderThumbStyle} />
+                        </div>
+                        <div class="slider-milestones">
+                            <button class="milestone-btn" data-val="10" onclick={handleMilestoneClick}>❄️ None (10%)</button>
+                            <button class="milestone-btn" data-val="35" onclick={handleMilestoneClick}>🌤️ Low (35%)</button>
+                            <button class="milestone-btn" data-val="65" onclick={handleMilestoneClick}>⚡ Med (65%)</button>
+                            <button class="milestone-btn" data-val="90" onclick={handleMilestoneClick}>🔥 High (90%)</button>
+                        </div>
+                    </div>
+
+                    <!-- Next Follow-up & Closing Manager -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-section">
+                            <label class="field-label">Next Follow-Up</label>
+                            <div class="pill-group" style="grid-template-columns: 1fr 1fr;">
+                                <button class={followUpWeekClass} data-val="Week" onclick={handleFollowUpSelect}>Within 1 Wk</button>
+                                <button class={followUpFortnightClass} data-val="Fortnight" onclick={handleFollowUpSelect}>Fortnight</button>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <label class="field-label">Assigned Executive</label>
+                            <select class="compact-select" onchange={handleClosingManagerChange}>
+                                <template for:each={closingManagerOptions} for:item="mgr">
+                                    <option key={mgr.id} value={mgr.id} selected={mgr.selected}>{mgr.name}</option>
+                                </template>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Sales Manager Remarks -->
+                    <div class="form-section" style="flex: 1;">
+                        <label class="field-label">Confidential Deal Strategy / Remarks</label>
+                        <textarea class="compact-textarea"
+                                  placeholder="Floor rise discount discussed, banker connect requested, token expected..."
+                                  value={salesManagerRemarks}
+                                  oninput={handleSalesManagerRemarksInput}></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 4. FOOTER CONTROLS -->
+            <div class="modal-footer">
+                <div class="footer-left">
+                    <span class="auto-status-hint">
+                        <span>✓</span>
+                        <span>Saving will mark Site Visit as <strong>Completed</strong></span>
+                    </span>
+                </div>
+                <div class="footer-right">
+                    <button class="btn-secondary" onclick={handleClose} disabled={isSaving}>Cancel</button>
+                    <button class="btn-primary" onclick={handleSaveFeedback} disabled={isSaving}>
+                        <template lwc:if={isSaving}>
+                            <span>Saving...</span>
+                        </template>
+                        <template lwc:else>
+                            <span>Save Feedback &bull; Complete Visit &rarr;</span>
+                        </template>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>

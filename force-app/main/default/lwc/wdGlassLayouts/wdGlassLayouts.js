@@ -719,7 +719,8 @@ export const RECORD_CONFIG = {
         eyebrow: 'Site visit',
         highlights: ['Project__c', 'Unit__c', 'Rating__c', 'Interest_Level__c'],
         facts: ['Lead__c', 'Closing_Manager_Name__c', 'Visit_DateTime__c'],
-        pathField: 'Status__c'
+        pathField: 'Status__c',
+        actions: ['Site_Visit__c.Add_Feedback', 'Edit', 'Clone', 'Delete']
     }
 };
 

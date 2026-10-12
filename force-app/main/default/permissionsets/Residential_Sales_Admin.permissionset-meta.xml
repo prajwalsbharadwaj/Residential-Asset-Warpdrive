@@ -4,6 +4,10 @@
         <application>Residential_Sales_CRM</application>
         <visible>true</visible>
     </applicationVisibilities>
+    <classAccesses>
+        <apexClass>SiteVisitFeedbackController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <description>Full Admin and Execution permissions across all Residential Sales objects and fields</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Residential Sales Admin</label>
@@ -628,7 +632,7 @@
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>true</modifyAllRecords>
-        <object>Project__c</object>
+        <object>Property__c</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <objectPermissions>
@@ -740,10 +744,6 @@
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <tabSettings>
-        <tab>Project__c</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
-    <tabSettings>
         <tab>Tower__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
@@ -776,10 +776,6 @@
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>
-        <tab>Installment__c</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
-    <tabSettings>
         <tab>Receipt__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
@@ -789,6 +785,22 @@
     </tabSettings>
     <tabSettings>
         <tab>Handover__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>GRE_Welcome_Desk</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Round_Robin_Assignment_Manager</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Property__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Ownership_Transfer__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
 </PermissionSet>

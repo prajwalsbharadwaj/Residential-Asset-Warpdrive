@@ -4,7 +4,7 @@ private class SiteVisitControllerTest {
     @TestSetup
     static void setupData() {
         Property__c prop = new Property__c(
-            Name = 'Grand Heights Residency'
+            Name = 'Varthur Vista'
         );
         insert prop;
 
@@ -103,11 +103,14 @@ private class SiteVisitControllerTest {
     static void testPublicGuestPortalMethods() {
         Property__c prop = [SELECT Id FROM Property__c LIMIT 1];
         Tower__c tow = [SELECT Id FROM Tower__c LIMIT 1];
+        Floor__c flr = [SELECT Id FROM Floor__c LIMIT 1];
         Unit__c u = [SELECT Id FROM Unit__c LIMIT 1];
 
         Test.startTest();
         List<Property__c> propList = SiteVisitController.getProperties();
         List<Tower__c> towerList = SiteVisitController.getTowers(prop.Id);
+        List<Floor__c> floorList = SiteVisitController.getFloors(tow.Id);
+        List<Unit__c> floorUnitList = SiteVisitController.getUnitsForFloor(flr.Id);
         List<Unit__c> unitList = SiteVisitController.getUnits(tow.Id);
         Lead foundLead = SiteVisitController.findExistingLead('9876543210', null);
 
@@ -128,6 +131,8 @@ private class SiteVisitControllerTest {
 
         System.assert(propList.size() > 0);
         System.assert(towerList.size() > 0);
+        System.assert(floorList.size() > 0);
+        System.assert(floorUnitList.size() > 0);
         System.assert(unitList.size() > 0);
         System.assertNotEquals(null, foundLead);
         System.assertEquals('Success', submitResult);
@@ -228,9 +233,10 @@ private class SiteVisitControllerTest {
         System.assertNotEquals(null, res.siteVisitId, 'Site Visit ID should be generated');
         System.assertEquals(false, res.isRepeatVisit, 'Should be flagged as first-time visit');
 
-        Lead newLd = [SELECT Id, Status, MobilePhone FROM Lead WHERE Id = :res.leadId];
+        Lead newLd = [SELECT Id, Status, MobilePhone, Projects__c, ProjectL__c FROM Lead WHERE Id = :res.leadId];
         System.assertEquals('Site Visit', newLd.Status);
         System.assertEquals('9888877771', newLd.MobilePhone);
+        System.assertEquals('Varthur Vista', newLd.Projects__c);
 
         Site_Visit__c sv = [SELECT Id, OTP_Verified__c, Has_the_Guest_Visited_with_Family__c, Remarks__c FROM Site_Visit__c WHERE Id = :res.siteVisitId];
         System.assertEquals(true, sv.OTP_Verified__c, 'Walk-in at desk must bypass OTP qualification gate');

@@ -102,13 +102,16 @@ export default class GreWalkinDesk extends NavigationMixin(LightningElement) {
         }
     }
 
+    rawUnits = [];
     async loadUnitsForProject(projId) {
         if (!projId) {
             this.unitOptions = [];
+            this.rawUnits = [];
             return;
         }
         try {
             const units = await getUnitsForProject({ projectId: projId });
+            this.rawUnits = units || [];
             this.unitOptions = (units || []).map(u => ({
                 label: u.displayName || u.name,
                 value: u.id
@@ -116,6 +119,7 @@ export default class GreWalkinDesk extends NavigationMixin(LightningElement) {
         } catch (err) {
             console.error('Error fetching units:', err);
             this.unitOptions = [];
+            this.rawUnits = [];
         }
     }
 
@@ -193,7 +197,15 @@ export default class GreWalkinDesk extends NavigationMixin(LightningElement) {
     }
 
     handleConfigChange(e) { this.configuration = e.target.value; }
-    handleUnitChange(e) { this.unitId = e.target.value; }
+    handleUnitChange(e) {
+        this.unitId = e.target.value;
+        if (this.unitId && this.rawUnits.length > 0) {
+            const found = this.rawUnits.find(u => u.id === this.unitId);
+            if (found && found.configuration) {
+                this.configuration = found.configuration;
+            }
+        }
+    }
     
     handleFamilyToggle(e) {
         this.visitedWithFamily = e.target.checked ? 'Yes' : 'No';

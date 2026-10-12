@@ -38,6 +38,7 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
     customerTab = 'overview';
     customerBadges = {};
     bookingTab = 'details';
+    showSiteVisitFeedbackModal = false;
 
     // ---------- data ----------
 
@@ -520,12 +521,13 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
         }
         return ordered.map((a) => {
             const isPortal = a.apiName === 'Account.Launch_Broker_Portal' || a.apiName === 'Launch_Broker_Portal';
+            const isFeedback = a.apiName === 'Site_Visit__c.Add_Feedback' || a.apiName === 'Add_Feedback';
             return {
                 key: a.apiName,
                 apiName: a.apiName,
                 label: a.label,
                 type: a.type,
-                btnClass: isPortal ? 'wd-btn wd-btn_primary' : 'wd-btn wd-btn_ghost'
+                btnClass: (isPortal || isFeedback) ? 'wd-btn wd-btn_primary' : 'wd-btn wd-btn_ghost'
             };
         });
     }
@@ -586,9 +588,22 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
             case 'Launch_Broker_Portal':
                 this.openQuickAction('Account.Launch_Broker_Portal');
                 return;
+            case 'Site_Visit__c.Add_Feedback':
+            case 'Add_Feedback':
+                this.showSiteVisitFeedbackModal = true;
+                return;
             default:
         }
         this.openQuickAction(api);
+    }
+
+    handleCloseFeedbackModal() {
+        this.showSiteVisitFeedbackModal = false;
+    }
+
+    handleFeedbackSaved() {
+        this.showSiteVisitFeedbackModal = false;
+        notifyRecordUpdateAvailable([{ recordId: this.recordId }]);
     }
 
     async handleViewHandover() {
