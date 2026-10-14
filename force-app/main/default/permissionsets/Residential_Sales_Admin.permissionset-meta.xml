@@ -764,23 +764,7 @@
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>
-        <tab>Payment_Milestone__c</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
-    <tabSettings>
         <tab>Booking__c</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
-    <tabSettings>
-        <tab>Booking_Applicant__c</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
-    <tabSettings>
-        <tab>Receipt__c</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
-    <tabSettings>
-        <tab>Cancellation_Request__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>
@@ -797,10 +781,6 @@
     </tabSettings>
     <tabSettings>
         <tab>Property__c</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
-    <tabSettings>
-        <tab>Ownership_Transfer__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
 </PermissionSet>

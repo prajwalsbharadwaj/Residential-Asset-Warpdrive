@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Grants visibility to Simple Opportunity and Residential Opportunity record types</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Nikoo Opportunity Record Types</label>
+    <recordTypeVisibilities>
+        <recordType>Opportunity.SimpleOpportunity</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+</PermissionSet>

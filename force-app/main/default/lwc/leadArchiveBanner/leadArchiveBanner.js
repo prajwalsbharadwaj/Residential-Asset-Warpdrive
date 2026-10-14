@@ -1,6 +1,6 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { updateRecord, notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+import { updateRecord, notifyRecordUpdateAvailable, getRecord } from 'lightning/uiRecordApi';
 
 import getArchiveInfo from '@salesforce/apex/LeadArchiveService.getArchiveInfo';
 import completeFollowUp from '@salesforce/apex/LeadArchiveService.completeFollowUp';
@@ -26,6 +26,13 @@ export default class LeadArchiveBanner extends LightningElement {
 
     connectedCallback() {
         this.loadStatus();
+    }
+
+    @wire(getRecord, { recordId: '$recordId', fields: ['Lead.Status', 'Lead.Archive_For_In_Days__c', 'Lead.Archive_Status__c'] })
+    wiredLeadRecord({ data }) {
+        if (data) {
+            this.loadStatus();
+        }
     }
 
     @api
@@ -212,7 +219,7 @@ export default class LeadArchiveBanner extends LightningElement {
         this.isLoading = true;
         try {
             await sendFollowUpNotification({ leadId: this.recordId });
-            this.showToast('Notification Dispatched! 🔔', 'Alert: "Customer might be ready, follow up" sent to owner with high-priority task created.', 'warning');
+            this.showToast('Follow-Up Alert Triggered! 🔔', 'Bell notification sent, follow-up task created, and cooling-off alert activated.', 'warning');
             await this.loadStatus();
             try {
                 await notifyRecordUpdateAvailable([{ recordId: this.recordId }]);

@@ -10,6 +10,7 @@ import getUnitsForProject from '@salesforce/apex/SiteVisitController.getUnitsFor
 import generateOtp from '@salesforce/apex/SiteVisitController.generateOtp';
 import logSiteVisit from '@salesforce/apex/SiteVisitController.logSiteVisit';
 import logSiteVisitWithDetails from '@salesforce/apex/SiteVisitController.logSiteVisitWithDetails';
+import convertLeadDirect from '@salesforce/apex/SiteVisitController.convertLeadDirect';
 
 export default class LogSiteVisitModal extends NavigationMixin(LightningElement) {
     @api recordId;
@@ -27,6 +28,15 @@ export default class LogSiteVisitModal extends NavigationMixin(LightningElement)
     @track leadName = '';
     @track leadCompany = '';
     @track recentVisits = [];
+
+    // Incomplete visit & locking state
+    @track hasIncompleteVisit = false;
+    @track incompleteVisitId = null;
+    @track incompleteVisitName = '';
+    @track incompleteVisitStatus = '';
+    @track addVisitLockReason = '';
+    @track convertLockReason = '';
+    @track isConverting = false;
 
     // Step 1: Project & Unit Selection
     @track projectOptions = [];
@@ -95,6 +105,14 @@ export default class LogSiteVisitModal extends NavigationMixin(LightningElement)
             this.leadName = data.name || 'Valued Visitor';
             this.leadCompany = data.company || 'Prospective Buyer';
             this.visitorMobile = data.mobilePhone || data.phone || '';
+
+            // Incomplete visit status & locking details
+            this.hasIncompleteVisit = !!data.hasIncompleteVisit;
+            this.incompleteVisitId = data.incompleteVisitId || null;
+            this.incompleteVisitName = data.incompleteVisitName || '';
+            this.incompleteVisitStatus = data.incompleteVisitStatus || '';
+            this.addVisitLockReason = data.addVisitLockReason || '';
+            this.convertLockReason = data.convertLockReason || '';
 
             // Pre-select project if enquired
             if (data.projectEnquiredId && !this.selectedProjectId) {
@@ -166,6 +184,14 @@ export default class LogSiteVisitModal extends NavigationMixin(LightningElement)
 
     // Modal Visibility Handlers
     handleOpenModal() {
+        if (this.hasIncompleteVisit) {
+            this.showToast(
+                'Visit Pending',
+                this.addVisitLockReason || 'Please complete feedback on the existing visit first.',
+                'warning'
+            );
+            return;
+        }
         this.currentStep = 1;
         this.enteredOtp = '';
         this.isModalOpen = true;
@@ -177,6 +203,55 @@ export default class LogSiteVisitModal extends NavigationMixin(LightningElement)
 
     handleCloseModal() {
         this.isModalOpen = false;
+    }
+
+    handleNavigateToIncompleteVisit(event) {
+        event?.preventDefault();
+        if (this.incompleteVisitId) {
+            this[NavigationMixin.Navigate]({
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: this.incompleteVisitId,
+                    objectApiName: 'Site_Visit__c',
+                    actionName: 'view'
+                }
+            });
+        }
+    }
+
+    async handleDirectConvert() {
+        if (this.isConvertDisabled) {
+            this.showToast('Conversion Locked', this.convertLockReason || 'Lead does not meet conversion requirements.', 'warning');
+            return;
+        }
+
+        this.isConverting = true;
+        try {
+            const res = await convertLeadDirect({ leadId: this.recordId });
+            this.showToast(
+                'Lead Converted Successfully!',
+                `Opportunity created: ${res.opportunityName || 'Residential Sales Opportunity'}`,
+                'success'
+            );
+
+            if (res.opportunityId) {
+                this[NavigationMixin.Navigate]({
+                    type: 'standard__recordPage',
+                    attributes: {
+                        recordId: res.opportunityId,
+                        objectApiName: 'Opportunity',
+                        actionName: 'view'
+                    }
+                });
+            } else {
+                notifyRecordUpdateAvailable([{ recordId: this.recordId }]);
+            }
+        } catch (error) {
+            const msg = error.body?.message || error.message || 'Error converting lead.';
+            this.showToast('Conversion Failed', msg, 'error');
+        } finally {
+            this.isConverting = false;
+        }
     }
 
     // Step 1: Project & Unit change handlers
@@ -445,6 +520,36 @@ export default class LogSiteVisitModal extends NavigationMixin(LightningElement)
             return (num / 100000).toFixed(2) + ' L';
         }
         return num.toLocaleString('en-IN');
+    }
+
+    get isAddVisitDisabled() {
+        return this.hasIncompleteVisit || this.isLoading;
+    }
+
+    get addVisitBtnClass() {
+        return this.hasIncompleteVisit ? 'wd-btn wd-btn_disabled action-btn' : 'wd-btn wd-btn_ghost action-btn';
+    }
+
+    get logSiteVisitBtnClass() {
+        return this.hasIncompleteVisit ? 'wd-btn wd-btn_disabled action-btn' : 'wd-btn wd-btn_primary action-btn';
+    }
+
+    get isConvertDisabled() {
+        return !this.hasSiteVisit || this.hasIncompleteVisit || this.isConverting;
+    }
+
+    get convertBtnClass() {
+        return this.isConvertDisabled ? 'convert-btn convert-btn_disabled' : 'convert-btn convert-btn_active';
+    }
+
+    get convertBtnLabel() {
+        if (this.isConverting) return 'Converting to Opportunity...';
+        return '⚡ Convert to Opportunity';
+    }
+
+    get convertButtonTitle() {
+        if (this.convertLockReason) return this.convertLockReason;
+        return 'Convert this Lead into a Person Account and Residential Sales Opportunity';
     }
 
     showToast(title, message, variant) {

@@ -49,17 +49,14 @@
     <tabs>standard-Account</tabs>
     <tabs>standard-Contact</tabs>
     <tabs>standard-Opportunity</tabs>
-    <tabs>Site_Visit__c</tabs>
+    <tabs>Property__c</tabs>
     <tabs>Tower__c</tabs>
     <tabs>Floor__c</tabs>
     <tabs>Unit__c</tabs>
+    <tabs>Site_Visit__c</tabs>
     <tabs>Booking__c</tabs>
     <tabs>Payment_Plan__c</tabs>
-    <tabs>Receipt__c</tabs>
-    <tabs>Cancellation_Request__c</tabs>
     <tabs>GRE_Welcome_Desk</tabs>
     <tabs>Round_Robin_Assignment_Manager</tabs>
-    <tabs>Property__c</tabs>
-    <tabs>Ownership_Transfer__c</tabs>
     <uiType>Lightning</uiType>
 </CustomApplication>

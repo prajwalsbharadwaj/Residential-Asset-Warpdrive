@@ -655,17 +655,36 @@ export const SECTIONS = {
 export const RECORD_CONFIG = {
     Lead: {
         eyebrow: 'Residential lead',
-        highlights: ['Projects__c', 'Type_of_Units__c', 'LeadSource', 'OwnerId'],
+        highlights: ['Projects__c', 'Budget__c', 'Type_of_Units__c', 'OwnerId'],
         facts: ['MobilePhone', 'Email', 'Preferred_City__c'],
         pathField: 'Status',
-        actions: ['Convert', 'Lead.Site_Visit', 'Lead.Assign_using_Round_Robin', 'Lead.Call_Customer', 'Lead.Mark_as_Dropped', 'Lead.runtime_appointmentbooking__Flow', 'Submit', 'Clone', 'Delete']
+        visibleActions: 4,
+        actions: [
+            'Convert_Lead',
+            'Lead.Assign_using_Round_Robin',
+            'Lead.Mark_as_Dropped',
+            'Lead.Generate_EOI_Voucher',
+            'Lead.Call_Customer',
+            'Lead.runtime_appointmentbooking__Flow',
+            'Submit',
+            'Clone',
+            'Delete'
+        ]
     },
     Opportunity: {
         eyebrow: 'Residential opportunity',
         highlights: ['Total_Amount__c', 'Interested_Unit__c', 'CloseDate', 'OwnerId'],
         facts: ['AccountId', 'Payment_Plan__c'],
         pathField: 'StageName',
-        actions: ['Opportunity.Generate_Sales_Offer', 'Opportunity.Site_Visit', 'Submit', 'Clone', 'Delete']
+        visibleActions: 4,
+        primaryActions: [
+            'Opportunity.Select_Inventory',
+            'Opportunity.Generate_Sales_Offer',
+            'Opportunity.Booking_Form',
+            'Opportunity.Generate_Sales_Order',
+            'Opportunity.Site_Visit',
+            'Submit'
+        ]
     },
     Account: {
         eyebrow: 'Customer',
@@ -720,7 +739,7 @@ export const RECORD_CONFIG = {
         highlights: ['Project__c', 'Unit__c', 'Rating__c', 'Interest_Level__c'],
         facts: ['Lead__c', 'Closing_Manager_Name__c', 'Visit_DateTime__c'],
         pathField: 'Status__c',
-        actions: ['Site_Visit__c.Add_Feedback', 'Edit', 'Clone', 'Delete']
+        actions: ['Site_Visit__c.Add_Feedback', 'Edit', 'Delete']
     }
 };
 

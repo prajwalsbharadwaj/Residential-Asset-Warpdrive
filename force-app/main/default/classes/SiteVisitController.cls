@@ -36,6 +36,12 @@ public without sharing class SiteVisitController {
         @AuraEnabled public String configurationInterested { get; set; }
         @AuraEnabled public String budgetRange { get; set; }
         @AuraEnabled public List<SiteVisitItemWrapper> recentVisits { get; set; }
+        @AuraEnabled public Boolean hasIncompleteVisit { get; set; }
+        @AuraEnabled public Id incompleteVisitId { get; set; }
+        @AuraEnabled public String incompleteVisitName { get; set; }
+        @AuraEnabled public String incompleteVisitStatus { get; set; }
+        @AuraEnabled public String addVisitLockReason { get; set; }
+        @AuraEnabled public String convertLockReason { get; set; }
     }
 
     public class SiteVisitItemWrapper {
@@ -272,7 +278,19 @@ public without sharing class SiteVisitController {
             LIMIT 1
         ];
 
-        Integer actualVisitCount = [SELECT count() FROM Site_Visit__c WHERE Lead__c = :leadId];
+        List<Site_Visit__c> incompleteVisits = [
+            SELECT Id, Name, Status__c
+            FROM Site_Visit__c
+            WHERE Lead__c = :leadId AND Status__c != 'Completed' AND Status__c != 'Cancelled'
+            ORDER BY CreatedDate DESC
+            LIMIT 1
+        ];
+
+        Integer completedVisitCount = [
+            SELECT count()
+            FROM Site_Visit__c
+            WHERE Lead__c = :leadId AND Status__c = 'Completed'
+        ];
 
         LeadDetailWrapper wrapper = new LeadDetailWrapper();
         wrapper.leadId = ld.Id;
@@ -282,12 +300,29 @@ public without sharing class SiteVisitController {
         wrapper.mobilePhone = ld.MobilePhone;
         wrapper.email = ld.Email;
         wrapper.status = ld.Status;
-        wrapper.hasSiteVisit = (actualVisitCount > 0);
-        wrapper.siteVisitCount = actualVisitCount;
+        wrapper.hasSiteVisit = (completedVisitCount > 0);
+        wrapper.siteVisitCount = completedVisitCount;
         wrapper.projectEnquiredId = ld.ProjectL__c;
         wrapper.projectEnquiredName = ld.ProjectL__r != null ? ld.ProjectL__r.Name : ld.Projects__c;
         wrapper.configurationInterested = ld.Type_of_Units__c;
         wrapper.budgetRange = ld.Budget__c;
+
+        if (!incompleteVisits.isEmpty()) {
+            wrapper.hasIncompleteVisit = true;
+            wrapper.incompleteVisitId = incompleteVisits[0].Id;
+            wrapper.incompleteVisitName = incompleteVisits[0].Name;
+            wrapper.incompleteVisitStatus = incompleteVisits[0].Status__c;
+            wrapper.addVisitLockReason = 'Cannot add new visit: Site Visit [' + incompleteVisits[0].Name + '] is still ' + incompleteVisits[0].Status__c + '. Please complete feedback on the existing visit first.';
+            wrapper.convertLockReason = 'Lead conversion locked: Site Visit [' + incompleteVisits[0].Name + '] is not completed. Submitting feedback is required before conversion.';
+        } else if (completedVisitCount == 0) {
+            wrapper.hasIncompleteVisit = false;
+            wrapper.addVisitLockReason = null;
+            wrapper.convertLockReason = 'Lead conversion locked: A completed Site Visit is required before conversion.';
+        } else {
+            wrapper.hasIncompleteVisit = false;
+            wrapper.addVisitLockReason = null;
+            wrapper.convertLockReason = null;
+        }
 
         List<Site_Visit__c> visits = [
             SELECT Id, Name, Project__c, Project__r.Name, Unit__c, Unit__r.Name,
@@ -315,6 +350,53 @@ public without sharing class SiteVisitController {
         }
 
         return wrapper;
+    }
+
+    @AuraEnabled
+    public static Map<String, Object> convertLeadDirect(Id leadId) {
+        if (leadId == null) {
+            throw new AuraHandledException('Lead ID is required.');
+        }
+
+        // Verify qualification: at least 1 completed visit and no pending visits
+        Integer completedCount = [
+            SELECT count()
+            FROM Site_Visit__c
+            WHERE Lead__c = :leadId AND Status__c = 'Completed'
+        ];
+        if (completedCount == 0) {
+            throw new AuraHandledException('You cannot convert a lead without a completed site visit.');
+        }
+
+        List<Site_Visit__c> pendingVisits = [
+            SELECT Id, Name, Status__c
+            FROM Site_Visit__c
+            WHERE Lead__c = :leadId AND Status__c != 'Completed' AND Status__c != 'Cancelled'
+            LIMIT 1
+        ];
+        if (!pendingVisits.isEmpty()) {
+            throw new AuraHandledException('Conversion locked: Site Visit [' + pendingVisits[0].Name + '] is still ' + pendingVisits[0].Status__c + '. Please complete feedback before converting.');
+        }
+
+        Database.LeadConvert lc = new Database.LeadConvert();
+        lc.setLeadId(leadId);
+        LeadStatus convertStatus = [SELECT Id, MasterLabel FROM LeadStatus WHERE IsConverted = true LIMIT 1];
+        lc.setConvertedStatus(convertStatus.MasterLabel);
+
+        Database.LeadConvertResult lcr = Database.convertLead(lc);
+        if (!lcr.isSuccess()) {
+            String errs = '';
+            for (Database.Error err : lcr.getErrors()) {
+                errs += err.getMessage() + '; ';
+            }
+            throw new AuraHandledException('Lead conversion failed: ' + errs);
+        }
+
+        Map<String, Object> res = new Map<String, Object>();
+        res.put('success', true);
+        res.put('accountId', lcr.getAccountId());
+        res.put('opportunityId', lcr.getOpportunityId());
+        return res;
     }
 
     @AuraEnabled(cacheable=true)
@@ -489,7 +571,10 @@ public without sharing class SiteVisitController {
                     }
                 }
             }
-            ld.Status = 'Site Visit';
+            ld.Has_Site_Visit__c = true;
+            if (ld.Status == 'Allocated' || ld.Status == 'Archive' || ld.Status == 'New') {
+                ld.Status = 'Site Visit';
+            }
             ld.Site_Visit_Scheduled__c = true;
             update ld;
 
@@ -716,6 +801,7 @@ public without sharing class SiteVisitController {
                 newLead.Type_of_Units__c = payload.configuration;
                 newLead.Status = 'Site Visit';
                 newLead.Site_Visit_Scheduled__c = true;
+                newLead.Has_Site_Visit__c = true;
 
                 if (payload.isChannelPartner == true && payload.channelPartnerId != null) {
                     newLead.LeadSource = 'Channel Partner';
@@ -736,14 +822,22 @@ public without sharing class SiteVisitController {
                 // Existing Lead re-visit: update touchpoints without duplicating lead
                 isRepeat = true;
                 Lead existingLd = [
-                    SELECT Id, Name, Status, ProjectL__c, Projects__c, Type_of_Units__c, Approved_Channel_Partner__c, Site_Visit_Scheduled__c
+                    SELECT Id, Name, Status, ProjectL__c, Projects__c, Type_of_Units__c, Approved_Channel_Partner__c, Site_Visit_Scheduled__c,
+                           Archive_For_In_Days__c, Archive_Populated_Date__c, Archive_Follow_Up_Date__c, Archive_Notification_Sent__c
                     FROM Lead
                     WHERE Id = :targetLeadId
                     LIMIT 1
                 ];
                 leadDisplayName = existingLd.Name;
+                if (existingLd.Status == 'Archive' || existingLd.Status == 'Dropped') {
+                    existingLd.Archive_For_In_Days__c = null;
+                    existingLd.Archive_Populated_Date__c = null;
+                    existingLd.Archive_Follow_Up_Date__c = null;
+                    existingLd.Archive_Notification_Sent__c = false;
+                }
                 existingLd.Status = 'Site Visit';
                 existingLd.Site_Visit_Scheduled__c = true;
+                existingLd.Has_Site_Visit__c = true;
 
                 if (payload.projectId != null) {
                     existingLd.ProjectL__c = payload.projectId;

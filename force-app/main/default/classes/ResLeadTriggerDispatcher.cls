@@ -31,12 +31,14 @@ public class ResLeadTriggerDispatcher extends TriggerDispatcherBase {
             }
             LeadArchiveService.handleBeforeSave((List<Lead>) tp.newList, oldLeadMap);
 
-            // QUALIFICATION GATE: Ensure Lead cannot be converted without a verified Site Visit
+            // QUALIFICATION GATE & PERSON ACCOUNT CONVERSION ENFORCEMENT
             Set<Id> convertingLeadIds = new Set<Id>();
             for (Lead ld : (List<Lead>) tp.newList) {
                 Lead oldLd = oldLeadMap.get(ld.Id);
                 if (ld.IsConverted == true && (oldLd == null || oldLd.IsConverted == false)) {
                     convertingLeadIds.add(ld.Id);
+                    // Clear Company so Salesforce standard Lead conversion creates a Person Account
+                    ld.Company = null;
                 }
             }
 
@@ -80,11 +82,13 @@ public class ResLeadTriggerDispatcher extends TriggerDispatcherBase {
     }
 
     /**
-     * After update: when a Lead is just converted, relink its Site Visits to the new Opportunity.
+     * After update: when a Lead is just converted, relink its Site Visits to the new Opportunity
+     * and set the Opportunity Record Type to Simple Opportunity.
      */
     public override void afterUpdate(TriggerParameters tp) {
         // Build a map of {LeadId -> ConvertedOpportunityId} only for newly-converted leads.
         Map<Id, Id> leadIdToOppId = new Map<Id, Id>();
+        Set<Id> convertedAccountIds = new Set<Id>();
         Map<Id, SObject> oldMap = tp.oldMap;
 
         for (SObject sobj : tp.newList) {
@@ -94,12 +98,31 @@ public class ResLeadTriggerDispatcher extends TriggerDispatcherBase {
 
             // Converted now (true) but not earlier (false)
             if (newLead.IsConverted == true && oldLead.IsConverted == false) {
-                // Optional: limit to Residential lead RT if available
-                if (newLead.RecordTypeId == RT_ID_LEAD_RESIDENTIAL) {
+                if (newLead.RecordTypeId == RT_ID_LEAD_RESIDENTIAL || newLead.RecordTypeId == null) {
                     // Only useful if an Opportunity was created
                     if (newLead.ConvertedOpportunityId != null) {
                         leadIdToOppId.put(newLead.Id, newLead.ConvertedOpportunityId);
                     }
+                    if (newLead.ConvertedAccountId != null) {
+                        convertedAccountIds.add(newLead.ConvertedAccountId);
+                    }
+                }
+            }
+        }
+
+        // Auto-marry converted accounts to Person Account if not already person account
+        if (!convertedAccountIds.isEmpty()) {
+            Id personAccRtId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('PersonAccount')?.getRecordTypeId();
+            if (personAccRtId != null) {
+                List<Account> accsToMarry = new List<Account>();
+                for (Account acc : [SELECT Id, IsPersonAccount FROM Account WHERE Id IN :convertedAccountIds AND IsPersonAccount = false]) {
+                    accsToMarry.add(new Account(
+                        Id = acc.Id,
+                        RecordTypeId = personAccRtId
+                    ));
+                }
+                if (!accsToMarry.isEmpty()) {
+                    Database.update(accsToMarry, false);
                 }
             }
         }
@@ -107,6 +130,24 @@ public class ResLeadTriggerDispatcher extends TriggerDispatcherBase {
         if (leadIdToOppId.isEmpty()) return;
 
         repointSiteVisitsOnConversion(leadIdToOppId);
+
+        // Enforce Opportunity record type upon conversion as Residential Sales Opportunity (Residential_Sales_Opportunity)
+        Id resOppRtId = null;
+        Map<String, Schema.RecordTypeInfo> oppRtMap = Schema.SObjectType.Opportunity.getRecordTypeInfosByDeveloperName();
+        if (oppRtMap.containsKey('Residential_Sales_Opportunity')) {
+            resOppRtId = oppRtMap.get('Residential_Sales_Opportunity').getRecordTypeId();
+        }
+
+        if (resOppRtId != null) {
+            List<Opportunity> oppsToUpdate = new List<Opportunity>();
+            for (Id oppId : leadIdToOppId.values()) {
+                oppsToUpdate.add(new Opportunity(
+                    Id = oppId,
+                    RecordTypeId = resOppRtId
+                ));
+            }
+            Database.update(oppsToUpdate, false);
+        }
     }
 
     public static void repointSiteVisitsOnConversion(Map<Id, Id> leadIdToOppId) {

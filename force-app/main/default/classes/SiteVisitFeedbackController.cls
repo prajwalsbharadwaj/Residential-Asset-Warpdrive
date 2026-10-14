@@ -283,9 +283,10 @@ public without sharing class SiteVisitFeedbackController {
 
             // 2. Propagate key intelligence to Lead if linked
             if (sv.Lead__c != null) {
-                List<Lead> leads = [SELECT Id, Status, Rating, Projects__c, ProjectL__c, IsConverted FROM Lead WHERE Id = :sv.Lead__c LIMIT 1];
+                List<Lead> leads = [SELECT Id, Status, Rating, Projects__c, ProjectL__c, Has_Site_Visit__c, IsConverted FROM Lead WHERE Id = :sv.Lead__c LIMIT 1];
                 if (!leads.isEmpty()) {
                     Lead ld = leads[0];
+                    ld.Has_Site_Visit__c = true;
                     if (!ld.IsConverted && ld.Status != 'Dropped' && ld.Status != 'Archive') {
                         ld.Status = 'Site Visit';
                     }

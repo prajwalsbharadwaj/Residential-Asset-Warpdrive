@@ -7,6 +7,10 @@ import submitForApproval from '@salesforce/apex/WdGlassRecordController.submitFo
 import getOrCreateHandoverForBooking from '@salesforce/apex/HandoverWorkspaceController.getOrCreateHandoverForBooking';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import LightningConfirm from 'lightning/confirm';
+import convertLeadDirect from '@salesforce/apex/SiteVisitController.convertLeadDirect';
+import getLeadConversionSummary from '@salesforce/apex/WdGlassRecordController.getLeadConversionSummary';
+import getOpportunityJourney from '@salesforce/apex/WdGlassRecordController.getOpportunityJourney';
+import createBookingAndSyncSap from '@salesforce/apex/WdGlassRecordController.createBookingAndSyncSap';
 import { SECTIONS, RECORD_CONFIG } from 'c/wdGlassLayouts';
 import { formatDate, formatTime, formatInr, inrParts } from 'c/wdGlassFormat';
 
@@ -67,6 +71,82 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
         if (data) {
             this.actions = data;
         }
+    }
+
+    conversionSummary;
+
+    @wire(getLeadConversionSummary, { leadId: '$recordId' })
+    wiredConversionSummary({ data }) {
+        if (data) {
+            this.conversionSummary = data;
+        } else {
+            this.conversionSummary = null;
+        }
+    }
+
+    get isConvertedLead() {
+        return this.objectApiName === 'Lead' && !!this.conversionSummary?.isConverted;
+    }
+
+    oppJourney;
+
+    @wire(getOpportunityJourney, { oppId: '$recordId' })
+    wiredOppJourney({ data }) {
+        if (data) {
+            this.oppJourney = data;
+        } else {
+            this.oppJourney = null;
+        }
+    }
+
+    get isOpportunity() {
+        return this.objectApiName === 'Opportunity';
+    }
+
+    get hasOppBooking() {
+        return this.isOpportunity && !!this.oppJourney?.bookingId;
+    }
+
+    get canGenerateBookingNow() {
+        if (!this.isOpportunity || this.hasOppBooking) return false;
+        const stage = this.pathValue || this.oppJourney?.stageName;
+        return stage === 'Closed Won' || stage === 'Booking Form & Token Confirmation';
+    }
+
+    get oppUnitName() {
+        return this.oppJourney?.unitName;
+    }
+
+    get oppUnitStatus() {
+        return this.oppJourney?.unitStatus;
+    }
+
+    get oppTowerName() {
+        return this.oppJourney?.towerName;
+    }
+
+    get oppAccountId() {
+        return this.oppJourney?.accountId;
+    }
+
+    get oppAccountName() {
+        return this.oppJourney?.accountName || 'Customer Account';
+    }
+
+    get oppBookingId() {
+        return this.oppJourney?.bookingId;
+    }
+
+    get oppBookingRefNo() {
+        return this.oppJourney?.bookingRefNo;
+    }
+
+    get oppBookingStatus() {
+        return this.oppJourney?.bookingStatus;
+    }
+
+    get oppSapSalesOrder() {
+        return this.oppJourney?.sapSalesOrder;
     }
 
     get config() {
@@ -506,6 +586,83 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
             ];
             const first = partnerOrder.map((n) => byName.get(n)).filter(Boolean);
             ordered = [...first, ...this.actions.filter((a) => !first.includes(a))];
+        } else if (this.isOpportunity) {
+            const stage = this.pathValue || this.oppJourney?.stageName;
+            const dynamicPrimary = [];
+            if (this.hasOppBooking) {
+                dynamicPrimary.push({
+                    key: 'Go_To_Booking',
+                    apiName: 'Go_To_Booking',
+                    label: 'Go to Booking ↗',
+                    type: 'Custom',
+                    btnClass: 'wd-btn wd-btn_primary'
+                });
+                if (this.oppJourney?.accountId) {
+                    dynamicPrimary.push({
+                        key: 'View_Opp_Account',
+                        apiName: 'View_Opp_Account',
+                        label: 'View Account ↗',
+                        type: 'Custom',
+                        btnClass: 'wd-btn wd-btn_ghost'
+                    });
+                }
+            } else if (stage === 'Closed Won') {
+                dynamicPrimary.push({
+                    key: 'Create_Booking_Sync_Sap',
+                    apiName: 'Create_Booking_Sync_Sap',
+                    label: '⚡ Sync SAP & Create Booking',
+                    type: 'Custom',
+                    btnClass: 'wd-btn wd-btn_primary'
+                });
+                if (this.oppJourney?.accountId) {
+                    dynamicPrimary.push({
+                        key: 'View_Opp_Account',
+                        apiName: 'View_Opp_Account',
+                        label: 'View Account ↗',
+                        type: 'Custom',
+                        btnClass: 'wd-btn wd-btn_ghost'
+                    });
+                }
+            } else if (stage === 'Booking Form & Token Confirmation' || stage === 'Quotation & Payment Plan') {
+                const bForm = byName.get('Opportunity.Booking_Form');
+                if (bForm) dynamicPrimary.push(bForm);
+            } else if (stage === 'Discount Approval') {
+                const submitAct = byName.get('Submit');
+                if (submitAct) dynamicPrimary.push(submitAct);
+            } else if (stage === 'Negotiation') {
+                const sOffer = byName.get('Opportunity.Generate_Sales_Offer');
+                if (sOffer) dynamicPrimary.push(sOffer);
+            } else if (stage === 'Unit Shortlisting' || !this.oppJourney?.unitId) {
+                const selInv = byName.get('Opportunity.Select_Inventory');
+                if (selInv) dynamicPrimary.push(selInv);
+            }
+
+            const configured = (this.config.primaryActions || []).map((n) => byName.get(n)).filter(Boolean);
+            const remaining = this.actions.filter((a) => !configured.includes(a) && !dynamicPrimary.some((d) => d.apiName === a.apiName));
+            const baseOrdered = [...configured.filter((a) => !dynamicPrimary.some((d) => d.apiName === a.apiName)), ...remaining];
+
+            const result = [...dynamicPrimary];
+            baseOrdered.forEach((a) => {
+                if (!result.some((r) => r.apiName === a.apiName)) {
+                    result.push(a);
+                }
+            });
+            return result.map((a) => {
+                const isPrimary = a.btnClass?.includes('wd-btn_primary') ||
+                    (stage === 'Negotiation' && a.apiName === 'Opportunity.Generate_Sales_Offer') ||
+                    (stage === 'Unit Shortlisting' && a.apiName === 'Opportunity.Select_Inventory') ||
+                    (stage === 'Booking Form & Token Confirmation' && a.apiName === 'Opportunity.Booking_Form') ||
+                    (stage === 'Discount Approval' && a.apiName === 'Submit') ||
+                    (a.apiName === 'Go_To_Booking') ||
+                    (a.apiName === 'Create_Booking_Sync_Sap');
+                return {
+                    key: a.apiName,
+                    apiName: a.apiName,
+                    label: a.label,
+                    type: a.type,
+                    btnClass: isPrimary ? 'wd-btn wd-btn_primary' : 'wd-btn wd-btn_ghost'
+                };
+            });
         } else if (this.config.actions) {
             ordered = this.config.actions.map((n) => byName.get(n)).filter(Boolean);
         } else if (this.config.primaryActions) {
@@ -532,12 +689,16 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
         });
     }
 
+    get visibleActionsCount() {
+        return this.config.visibleActions || VISIBLE_ACTIONS;
+    }
+
     get visibleActions() {
-        return this.actionItems.slice(0, VISIBLE_ACTIONS);
+        return this.actionItems.slice(0, this.visibleActionsCount);
     }
 
     get menuActions() {
-        return this.actionItems.slice(VISIBLE_ACTIONS);
+        return this.actionItems.slice(this.visibleActionsCount);
     }
 
     get hasMenu() {
@@ -577,8 +738,20 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
             case 'Submit':
                 this.submitApproval();
                 return;
+            case 'Convert_Lead':
             case 'Convert':
-                this.navigateToUrl(`/lightning/cmp/runtime_sales_lead__convertDesktopConsole?leadConvert__leadId=${this.recordId}`);
+                this.handleConvertLead();
+                return;
+            case 'Go_To_Booking':
+                this.handleOpenOppBooking();
+                return;
+            case 'View_Opp_Account':
+                this.handleOpenOppAccount();
+                return;
+            case 'Create_Booking_Sync_Sap':
+            case 'Opportunity.Generate_Sales_Order':
+            case 'Generate_Sales_Order':
+                this.handleCreateBookingAndSyncSap();
                 return;
             case 'Booking__c.View_Handover':
             case 'View_Handover':
@@ -595,6 +768,148 @@ export default class WdGlassRecord extends NavigationMixin(LightningElement) {
             default:
         }
         this.openQuickAction(api);
+    }
+
+    async handleConvertLead() {
+        if (this.isConvertedLead) {
+            this.toast('Already Converted', 'This lead has already been converted to an Opportunity.', 'info');
+            return;
+        }
+
+        const confirmed = await LightningConfirm.open({
+            message: 'Convert this Qualified Lead into a Residential Sales Opportunity and Person Account?',
+            variant: 'header',
+            label: 'Convert Lead',
+            theme: 'default'
+        });
+        if (!confirmed) return;
+
+        this.saving = true;
+        try {
+            const res = await convertLeadDirect({ leadId: this.recordId });
+            this.toast(
+                'Lead Converted Successfully',
+                'Residential Sales Opportunity and Person Account created.',
+                'success'
+            );
+            if (res && res.opportunityId) {
+                this[NavigationMixin.Navigate]({
+                    type: 'standard__recordPage',
+                    attributes: {
+                        recordId: res.opportunityId,
+                        objectApiName: 'Opportunity',
+                        actionName: 'view'
+                    }
+                });
+            } else {
+                notifyRecordUpdateAvailable([{ recordId: this.recordId }]);
+            }
+        } catch (error) {
+            this.toast('Conversion Blocked', errorMessage(error), 'warning');
+        } finally {
+            this.saving = false;
+        }
+    }
+
+    handleOpenConvertedAccount() {
+        if (this.conversionSummary?.accountId) {
+            this[NavigationMixin.Navigate]({
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: this.conversionSummary.accountId,
+                    objectApiName: 'Account',
+                    actionName: 'view'
+                }
+            });
+        }
+    }
+
+    handleOpenConvertedOpportunity() {
+        if (this.conversionSummary?.opportunityId) {
+            this[NavigationMixin.Navigate]({
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: this.conversionSummary.opportunityId,
+                    objectApiName: 'Opportunity',
+                    actionName: 'view'
+                }
+            });
+        }
+    }
+
+    handleOpenConvertedBooking() {
+        if (this.conversionSummary?.bookingId) {
+            this[NavigationMixin.Navigate]({
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: this.conversionSummary.bookingId,
+                    objectApiName: 'Booking__c',
+                    actionName: 'view'
+                }
+            });
+        }
+    }
+
+    handleOpenOppAccount() {
+        const accId = this.oppJourney?.accountId || this.raw('AccountId');
+        if (accId) {
+            this[NavigationMixin.Navigate]({
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: accId,
+                    objectApiName: 'Account',
+                    actionName: 'view'
+                }
+            });
+        }
+    }
+
+    handleOpenOppBooking() {
+        if (this.oppJourney?.bookingId) {
+            this[NavigationMixin.Navigate]({
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: this.oppJourney.bookingId,
+                    objectApiName: 'Booking__c',
+                    actionName: 'view'
+                }
+            });
+        }
+    }
+
+    async handleCreateBookingAndSyncSap() {
+        if (this.oppJourney?.bookingId) {
+            this.handleOpenOppBooking();
+            return;
+        }
+        this.saving = true;
+        try {
+            const res = await createBookingAndSyncSap({ oppId: this.recordId });
+            this.toast(
+                'Booking Confirmed & SAP Synced',
+                res?.message || 'SAP Sales Order created and Booking confirmed.',
+                'success'
+            );
+            notifyRecordUpdateAvailable([{ recordId: this.recordId }]);
+            if (res && res.bookingId) {
+                this[NavigationMixin.Navigate]({
+                    type: 'standard__recordPage',
+                    attributes: {
+                        recordId: res.bookingId,
+                        objectApiName: 'Booking__c',
+                        actionName: 'view'
+                    }
+                });
+            }
+        } catch (err) {
+            this.toast('Booking Creation Failed', errorMessage(err), 'error');
+        } finally {
+            this.saving = false;
+        }
+    }
+
+    handleOpenFeedbackModal() {
+        this.showSiteVisitFeedbackModal = true;
     }
 
     handleCloseFeedbackModal() {

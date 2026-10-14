@@ -261,13 +261,26 @@ export default class CtiDialerWidget extends LightningElement {
         this.isSaving = true;
 
         try {
-            // 1. If on Lead object, update status if Site Visit was scheduled
+            // 1. If on Lead object, update status according to disposition
             if (this.objectApiName === 'Lead' && this.recordId) {
+                const fields = { Id: this.recordId };
+                let shouldUpdateLead = false;
+
                 if (this.selectedDisposition === 'SV Scheduled') {
-                    const fields = {};
-                    fields.Id = this.recordId;
                     fields.Status = 'Site Visit';
-                    await updateRecord({ fields });
+                    shouldUpdateLead = true;
+                } else if (this.selectedDisposition === 'Budget / Location Mismatch') {
+                    fields.Status = 'Dropped';
+                    fields.Drop_Reason__c = 'Budget / Location Mismatch';
+                    shouldUpdateLead = true;
+                }
+
+                if (shouldUpdateLead) {
+                    try {
+                        await updateRecord({ fields });
+                    } catch (updateErr) {
+                        console.warn('Lead stage auto-update notice:', updateErr);
+                    }
                 }
             }
 

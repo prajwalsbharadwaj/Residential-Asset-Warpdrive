@@ -93,7 +93,7 @@ public with sharing class WdGlassRecordController {
         try {
             List<ActionItem> actions = new List<ActionItem>();
             if (objectApiName == 'Lead') {
-                actions.add(new ActionItem('Convert', 'Convert', 'Standard'));
+                actions.add(new ActionItem('Convert_Lead', 'Convert Lead', 'Standard'));
             }
             // Global actions and demo-package tooling are left out; the page's own activity card covers tasks and calls.
             String prefix = objectApiName + '.';
@@ -106,9 +106,155 @@ public with sharing class WdGlassRecordController {
             if (hasApprovalProcess(objectApiName)) {
                 actions.add(new ActionItem('Submit', 'Submit for Approval', 'Standard'));
             }
-            actions.add(new ActionItem('Clone', 'Clone', 'Standard'));
+            if (objectApiName != 'Site_Visit__c') {
+                actions.add(new ActionItem('Clone', 'Clone', 'Standard'));
+            }
             actions.add(new ActionItem('Delete', 'Delete', 'Standard'));
             return actions;
+        } catch (Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    public class ConvertedSummary {
+        @AuraEnabled public Boolean isConverted;
+        @AuraEnabled public Id accountId;
+        @AuraEnabled public String accountName;
+        @AuraEnabled public Id opportunityId;
+        @AuraEnabled public String opportunityName;
+        @AuraEnabled public Id bookingId;
+        @AuraEnabled public String bookingName;
+        @AuraEnabled public String bookingStatus;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static ConvertedSummary getLeadConversionSummary(Id leadId) {
+        try {
+            if (leadId == null) return null;
+            List<Lead> leads = [
+                SELECT Id, IsConverted, ConvertedAccountId, ConvertedAccount.Name,
+                       ConvertedOpportunityId, ConvertedOpportunity.Name
+                FROM Lead
+                WHERE Id = :leadId
+                LIMIT 1
+            ];
+            if (leads.isEmpty() || !leads[0].IsConverted) {
+                return null;
+            }
+            Lead ld = leads[0];
+            ConvertedSummary cs = new ConvertedSummary();
+            cs.isConverted = true;
+            cs.accountId = ld.ConvertedAccountId;
+            cs.accountName = ld.ConvertedAccount != null ? ld.ConvertedAccount.Name : 'Account';
+            cs.opportunityId = ld.ConvertedOpportunityId;
+            cs.opportunityName = ld.ConvertedOpportunity != null ? ld.ConvertedOpportunity.Name : 'Opportunity';
+
+            if (ld.ConvertedOpportunityId != null) {
+                List<Booking__c> bList = [
+                    SELECT Id, Name, Status__c
+                    FROM Booking__c
+                    WHERE Opportunity_Id__c = :ld.ConvertedOpportunityId
+                    ORDER BY CreatedDate DESC
+                    LIMIT 1
+                ];
+                if (!bList.isEmpty()) {
+                    cs.bookingId = bList[0].Id;
+                    cs.bookingName = bList[0].Name;
+                    cs.bookingStatus = bList[0].Status__c;
+                }
+            }
+            return cs;
+        } catch (Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    public class OpportunityJourneySummary {
+        @AuraEnabled public Id oppId;
+        @AuraEnabled public String oppName;
+        @AuraEnabled public String stageName;
+        @AuraEnabled public Decimal amount;
+        @AuraEnabled public Id accountId;
+        @AuraEnabled public String accountName;
+        @AuraEnabled public String accountPhone;
+        @AuraEnabled public Id unitId;
+        @AuraEnabled public String unitName;
+        @AuraEnabled public String unitStatus;
+        @AuraEnabled public String configuration;
+        @AuraEnabled public String towerName;
+        @AuraEnabled public String projectName;
+        @AuraEnabled public Id bookingId;
+        @AuraEnabled public String bookingName;
+        @AuraEnabled public String bookingRefNo;
+        @AuraEnabled public String bookingStatus;
+        @AuraEnabled public String sapSalesOrder;
+        @AuraEnabled public String sapCustomerCode;
+        @AuraEnabled public String sapSyncStatus;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static OpportunityJourneySummary getOpportunityJourney(Id oppId) {
+        try {
+            if (oppId == null) return null;
+            List<Opportunity> oppList = [
+                SELECT Id, Name, StageName, Amount, AccountId, Account.Name, Account.Phone,
+                       Interested_Unit__c, Interested_Unit__r.Name, Interested_Unit__r.Status__c,
+                       Interested_Unit__r.BHK_Configuration__c, Interested_Unit__r.Tower__r.Name,
+                       Interested_Unit__r.Property__r.Name
+                FROM Opportunity
+                WHERE Id = :oppId
+                LIMIT 1
+            ];
+            if (oppList.isEmpty()) return null;
+            Opportunity opp = oppList[0];
+
+            OpportunityJourneySummary s = new OpportunityJourneySummary();
+            s.oppId = opp.Id;
+            s.oppName = opp.Name;
+            s.stageName = opp.StageName;
+            s.amount = opp.Amount;
+            s.accountId = opp.AccountId;
+            s.accountName = opp.Account != null ? opp.Account.Name : 'Valued Customer';
+            s.accountPhone = opp.Account != null ? opp.Account.Phone : '';
+
+            if (opp.Interested_Unit__c != null) {
+                s.unitId = opp.Interested_Unit__c;
+                s.unitName = opp.Interested_Unit__r.Name;
+                s.unitStatus = opp.Interested_Unit__r.Status__c;
+                s.configuration = opp.Interested_Unit__r.BHK_Configuration__c;
+                s.towerName = opp.Interested_Unit__r.Tower__r != null ? opp.Interested_Unit__r.Tower__r.Name : '';
+                s.projectName = opp.Interested_Unit__r.Property__r != null ? opp.Interested_Unit__r.Property__r.Name : '';
+            }
+
+            List<Booking__c> bList = [
+                SELECT Id, Name, SFDC_booking_reference_no__c,
+                       Status__c, SAP_External_Id__c, SAP_Sync_Status__c
+                FROM Booking__c
+                WHERE Opportunity_Id__c = :opp.Id
+                ORDER BY CreatedDate DESC
+                LIMIT 1
+            ];
+            if (!bList.isEmpty()) {
+                Booking__c b = bList[0];
+                s.bookingId = b.Id;
+                s.bookingName = b.Name;
+                s.bookingRefNo = String.isNotBlank(b.SFDC_booking_reference_no__c)
+                    ? b.SFDC_booking_reference_no__c
+                    : b.Name;
+                s.bookingStatus = b.Status__c;
+                s.sapSalesOrder = b.SAP_External_Id__c;
+                s.sapSyncStatus = b.SAP_Sync_Status__c;
+            }
+            return s;
+        } catch (Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static UnitSelectionQuoteController.SapBookingResultWrapper createBookingAndSyncSap(Id oppId) {
+        try {
+            return UnitSelectionQuoteController.syncToSapAndCreateBooking(oppId);
         } catch (Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }

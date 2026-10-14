@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Interactive Site Visit Feedback and Deal Intelligence modal capturing Customer &amp; Executive Feedback.</description>
+    <label>Add Feedback</label>
+    <lightningWebComponent>siteVisitFeedbackModal</lightningWebComponent>
+    <type>LightningWebComponent</type>
+</QuickAction>

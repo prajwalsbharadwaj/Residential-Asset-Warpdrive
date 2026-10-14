@@ -69,11 +69,92 @@
                 record-type-id={recordTypeId}
                 value={pathValue}
                 onrequestleadarchive={handleRequestLeadArchive}
+                onrequestfeedback={handleOpenFeedbackModal}
             ></c-wd-glass-path>
         </template>
 
+        <!-- CONVERTED LEAD 3-WAY NAVIGATION BANNER -->
+        <template lwc:if={isConvertedLead}>
+            <div class="wd-glass converted-hub-banner" role="region" aria-label="Converted Lead Hub">
+                <div class="hub-status">
+                    <span class="hub-pill">✓ CONVERTED LEAD</span>
+                    <span class="hub-title">Unified Customer Journey Links</span>
+                </div>
+                <div class="hub-links">
+                    <button type="button" class="hub-link-chip" onclick={handleOpenConvertedAccount} title="Open Person Account">
+                        <span class="hub-icon">👤</span>
+                        <span class="hub-chip-label">Account:</span>
+                        <span class="hub-chip-name">{conversionSummary.accountName} ↗</span>
+                    </button>
+                    <button type="button" class="hub-link-chip" onclick={handleOpenConvertedOpportunity} title="Open Opportunity">
+                        <span class="hub-icon">🎯</span>
+                        <span class="hub-chip-label">Opportunity:</span>
+                        <span class="hub-chip-name">{conversionSummary.opportunityName} ↗</span>
+                    </button>
+                    <template lwc:if={conversionSummary.bookingId}>
+                        <button type="button" class="hub-link-chip hub-link-chip_booking" onclick={handleOpenConvertedBooking} title="Open Booking">
+                            <span class="hub-icon">📑</span>
+                            <span class="hub-chip-label">Booking ({conversionSummary.bookingStatus}):</span>
+                            <span class="hub-chip-name">{conversionSummary.bookingName} ↗</span>
+                        </button>
+                    </template>
+                    <template lwc:else>
+                        <div class="hub-link-chip hub-link-chip_muted" title="Booking can be created from the Opportunity">
+                            <span class="hub-icon">⏳</span>
+                            <span class="hub-chip-label">Booking:</span>
+                            <span class="hub-chip-name">Pending Allocation</span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
 
-
+        <!-- RESIDENTIAL SALES OPPORTUNITY JOURNEY & CUSTOMER HUB -->
+        <template lwc:if={isOpportunity}>
+            <div class="wd-glass converted-hub-banner opp-hub-banner" role="region" aria-label="Opportunity Customer & Booking Hub">
+                <div class="hub-status">
+                    <span class="hub-pill opp-pill">🏠 RESIDENTIAL SALES</span>
+                    <template lwc:if={oppUnitName}>
+                        <span class="hub-unit-tag">
+                            🏢 Unit {oppUnitName} &bull; {oppTowerName} ({oppUnitStatus})
+                        </span>
+                    </template>
+                </div>
+                <div class="hub-links">
+                    <template lwc:if={oppAccountId}>
+                        <button type="button" class="hub-link-chip" onclick={handleOpenOppAccount} title="View Customer Account (Person Account & SAP Master)">
+                            <span class="hub-icon">👤</span>
+                            <span class="hub-chip-label">Account:</span>
+                            <span class="hub-chip-name">{oppAccountName} ↗</span>
+                        </button>
+                    </template>
+                    <template lwc:if={oppBookingId}>
+                        <button type="button" class="hub-link-chip hub-link-chip_booking" onclick={handleOpenOppBooking} title="Go to Confirmed Booking Record">
+                            <span class="hub-icon">📑</span>
+                            <span class="hub-chip-label">Go to Booking ({oppBookingStatus}):</span>
+                            <span class="hub-chip-name">{oppBookingRefNo} ↗</span>
+                        </button>
+                        <template lwc:if={oppSapSalesOrder}>
+                            <span class="hub-sap-badge" title="SAP Sales Order Synchronized">
+                                ⚡ SAP SO: {oppSapSalesOrder}
+                            </span>
+                        </template>
+                    </template>
+                    <template lwc:else>
+                        <div class="hub-link-chip hub-link-chip_muted" title="Booking record will be created upon Booking Form submission & SAP Sales Order generation">
+                            <span class="hub-icon">⏳</span>
+                            <span class="hub-chip-label">Booking:</span>
+                            <span class="hub-chip-name">Pending Booking Form & Token</span>
+                        </div>
+                        <template lwc:if={canGenerateBookingNow}>
+                            <button type="button" class="hub-link-chip hub-link-chip_action" onclick={handleCreateBookingAndSyncSap} title="Create Booking & Sync SAP Sales Order">
+                                ⚡ Sync SAP & Create Booking
+                            </button>
+                        </template>
+                    </template>
+                </div>
+            </div>
+        </template>
 
         <template lwc:if={isCustomer}>
             <div class="customer-summary">

@@ -116,6 +116,142 @@
     line-height: 1.35;
 }
 
+/* Pending Incomplete Visit Banner */
+.pending-visit-banner {
+    padding: 0.65rem 0.85rem;
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    background: rgba(255, 251, 235, 0.8);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.08);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+.pending-banner-head {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.25rem;
+}
+
+.pending-icon {
+    font-size: 0.95rem;
+}
+
+.pending-head-text {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+}
+
+.pending-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #92400e;
+}
+
+.pending-status-pill {
+    padding: 0.12rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fcd34d;
+    text-transform: uppercase;
+}
+
+.pending-desc {
+    margin: 0;
+    font-size: 0.74rem;
+    color: #78350f;
+    line-height: 1.35;
+}
+
+.pending-visit-link {
+    color: #b45309;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.pending-visit-link:hover {
+    color: #92400e;
+    text-decoration: underline;
+}
+
+/* Disabled Button Style */
+.wd-btn_disabled {
+    opacity: 0.45 !important;
+    cursor: not-allowed !important;
+    filter: grayscale(0.85);
+    pointer-events: auto !important;
+    background: #f1f5f9 !important;
+    color: #94a3b8 !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: none !important;
+}
+
+/* Executive Conversion Status Strip */
+.convert-status-strip {
+    margin-top: 0.75rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid var(--wd-line);
+}
+
+.status-indicator-box {
+    padding: 0.65rem 0.85rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid var(--wd-line);
+    transition: all 0.2s ease;
+}
+
+.status-indicator-box.ready {
+    background: linear-gradient(135deg, rgba(240, 253, 244, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+    border-color: rgba(0, 153, 51, 0.25);
+}
+
+.status-indicator-box.locked {
+    background: rgba(249, 250, 251, 0.75);
+    border-color: rgba(20, 48, 90, 0.08);
+}
+
+.indicator-head {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.2rem;
+}
+
+.indicator-icon {
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.ready .indicator-icon {
+    color: #009933;
+}
+
+.locked .indicator-icon {
+    color: var(--wd-muted);
+}
+
+.indicator-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--wd-ink);
+}
+
+.indicator-desc {
+    font-size: 0.73rem;
+    color: var(--wd-ink-soft);
+    margin: 0;
+    line-height: 1.35;
+}
+
 /* Bottom Action Row */
 .gate-actions {
     display: flex;

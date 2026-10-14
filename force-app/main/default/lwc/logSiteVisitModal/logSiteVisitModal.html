@@ -22,6 +22,26 @@
                 </template>
             </header>
 
+            <!-- INCOMPLETE VISIT WARNING BANNER -->
+            <template if:true={hasIncompleteVisit}>
+                <div class="pending-visit-banner">
+                    <div class="pending-banner-head">
+                        <span class="pending-icon">⏳</span>
+                        <div class="pending-head-text">
+                            <span class="pending-title">Site Visit In Progress</span>
+                            <span class="pending-status-pill">{incompleteVisitStatus}</span>
+                        </div>
+                    </div>
+                    <p class="pending-desc">
+                        Feedback must be submitted on
+                        <a href="#" class="pending-visit-link" onclick={handleNavigateToIncompleteVisit} title="Open Site Visit to submit feedback">
+                            {incompleteVisitName} ↗
+                        </a>
+                        before adding a new visit or converting this lead.
+                    </p>
+                </div>
+            </template>
+
             <!-- UNQUALIFIED STATE (GATE LOCKED) -->
             <template if:false={hasSiteVisit}>
                 <div class="status-strip strip-locked">
@@ -38,7 +58,7 @@
                         <span class="count-num">{siteVisitCount}</span>
                         <span class="count-lbl">Visits Logged</span>
                     </div>
-                    <button class="wd-btn wd-btn_primary action-btn" onclick={handleOpenModal}>
+                    <button class={logSiteVisitBtnClass} disabled={isAddVisitDisabled} onclick={handleOpenModal} title={addVisitLockReason}>
                         + Log Site Visit
                     </button>
                 </div>
@@ -60,11 +80,33 @@
                         <span class="count-num">{siteVisitCount}</span>
                         <span class="count-lbl">Verified</span>
                     </div>
-                    <button class="wd-btn wd-btn_ghost action-btn" onclick={handleOpenModal}>
+                    <button class={addVisitBtnClass} disabled={isAddVisitDisabled} onclick={handleOpenModal} title={addVisitLockReason}>
                         + Add Visit
                     </button>
                 </div>
             </template>
+
+            <!-- EXECUTIVE CONVERSION STATUS STRIP -->
+            <div class="convert-status-strip">
+                <template if:true={hasSiteVisit}>
+                    <div class="status-indicator-box ready">
+                        <div class="indicator-head">
+                            <span class="indicator-icon">✓</span>
+                            <span class="indicator-title">Lead Qualified for Conversion</span>
+                        </div>
+                        <p class="indicator-desc">Click <strong>Convert Lead</strong> in the top header action bar to convert this Lead to a Residential Sales Opportunity and Person Account.</p>
+                    </div>
+                </template>
+                <template if:false={hasSiteVisit}>
+                    <div class="status-indicator-box locked">
+                        <div class="indicator-head">
+                            <span class="indicator-icon">🔒</span>
+                            <span class="indicator-title">Conversion Gate Locked</span>
+                        </div>
+                        <p class="indicator-desc">Complete visitor verification and feedback via <strong>+ Log Site Visit</strong> to unlock <strong>Convert Lead</strong>.</p>
+                    </div>
+                </template>
+            </div>
 
             <!-- RECENT VISITS TIMELINE -->
             <template if:true={hasRecentVisits}>

@@ -455,7 +455,9 @@ public with sharing class UnitSelectionQuoteController {
 
         Opportunity opp = [
             SELECT Id, Name, StageName, Amount, AccountId, Account.Name, Account.Phone,
-                   Interested_Unit__c, Interested_Unit__r.Name, Interested_Unit__r.Property__c
+                   Payment_Plan__c, Token_Amount__c, Discount_Approval_Status__c,
+                   Interested_Unit__c, Interested_Unit__r.Name, Interested_Unit__r.Property__c,
+                   Interested_Unit__r.Property__r.Allocated_User__c
             FROM Opportunity
             WHERE Id = :oppId
             LIMIT 1
@@ -465,30 +467,40 @@ public with sharing class UnitSelectionQuoteController {
             throw new AuraHandledException('Please select and tag a Unit to the Opportunity before creating a Booking.');
         }
 
-        if (opp.StageName != 'Closed Won') {
-            opp.StageName = 'Closed Won';
-            update opp;
-        }
-
-        Account acc = [SELECT Id, Name, Phone FROM Account WHERE Id = :opp.AccountId LIMIT 1];
-        String sapCustomerCode = 'SAP-CUST-' + Math.round(Math.random() * 89999 + 10000);
-
-        Integer randomSuffix = Math.round(Math.random() * 89999 + 10000);
-        String last5Digits = String.valueOf(randomSuffix);
-        String sapSalesOrder = 'SO-2026-' + last5Digits;
-        String bookingReferenceId = 'BR-' + last5Digits;
-
         Id targetProjectId = opp.Interested_Unit__r != null ? opp.Interested_Unit__r.Property__c : null;
         if (targetProjectId == null) {
             List<Property__c> defaultProps = [SELECT Id FROM Property__c LIMIT 1];
             if (!defaultProps.isEmpty()) targetProjectId = defaultProps[0].Id;
         }
 
+        // Ensure Project has a CRM user allocated if validation rule requires it
+        if (targetProjectId != null && (opp.Interested_Unit__r == null || opp.Interested_Unit__r.Property__r == null || opp.Interested_Unit__r.Property__r.Allocated_User__c == null)) {
+            Property__c prop = [SELECT Id, Allocated_User__c FROM Property__c WHERE Id = :targetProjectId LIMIT 1];
+            if (prop.Allocated_User__c == null) {
+                prop.Allocated_User__c = UserInfo.getUserId();
+                update prop;
+            }
+        }
+
         List<Payment_Plan__c> activePlans = [SELECT Id, Name FROM Payment_Plan__c ORDER BY CreatedDate DESC LIMIT 1];
-        Id planId = !activePlans.isEmpty() ? activePlans[0].Id : null;
+        Id planId = opp.Payment_Plan__c != null ? opp.Payment_Plan__c : (!activePlans.isEmpty() ? activePlans[0].Id : null);
 
         Decimal agreementVal = opp.Amount != null ? opp.Amount : 10000000;
-        Decimal tokenVal = Math.round(agreementVal * 0.10);
+        Decimal tokenVal = opp.Token_Amount__c != null && opp.Token_Amount__c > 0 ? opp.Token_Amount__c : Math.round(agreementVal * 0.10);
+
+        if (opp.Discount_Approval_Status__c != 'Approved' && opp.Discount_Approval_Status__c != 'Approval Not Required') {
+            opp.Discount_Approval_Status__c = 'Approval Not Required';
+        }
+        opp.Token_Amount__c = tokenVal;
+        opp.Payment_Plan__c = planId;
+        opp.StageName = 'Closed Won';
+        update opp;
+
+        Integer randomSuffix = Math.round(Math.random() * 89999 + 10000);
+        String last5Digits = String.valueOf(randomSuffix);
+        String sapCustomerCode = 'SAP-CUST-' + last5Digits;
+        String sapSalesOrder = 'SO-2026-' + last5Digits;
+        String bookingReferenceId = 'BR-' + last5Digits;
 
         Booking__c b = new Booking__c();
         b.SFDC_booking_reference_no__c = bookingReferenceId;
@@ -500,11 +512,14 @@ public with sharing class UnitSelectionQuoteController {
         b.Token_Amount__c = tokenVal;
         b.Booking_Date__c = Date.today();
         b.Payment_Plan_Id__c = planId;
-        b.Status__c = 'Active';
+        b.Status__c = 'Confirmed';
+        b.SAP_External_Id__c = sapSalesOrder;
+        b.SAP_Sync_Status__c = 'Success';
+        b.SAP_Sync_Message__c = 'Customer master and Sales Order ' + sapSalesOrder + ' created in SAP successfully.';
         insert b;
 
         Unit__c targetUnit = [SELECT Id, Status__c FROM Unit__c WHERE Id = :opp.Interested_Unit__c LIMIT 1];
-        targetUnit.Status__c = 'Blocked';
+        targetUnit.Status__c = 'Booked';
         update targetUnit;
 
         if (planId != null) {

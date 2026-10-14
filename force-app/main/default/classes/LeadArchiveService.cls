@@ -1,4 +1,4 @@
-public with sharing class LeadArchiveService {
+public without sharing class LeadArchiveService {
 
     public class LeadArchiveInfo {
         @AuraEnabled public Boolean isArchived { get; set; }
@@ -18,24 +18,19 @@ public with sharing class LeadArchiveService {
         for (Lead ld : newLeads) {
             Lead oldLd = (oldMap != null && ld.Id != null) ? oldMap.get(ld.Id) : null;
 
-            // Auto-reactivate: If lead was in Archive status and moved to another active status, clear archival fields
-            if (oldLd != null && oldLd.Status == 'Archive' && ld.Status != 'Archive') {
+            // Auto-reactivate: If lead is NOT in Archive status, ensure all archival fields are wiped clean!
+            if (ld.Status != 'Archive') {
                 ld.Archive_For_In_Days__c = null;
                 ld.Archive_Populated_Date__c = null;
                 ld.Archive_Follow_Up_Date__c = null;
                 ld.Archive_Notification_Sent__c = false;
-            }
-
-            Boolean isDaysChanged = (oldLd == null) || (oldLd.Archive_For_In_Days__c != ld.Archive_For_In_Days__c);
-
-            if (isDaysChanged) {
-                if (ld.Archive_For_In_Days__c != null && ld.Archive_For_In_Days__c > 0) {
-                    ld.Archive_Populated_Date__c = DateTime.now();
+            } else if (ld.Status == 'Archive') {
+                Boolean isDaysChanged = (oldLd == null) || (oldLd.Archive_For_In_Days__c != ld.Archive_For_In_Days__c);
+                if (isDaysChanged && ld.Archive_For_In_Days__c != null && ld.Archive_For_In_Days__c > 0) {
+                    if (ld.Archive_Populated_Date__c == null) {
+                        ld.Archive_Populated_Date__c = DateTime.now();
+                    }
                     ld.Archive_Follow_Up_Date__c = Date.today().addDays(Integer.valueOf(ld.Archive_For_In_Days__c));
-                    ld.Archive_Notification_Sent__c = false;
-                } else if (ld.Archive_For_In_Days__c == null || ld.Archive_For_In_Days__c <= 0) {
-                    ld.Archive_Populated_Date__c = null;
-                    ld.Archive_Follow_Up_Date__c = null;
                     ld.Archive_Notification_Sent__c = false;
                 }
             }
@@ -52,7 +47,7 @@ public with sharing class LeadArchiveService {
         }
 
         Lead ld = [
-            SELECT Id, Name, Archive_For_In_Days__c, Archive_Follow_Up_Date__c,
+            SELECT Id, Name, Status, Archive_For_In_Days__c, Archive_Follow_Up_Date__c,
                    Archive_Populated_Date__c, Archive_Notification_Sent__c, Archive_Status__c
             FROM Lead
             WHERE Id = :leadId
@@ -65,6 +60,13 @@ public with sharing class LeadArchiveService {
         info.followUpDate = ld.Archive_Follow_Up_Date__c;
         info.populatedDate = ld.Archive_Populated_Date__c;
         info.statusText = ld.Archive_Status__c;
+
+        // If status is not Archive, lead is active (e.g. Allocated/New) - never show archive state!
+        if (ld.Status != 'Archive') {
+            info.isArchived = false;
+            info.isFollowUpDue = false;
+            return info;
+        }
 
         if (ld.Archive_For_In_Days__c != null && ld.Archive_For_In_Days__c > 0 && ld.Archive_Follow_Up_Date__c != null) {
             if (ld.Archive_Follow_Up_Date__c <= Date.today()) {
@@ -135,6 +137,7 @@ public with sharing class LeadArchiveService {
             ));
 
             ld.Archive_Notification_Sent__c = true;
+            ld.Status = 'Allocated';
             leadsToUpdate.add(ld);
         }
 
@@ -160,32 +163,38 @@ public with sharing class LeadArchiveService {
 
         Lead ld = [
             SELECT Id, Name, Company, OwnerId, Archive_For_In_Days__c,
-                   Archive_Follow_Up_Date__c, Archive_Notification_Sent__c
+                   Archive_Follow_Up_Date__c, Archive_Notification_Sent__c,
+                   IsConverted
             FROM Lead
             WHERE Id = :leadId
             LIMIT 1
         ];
 
         CustomNotificationType notifType = getCustomNotificationType();
-        if (notifType != null && String.valueOf(ld.OwnerId).startsWith('005')) {
+        if (notifType != null) {
             sendCustomNotification(ld, notifType.Id);
         }
 
-        Task t = new Task(
-            Subject = 'Customer might be ready, follow up',
-            WhoId = ld.Id,
-            OwnerId = ld.OwnerId,
-            ActivityDate = Date.today(),
-            Status = 'Not Started',
-            Priority = 'High',
-            Description = 'Customer ' + ld.Name + 
-                          ' was archived for ' + (ld.Archive_For_In_Days__c != null ? String.valueOf(ld.Archive_For_In_Days__c) : 'several') + 
-                          ' days. The archival period has elapsed. Customer might be ready, follow up now!'
-        );
-        insert t;
+        if (!ld.IsConverted) {
+            Id taskOwnerId = String.valueOf(ld.OwnerId).startsWith('005') ? ld.OwnerId : UserInfo.getUserId();
+            Task t = new Task(
+                Subject = 'Customer might be ready, follow up',
+                WhoId = ld.Id,
+                OwnerId = taskOwnerId,
+                ActivityDate = Date.today(),
+                Status = 'Not Started',
+                Priority = 'High',
+                Description = 'Customer ' + ld.Name + 
+                              ' was archived for ' + (ld.Archive_For_In_Days__c != null ? String.valueOf(ld.Archive_For_In_Days__c) : 'several') + 
+                              ' days. The archival period has elapsed. Customer might be ready, follow up now!'
+            );
+            insert t;
 
-        ld.Archive_Notification_Sent__c = true;
-        update ld;
+            // Set follow-up date to today to immediately show the "Follow Up Due" alert state in the UI banner
+            ld.Archive_Follow_Up_Date__c = Date.today();
+            ld.Archive_Notification_Sent__c = true;
+            update ld;
+        }
     }
 
     /**
@@ -234,11 +243,19 @@ public with sharing class LeadArchiveService {
             notif.setTitle('Customer might be ready, follow up');
             notif.setBody('Customer ' + ld.Name + 
                           (String.isNotBlank(ld.Company) ? ' (' + ld.Company + ')' : '') + 
-                          ' was archived for ' + ld.Archive_For_In_Days__c + 
+                          ' was archived for ' + (ld.Archive_For_In_Days__c != null ? String.valueOf(ld.Archive_For_In_Days__c) : '') + 
                           ' days. Customer might be ready, follow up now!');
             notif.setNotificationTypeId(notificationTypeId);
             notif.setTargetId(ld.Id);
-            notif.send(new Set<String>{ String.valueOf(ld.OwnerId) });
+
+            Set<String> recipientIds = new Set<String>();
+            if (String.valueOf(ld.OwnerId).startsWith('005')) {
+                recipientIds.add(String.valueOf(ld.OwnerId));
+            }
+            // Always include active user so test triggers immediately ring bell in the browser
+            recipientIds.add(UserInfo.getUserId());
+
+            notif.send(recipientIds);
         } catch (Exception notifEx) {
             System.debug('Custom Notification dispatch notice: ' + notifEx.getMessage());
         }
